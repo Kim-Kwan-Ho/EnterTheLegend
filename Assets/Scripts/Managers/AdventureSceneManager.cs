@@ -6,8 +6,8 @@ public class AdventureSceneManager : SingletonMonobehaviour<AdventureSceneManage
 {
 
     [HideInInspector] public AdventureSceneState SceneState;
-    public MyPlayer Player;
-    public GameObject PlayerPrefab;
+    private MyPlayer _player;
+    [SerializeField] private GameObject _playerPrefab;
     protected override void Awake()
     {
         base.Awake();
@@ -16,13 +16,13 @@ public class AdventureSceneManager : SingletonMonobehaviour<AdventureSceneManage
 
     public void InitializePlayer()
     {
-        Player = Instantiate(PlayerPrefab).GetComponent<MyPlayer>();
-        Player.Initialize();
+        _player = Instantiate(_playerPrefab).GetComponent<MyPlayer>();
+        _player.Initialize();
     }
 
     public MyPlayer GetMyPlayer()
     {
-        return Player.GetComponent<MyPlayer>();
+        return _player;
     }
 
 #if UNITY_EDITOR
@@ -30,7 +30,7 @@ public class AdventureSceneManager : SingletonMonobehaviour<AdventureSceneManage
 
     private void OnValidate()
     {
-        CheckNullValue(this.name, PlayerPrefab);
+        CheckNullValue(this.name, _playerPrefab);
     }
 #endif
 }

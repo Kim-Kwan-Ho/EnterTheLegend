@@ -8,7 +8,6 @@ using UnityEngine.UI;
 [RequireComponent(typeof(StateEvent))]
 [RequireComponent(typeof(DirectionEvent))]
 
-[DisallowMultipleComponent]
 public class Creature : BaseBehaviour
 {
     [Header("State & LookPosition")]
@@ -78,6 +77,7 @@ public class Creature : BaseBehaviour
 
     private void Event_OnDirectionChanged(DirectionEvent directionEvent, DirectionEventArgs directionEventArgs)
     {
+
         _direction = directionEventArgs.direction;
         InitializeDirection();
         UpdateDirection();

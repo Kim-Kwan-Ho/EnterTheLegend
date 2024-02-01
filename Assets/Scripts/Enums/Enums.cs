@@ -7,7 +7,8 @@ public enum Direction
     Right = 4,
     DownLeft = 5,
     Down = 6,
-    DownRight = 7
+    DownRight = 7,
+    Previous = 8,
 }
 
 public enum State
