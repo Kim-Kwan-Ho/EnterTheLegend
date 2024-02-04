@@ -7,6 +7,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(StateEvent))]
 [RequireComponent(typeof(DirectionEvent))]
+[RequireComponent(typeof(MovementEvent))]
 
 public class Creature : BaseBehaviour
 {
@@ -18,8 +19,9 @@ public class Creature : BaseBehaviour
     [SerializeField] protected Animator _animator;
 
     [Header("Events")]
-    [SerializeField] public StateEvent EventState;
-    [SerializeField] public DirectionEvent EventDirection;
+    public StateEvent EventState;
+    public DirectionEvent EventDirection;
+    public MovementEvent EventMovement;
 
 
     public virtual void Initialize()
@@ -34,12 +36,16 @@ public class Creature : BaseBehaviour
     {
         EventState.OnStateChanged += Event_OnStateChanged;
         EventDirection.OnDirectionChanged += Event_OnDirectionChanged;
+        EventMovement.OnPositionMovement += Event_OnMovement;
+
     }
 
     protected virtual void OnDisable()
     {
         EventState.OnStateChanged -= Event_OnStateChanged;
         EventDirection.OnDirectionChanged -= Event_OnDirectionChanged;
+        EventMovement.OnPositionMovement += Event_OnMovement;
+
     }
 
 
@@ -65,6 +71,12 @@ public class Creature : BaseBehaviour
         }
     }
 
+
+
+    protected virtual void Event_OnMovement(MovementEvent movementEvent, MovementEventArgs movementEventArgs)
+    {
+        transform.position = movementEventArgs.position;
+    }
     protected virtual void InitializeState()
     {
         _animator.SetBool(AnimationSettings.IsMoving, false);

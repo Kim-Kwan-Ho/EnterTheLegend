@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Unity.VisualScripting;
 using UnityEngine;
-using System;
+using UnityEditor;
+
 public class BaseBehaviour : MonoBehaviour
 {
 #if UNITY_EDITOR // 에디터에서만 작동되게끔
@@ -58,17 +60,17 @@ public class BaseBehaviour : MonoBehaviour
 public class BehaviourBaseEditor : UnityEditor.Editor
 {
 
-    // BaseBehaviour 클래스의 OnBindField 메소드에 대한 참조를 가져옵니다.
     private MethodInfo _bindMethod = (typeof(BaseBehaviour)).GetMethod("OnBindField", BindingFlags.NonPublic | BindingFlags.Instance);
     public override void OnInspectorGUI()
     {
-        // "Bind Objects" 버튼을 생성
+        
         if (GUILayout.Button("Bind Objects")) 
         {
-            // 버튼이 클릭되면, OnBindField 메소드를 호출
             _bindMethod.Invoke(target ,new object[]{}); 
         }
         base.OnInspectorGUI();
+
+
     }
 }
 #endif 

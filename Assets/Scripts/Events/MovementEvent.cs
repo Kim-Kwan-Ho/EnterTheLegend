@@ -11,7 +11,7 @@ public class MovementEvent : MonoBehaviour
         OnVelocityMovement?.Invoke(this, new MovementEventArgs() { velocity = velocity, direction = direction});
     }
 
-    public void CallPositionMovement(Vector3 position)
+    public void CallPositionMovement(Vector2 position)
     {
         OnPositionMovement?.Invoke(this, new MovementEventArgs(){position = position});
     }
