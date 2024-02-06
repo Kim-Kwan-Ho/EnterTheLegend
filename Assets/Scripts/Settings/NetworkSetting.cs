@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using UnityEngine;
 namespace StandardData
 {
     public static class NetworkSize
@@ -21,20 +17,36 @@ namespace StandardData
     }
     public static class MessageIdTcp
     {
-        public const ushort AdventureMatched = 1;
+        public const ushort RequestForMatch = 1;
         public const ushort AdventureRoomLoaded = 2;
         public const ushort CreateAdventureRoom = 3;
         public const ushort AdventurePlayerLoadInfo = 4;
         public const ushort AdventureRoomLoadInfo = 5;
+        public const ushort SetUdpPort = 6;
     }
 
     public static class MessageIdUdp
     {
-        public const ushort PlayerPosition = 0x00;
+        public const ushort AdventurePlayerPositionToServer = 1;
+        public const ushort AdventurePlayerPositionFromServer = 2;
 
     }
+    public static class UdpSendCycle
+    {
+        public const float AdventureRoomSendCycle = 0.016f;
+    }
+    public enum GameRoomType
+    {
+        BattleRoom,
+        AdventureRoom,
+    }
 
+    public enum SceneType
+    {
+        AdventureScene,
+        MainScene,
 
+    }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct stHeaderTcp
@@ -46,31 +58,41 @@ namespace StandardData
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stAdventureMatched
+    public struct stSetUdpPort
     {
         public stHeaderTcp Header;
-        [MarshalAs(UnmanagedType.Bool, SizeConst = 1)]
-        public bool Matched;
-    }
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stAdventureRoomLoaded
-    {
-        public stHeaderTcp Header;
-        [MarshalAs(UnmanagedType.Bool, SizeConst = 1)]
-        public bool Loaded;
+        [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
+        public ushort UdpPortSend;
+        [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
+        public ushort UdpPortReceive;
     }
 
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stCreateAdventureRoomTcp
+    public struct stRequestForMatch
+    {
+        public stHeaderTcp Header;
+        [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
+        public ushort MatchType;
+
+    }
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct stAdventureRoomPlayerLoadInfo
     {
         public stHeaderTcp Header;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort RoomId;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort PlayerIndex;
+    }
 
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct stCreateAdventureRoom
+    {
+        public stHeaderTcp Header;
+        public ushort RoomId;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = (int)GameRoomSize.AdventureRoomSize)]
         public stAdventurePlayerInfo[] playersInfo;
     }
@@ -81,15 +103,7 @@ namespace StandardData
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort Index;
     }
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stAdventureRoomPlayerLoadInfo
-    {
-        public stHeaderTcp Header;
-        [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
-        public ushort RoomId;
-        [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
-        public ushort Index;
-    }
+
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct stAdventureRoomLoadInfo
@@ -108,18 +122,37 @@ namespace StandardData
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort MsgID;
     }
+
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct stPlayerPosition
     {
-        public stHeaderUdp Header;
-        [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
-        public ushort RoomId;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort PlayerIndex;
         [MarshalAs(UnmanagedType.R4, SizeConst = 4)]
         public float PositionX;
         [MarshalAs(UnmanagedType.R4, SizeConst = 4)]
         public float PositionY;
+    }
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct stAdventurePlayerPositionToServer
+    {
+        public stHeaderUdp Header;
+        
+        [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
+        public ushort RoomType;
+        [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
+        public ushort RoomId;
+        public stPlayerPosition PlayerPosition;
+    }
+
+    public struct stAdventurePlayerPositionFromSever
+    {
+        public stHeaderUdp Header;
+
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = GameRoomSize.AdventureRoomSize)]
+        public stPlayerPosition[] PlayerPosition;
+
     }
 
 

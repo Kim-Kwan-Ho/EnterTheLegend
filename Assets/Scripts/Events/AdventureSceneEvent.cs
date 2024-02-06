@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using StandardData;
 using UnityEngine;
 
@@ -10,10 +8,10 @@ public class AdventureSceneEvent : MonoBehaviour
     public Action<AdventureSceneEvent, bool> OnGameStart;
     public Action<AdventureSceneEvent, AdventureSceneEventPlayerPositionArgs> OnPositionChanged;
 
-    public void CallRoomInitialize(ushort roomId, ushort playerIndex ,stAdventurePlayerInfo[] playersInfo)
+    public void CallRoomInitialize(ushort roomId, stAdventurePlayerInfo[] playersInfo)
     {
         OnRoomInitialize?.Invoke(this,
-            new AdventureSceneEventRoomInfoArgs() { roomInfo = new stAdventureRoomInfo(){roomId = roomId, playerIndex = playerIndex, playersInfo = playersInfo }});
+            new AdventureSceneEventRoomInfoArgs() { roomInfo = new stAdventureRoomInfo(){roomId = roomId,  playersInfo = playersInfo }});
     }
 
     public void CallGameStart(bool gameStart)
@@ -21,11 +19,10 @@ public class AdventureSceneEvent : MonoBehaviour
         OnGameStart?.Invoke(this, gameStart);
     }
 
-    public void CallPositionChanged(ushort index, Vector2 position)
+    public void CallPositionChanged(stAdventurePlayerPositionFromSever playerPositions)
     {
         OnPositionChanged?.Invoke(this,
-            new AdventureSceneEventPlayerPositionArgs()
-                { playerPosition = new stAdventurePlayerPosition() { index = index, position = position } });
+            new AdventureSceneEventPlayerPositionArgs() { playerPositions = playerPositions});
     }
 
 
@@ -39,17 +36,11 @@ public class AdventureSceneEventRoomInfoArgs : EventArgs
 public struct stAdventureRoomInfo
 {
     public ushort roomId;
-    public ushort playerIndex;
     public stAdventurePlayerInfo[] playersInfo;
 }
 
 public class AdventureSceneEventPlayerPositionArgs : EventArgs
 {
-    public stAdventurePlayerPosition playerPosition;
+    public stAdventurePlayerPositionFromSever playerPositions;
 }
 
-public struct stAdventurePlayerPosition
-{
-    public ushort index;
-    public Vector2 position;
-}

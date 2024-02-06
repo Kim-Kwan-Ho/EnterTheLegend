@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using StandardData;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 
 [RequireComponent(typeof(AttackEvent))]
@@ -78,10 +76,13 @@ public class MyPlayer : Creature
         yield return new WaitUntil(() =>AdventureSceneManager.Instance.State == AdventureSceneState.StartGame);
         while (true)
         {
-            stPlayerPosition position = new stPlayerPosition();
-            position.Header.MsgID = MessageIdUdp.PlayerPosition;
-            position.PositionX = transform.position.x;
-            position.PositionY = transform.position.y;
+            stAdventurePlayerPositionToServer position = new stAdventurePlayerPositionToServer();
+            position.Header.MsgID = MessageIdUdp.AdventurePlayerPositionToServer;
+            position.RoomType = (ushort)MyGameManager.Instance.RoomType;
+            position.RoomId = AdventureSceneManager.Instance.RoomId;
+            position.PlayerPosition.PlayerIndex = AdventureSceneManager.Instance.PlayerIndex;
+            position.PlayerPosition.PositionX = transform.position.x;
+            position.PlayerPosition.PositionY = transform.position.y;
 
             byte[] sendBytes = Utilities.GetObjectToByte(position);
             ServerManager.Instance.EventClientToServer.CallOnUdpSend(sendBytes);

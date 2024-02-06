@@ -1,11 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using PimDeWitte.UnityMainThreadDispatcher;
 using StandardData;
 using UnityEngine.SceneManagement;
 
@@ -40,8 +39,6 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
     protected override void Awake()
     {
         base.Awake();
-        _IPEndPointSend = new IPEndPoint(IPAddress.Parse(Ip), 9999);
-        _IPEndPointSend = new IPEndPoint(IPAddress.Parse(Ip), 2409);
         Init();
     }
 
@@ -68,7 +65,7 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         _udpSocketSend.Send(clientToServerEventArgs.bytes, clientToServerEventArgs.bytes.Length, _IPEndPointSend);
     }
 
-    public void Event_OnTcpMessageSend(ClientToServerEvent clientToServerEvent,
+    private void Event_OnTcpMessageSend(ClientToServerEvent clientToServerEvent,
         ClientToServerEventArgs clientToServerEventArgs)
     {
         if (_socketConnection.Connected)
@@ -85,12 +82,9 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         _udpListenerThread = new Thread(new ThreadStart(UdpListenForIncomingRequest));
         _udpListenerThread.IsBackground = true;
         _udpListenerThread.Start();
-
-        _IPEndPointSend = new IPEndPoint(IPAddress.Parse(Ip), 9999);
-        _udpSocketSend = new UdpClient();
-
-
     }
+
+
     private void TcpListenForIncomingRequest()
     {
         try
@@ -194,19 +188,23 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
     {
         switch (msgId)
         {
-            case MessageIdTcp.AdventureMatched:
-                MySceneManager.Instance.EventSceneChanged.CallSceneChanged("AdventureScene", true, 3);
+            case MessageIdTcp.SetUdpPort:
+                stSetUdpPort setPort = Utilities.GetObjectFromByte<stSetUdpPort>(msgData);
+                _IPEndPointSend = new IPEndPoint(IPAddress.Parse(Ip), setPort.UdpPortSend);
+                _udpSocketSend = new UdpClient();
+                _IPEndPointReceive = new IPEndPoint(IPAddress.Any, setPort.UdpPortReceive);
+                _udpSocketReceive = new UdpClient(_IPEndPointReceive);
                 break;
+
             case MessageIdTcp.CreateAdventureRoom:
-                stCreateAdventureRoomTcp createRoom = Utilities.GetObjectFromByte<stCreateAdventureRoomTcp>(msgData);
-                AdventureSceneManager.Instance.EventAdventureScene.CallRoomInitialize(createRoom.RoomId,
-                    createRoom.PlayerIndex,
-                    createRoom.playersInfo);
+                stCreateAdventureRoom createRoom = Utilities.GetObjectFromByte<stCreateAdventureRoom>(msgData);
+                UnityMainThreadDispatcher.Instance().Enqueue(() => { MySceneManager.Instance.EventSceneChanged.CallSceneChanged("AdventureScene", createRoom, true, 3); });
                 break;
             case MessageIdTcp.AdventureRoomLoadInfo:
                 stAdventureRoomLoadInfo loadInfo = Utilities.GetObjectFromByte<stAdventureRoomLoadInfo>(msgData);
                 if (loadInfo.IsAllSucceed)
                 {
+
 
                 }
                 else
@@ -243,10 +241,9 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
     {
         switch (msgId)
         {
-            case MessageIdUdp.PlayerPosition:
-                stPlayerPosition playerPosition = Utilities.GetObjectFromByte<stPlayerPosition>(msgData);
-                Vector2 pos = new Vector2(playerPosition.PositionX, playerPosition.PositionY);
-                AdventureSceneManager.Instance.EventAdventureScene.CallPositionChanged(playerPosition.PlayerIndex, pos);
+            case MessageIdUdp.AdventurePlayerPositionFromServer:
+                stAdventurePlayerPositionFromSever playerPosition = Utilities.GetObjectFromByte<stAdventurePlayerPositionFromSever>(msgData);
+                AdventureSceneManager.Instance.EventAdventureScene.CallPositionChanged(playerPosition);
                 break;
         }
     }
@@ -277,11 +274,11 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         _socketConnection.Close();
         _socketConnection = null;
 
-        _tcpListenerThread.Abort();
-        _tcpListenerThread = null;
+        //_tcpListenerThread.Abort();
+        //_tcpListenerThread = null;
 
-        _udpListenerThread.Abort();
-        _udpListenerThread = null;
+        //_udpListenerThread.Abort();
+        //_udpListenerThread = null;
     }
 
     private void OnApplicationQuit()
