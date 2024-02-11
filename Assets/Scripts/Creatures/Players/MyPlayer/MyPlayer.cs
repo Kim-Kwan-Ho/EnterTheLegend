@@ -13,7 +13,9 @@ public class MyPlayer : Creature
     [SerializeField] private Rigidbody2D _rigid;
     private float _moveSpeed = 3f;
 
-
+    private bool _canAttack = true;
+    private float _attackCoolTime = 0.2f;
+    
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -34,8 +36,6 @@ public class MyPlayer : Creature
 
     private void Start()
     {
-        _animator.speed = AnimationSettings.MyPlayerAnimationSpeed;
-        StartCoroutine(SendPlayerPosition());
     }
 
 
@@ -43,8 +43,9 @@ public class MyPlayer : Creature
     {
         if (_state != State.Attack)
         {
-            EventState.CallStateChangedEvent(State.Move);
-            if (movementEventArgs.direction != Direction.Previous)
+            if (_state != State.Move)
+                EventState.CallStateChangedEvent(State.Move);
+            if (movementEventArgs.direction != _direction)
                 EventDirection.CallDirectionChanged(movementEventArgs.direction);
 
         }
@@ -58,8 +59,20 @@ public class MyPlayer : Creature
     }
     private void Event_OnAttack(AttackEvent attackEvent, AttackEventArgs attackEventArgs)
     {
+        if (_canAttack)
+        {
+            StartCoroutine(Event_OnAttackCoroutine(attackEventArgs));
+        }
+        
+    }
+
+    private IEnumerator Event_OnAttackCoroutine(AttackEventArgs attackEventArgs)
+    {
+        _canAttack = false;
         EventState.CallStateChangedEvent(State.Attack);
         EventDirection.CallDirectionChanged(attackEventArgs.direction);
+        yield return new WaitForSeconds(_attackCoolTime);
+        _canAttack = true;
     }
 
     private void MoveRigidPlayer(Vector2 velocity)
@@ -71,25 +84,7 @@ public class MyPlayer : Creature
         _rigid.velocity = Vector2.zero;
     }
 
-    private IEnumerator SendPlayerPosition()
-    {
-        yield return new WaitUntil(() =>AdventureSceneManager.Instance.State == AdventureSceneState.StartGame);
-        while (true)
-        {
-            stAdventurePlayerPositionToServer position = new stAdventurePlayerPositionToServer();
-            position.Header.MsgID = MessageIdUdp.AdventurePlayerPositionToServer;
-            position.RoomType = (ushort)MyGameManager.Instance.RoomType;
-            position.RoomId = AdventureSceneManager.Instance.RoomId;
-            position.PlayerPosition.PlayerIndex = AdventureSceneManager.Instance.PlayerIndex;
-            position.PlayerPosition.PositionX = transform.position.x;
-            position.PlayerPosition.PositionY = transform.position.y;
 
-            byte[] sendBytes = Utilities.GetObjectToByte(position);
-            ServerManager.Instance.EventClientToServer.CallOnUdpSend(sendBytes);
-            yield return new WaitForSeconds(2f);
-
-        }
-    }
 
 #if UNITY_EDITOR
 

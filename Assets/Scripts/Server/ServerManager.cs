@@ -39,6 +39,7 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
     protected override void Awake()
     {
         base.Awake();
+        DontDestroyGameObject();
         Init();
     }
 
@@ -133,7 +134,7 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
                 {
                     break;
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(10);
             }
         }
         catch (SocketException socketException)
@@ -190,6 +191,7 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         {
             case MessageIdTcp.SetUdpPort:
                 stSetUdpPort setPort = Utilities.GetObjectFromByte<stSetUdpPort>(msgData);
+                MyGameManager.Instance.SetPlayerName(setPort.Name);
                 _IPEndPointSend = new IPEndPoint(IPAddress.Parse(Ip), setPort.UdpPortSend);
                 _udpSocketSend = new UdpClient();
                 _IPEndPointReceive = new IPEndPoint(IPAddress.Any, setPort.UdpPortReceive);
@@ -202,16 +204,25 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
                 break;
             case MessageIdTcp.AdventureRoomLoadInfo:
                 stAdventureRoomLoadInfo loadInfo = Utilities.GetObjectFromByte<stAdventureRoomLoadInfo>(msgData);
-                if (loadInfo.IsAllSucceed)
-                {
-
-
-                }
-                else
-                {
-                    // 여기다가 실패창 설정
-                }
+                AdventureSceneManager.Instance.EventAdventureScene.CallGameStart(loadInfo.IsAllSucceed);
                 break;
+            case MessageIdTcp.AdventureRoomPlayerStateChangedFromServer:
+                stAdventureRoomPlayerStateChangedFromServer stateChanged =
+                    Utilities.GetObjectFromByte<stAdventureRoomPlayerStateChangedFromServer>(msgData);
+                UnityMainThreadDispatcher.Instance().Enqueue(() =>
+                {
+                    AdventureSceneManager.Instance.EventAdventureScene.CallPlayerStateChanged(stateChanged.PlayerIndex, (State)stateChanged.State);
+                });
+                break;
+            case MessageIdTcp.AdventureRoomPlayerDirectionChangedFromServer:
+                stAdventureRoomPlayerDirectionChangedFromServer directionChanged =
+                    Utilities.GetObjectFromByte<stAdventureRoomPlayerDirectionChangedFromServer>(msgData);
+                UnityMainThreadDispatcher.Instance().Enqueue(() =>
+                {
+                    AdventureSceneManager.Instance.EventAdventureScene.CallPlayerDirectionChanged(directionChanged.PlayerIndex, (Direction)directionChanged.Direction);
+                });
+                break;
+
 
         }
     }
@@ -242,8 +253,13 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         switch (msgId)
         {
             case MessageIdUdp.AdventurePlayerPositionFromServer:
-                stAdventurePlayerPositionFromSever playerPosition = Utilities.GetObjectFromByte<stAdventurePlayerPositionFromSever>(msgData);
-                AdventureSceneManager.Instance.EventAdventureScene.CallPositionChanged(playerPosition);
+                stAdventurePlayerPositionFromSever playerPosition =
+                    Utilities.GetObjectFromByte<stAdventurePlayerPositionFromSever>(msgData);
+
+                UnityMainThreadDispatcher.Instance().Enqueue(() =>
+                {
+                    AdventureSceneManager.Instance.EventAdventureScene.CallPlayerPositionChanged(playerPosition);
+                });
                 break;
         }
     }
@@ -274,11 +290,11 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         _socketConnection.Close();
         _socketConnection = null;
 
-        //_tcpListenerThread.Abort();
-        //_tcpListenerThread = null;
+        _tcpListenerThread.Abort();
+        _tcpListenerThread = null;
 
-        //_udpListenerThread.Abort();
-        //_udpListenerThread = null;
+        _udpListenerThread.Abort();
+        _udpListenerThread = null;
     }
 
     private void OnApplicationQuit()

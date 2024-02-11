@@ -6,7 +6,10 @@ public class AdventureSceneEvent : MonoBehaviour
 {
     public Action<AdventureSceneEvent, AdventureSceneEventRoomInfoArgs> OnRoomInitialize;
     public Action<AdventureSceneEvent, bool> OnGameStart;
-    public Action<AdventureSceneEvent, AdventureSceneEventPlayerPositionArgs> OnPositionChanged;
+    public Action<AdventureSceneEvent, AdventureSceneEventPlayerPositionChangedArgs> OnPlayerPositionChanged;
+    public Action<AdventureSceneEvent, AdventureSceneEventPlayerStateChangedArgs> OnPlayerStateChanged;
+    public Action<AdventureSceneEvent, AdventureSceneEventPlayerDirectionChangedArgs> OnPlayerDirectionChanged;
+
 
     public void CallRoomInitialize(ushort roomId, stAdventurePlayerInfo[] playersInfo)
     {
@@ -19,13 +22,22 @@ public class AdventureSceneEvent : MonoBehaviour
         OnGameStart?.Invoke(this, gameStart);
     }
 
-    public void CallPositionChanged(stAdventurePlayerPositionFromSever playerPositions)
+    public void CallPlayerPositionChanged(stAdventurePlayerPositionFromSever playerPositions)
     {
-        OnPositionChanged?.Invoke(this,
-            new AdventureSceneEventPlayerPositionArgs() { playerPositions = playerPositions});
+        OnPlayerPositionChanged?.Invoke(this,
+            new AdventureSceneEventPlayerPositionChangedArgs() { playerPositions = playerPositions});
     }
 
-
+    public void CallPlayerStateChanged(ushort playerIndex, State state)
+    {
+        OnPlayerStateChanged?.Invoke(this,
+            new AdventureSceneEventPlayerStateChangedArgs() { playerIndex = playerIndex, state = state });
+    }
+    public void CallPlayerDirectionChanged(ushort playerIndex, Direction direction)
+    {
+        OnPlayerDirectionChanged?.Invoke(this,
+            new AdventureSceneEventPlayerDirectionChangedArgs() { playerIndex = playerIndex, direction = direction });
+    }
 }
 
 public class AdventureSceneEventRoomInfoArgs : EventArgs
@@ -39,8 +51,19 @@ public struct stAdventureRoomInfo
     public stAdventurePlayerInfo[] playersInfo;
 }
 
-public class AdventureSceneEventPlayerPositionArgs : EventArgs
+public class AdventureSceneEventPlayerPositionChangedArgs : EventArgs
 {
     public stAdventurePlayerPositionFromSever playerPositions;
 }
 
+public class AdventureSceneEventPlayerStateChangedArgs : EventArgs
+{
+    public ushort playerIndex;
+    public State state;
+}
+
+public class AdventureSceneEventPlayerDirectionChangedArgs : EventArgs
+{
+    public ushort playerIndex;
+    public Direction direction;
+}

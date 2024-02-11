@@ -29,5 +29,5 @@ public enum AdventureSceneState
     StartGame,
     MyPlayerDeath,
     ClearFailed,
-    ClearSucessed
+    ClearSucceed
 }

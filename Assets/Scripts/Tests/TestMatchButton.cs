@@ -10,7 +10,8 @@ public class TestMatchButton : MonoBehaviour
         requestMatch.Header.MsgID = MessageIdTcp.RequestForMatch;
         requestMatch.Header.PacketSize = (ushort)Marshal.SizeOf(requestMatch);
         requestMatch.MatchType = (ushort)GameRoomType.AdventureRoom;
-        ServerManager.Instance.EventClientToServer.CallOnTcpSend(Utilities.GetObjectToByte(requestMatch));
+        byte[] msg = Utilities.GetObjectToByte(requestMatch);
+        ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);
 
     }
 }

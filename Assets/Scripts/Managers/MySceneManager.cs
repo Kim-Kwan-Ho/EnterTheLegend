@@ -13,6 +13,7 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
     protected override void Awake()
     {
         base.Awake();
+        DontDestroyGameObject();
     }
     private void OnEnable()
     {

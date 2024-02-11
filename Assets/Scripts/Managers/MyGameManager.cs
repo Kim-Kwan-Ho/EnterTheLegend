@@ -1,16 +1,22 @@
 using StandardData;
-using UnityEditor.PackageManager;
+using UnityEngine;
 
 public class MyGameManager : SingletonMonobehaviour<MyGameManager>
 {
-    private string _playerName = "Client_1";
+    [SerializeField] private string _playerName = "Client_1";
     public string PlayerName
     {
         get { return _playerName; }
     }
+
+    public void SetPlayerName(string name)
+    {
+        _playerName = name;
+    }
     protected override void Awake()
     {
         base.Awake();
+        DontDestroyGameObject();
     }
 
     private GameRoomType _roomType;

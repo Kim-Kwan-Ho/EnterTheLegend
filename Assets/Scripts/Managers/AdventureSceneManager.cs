@@ -14,14 +14,11 @@ public class AdventureSceneManager : SingletonMonobehaviour<AdventureSceneManage
     [SerializeField] private GameObject _otherPlayerPrefab;
     [SerializeField] private GameObject _playerControllerPrefab;
 
-
     private AdventureSceneState _state;
     public AdventureSceneState State { get { return _state; } }
 
     private Creature[] _players = new Creature[GameRoomSize.AdventureRoomSize];
     private GameObject _playerController;
-    
-    private Dictionary<ushort, Creature> _playerDic = new Dictionary<ushort, Creature>();
 
     private ushort _roomId;
     public ushort RoomId { get { return _roomId; } }
@@ -35,20 +32,25 @@ public class AdventureSceneManager : SingletonMonobehaviour<AdventureSceneManage
     {
         base.Awake();
         _state = AdventureSceneState.Loading;
+
     }
     private void OnEnable()
     {
         EventAdventureScene.OnRoomInitialize += Event_InitializeRoom;
-        EventAdventureScene.OnPositionChanged += Event_PlayerPositionChanged;
+        EventAdventureScene.OnPlayerPositionChanged += Event_PlayerPositionChanged;
         EventAdventureScene.OnGameStart += Event_OnGameStart;
+        EventAdventureScene.OnPlayerStateChanged += Event_PlayerStateChanged;
+        EventAdventureScene.OnPlayerDirectionChanged += Event_PlayerDirectionChanged;
 
     }
 
     private void OnDisable()
     {
         EventAdventureScene.OnRoomInitialize -= Event_InitializeRoom;
-        EventAdventureScene.OnPositionChanged -= Event_PlayerPositionChanged;
+        EventAdventureScene.OnPlayerPositionChanged -= Event_PlayerPositionChanged;
         EventAdventureScene.OnGameStart -= Event_OnGameStart;
+        EventAdventureScene.OnPlayerStateChanged -= Event_PlayerStateChanged;
+        EventAdventureScene.OnPlayerDirectionChanged -= Event_PlayerDirectionChanged;
     }
 
     private void Event_InitializeRoom(AdventureSceneEvent adventureSceneEvent, AdventureSceneEventRoomInfoArgs adventureSceneEventArgs)
@@ -69,15 +71,15 @@ public class AdventureSceneManager : SingletonMonobehaviour<AdventureSceneManage
                 _players[i] = Instantiate(_otherPlayerPrefab).GetComponent<OtherPlayer>();
             }
             _players[i].Initialize();
-            _playerDic[roomInfo.playersInfo[i].Index] = _players[i];
-
         }
 
         stAdventureRoomPlayerLoadInfo playerLoadInfo = new stAdventureRoomPlayerLoadInfo();
         playerLoadInfo.Header.MsgID = MessageIdTcp.AdventurePlayerLoadInfo;
         playerLoadInfo.Header.PacketSize = (ushort)Marshal.SizeOf(playerLoadInfo);
         playerLoadInfo.RoomId = _roomId;
-        ServerManager.Instance.EventClientToServer.CallOnTcpSend(Utilities.GetObjectToByte(playerLoadInfo));
+        playerLoadInfo.PlayerIndex = _playerIndex;
+        byte[] msg = Utilities.GetObjectToByte(playerLoadInfo);
+        ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);
 
         _state = AdventureSceneState.WaitingPlayer;
     }
@@ -86,6 +88,8 @@ public class AdventureSceneManager : SingletonMonobehaviour<AdventureSceneManage
     {
         if (loadInfo)
         {
+            _state = AdventureSceneState.StartGame;
+            TestDebugLog.DebugLog("Game Start");
             // 게임 시작 작성
         }
         else
@@ -95,19 +99,32 @@ public class AdventureSceneManager : SingletonMonobehaviour<AdventureSceneManage
     }
 
     private void Event_PlayerPositionChanged(AdventureSceneEvent adventureSceneEvent,
-        AdventureSceneEventPlayerPositionArgs adventureSceneEventArgs)
+        AdventureSceneEventPlayerPositionChangedArgs adventureSceneEventArgs)
     {
         stAdventurePlayerPositionFromSever playerPositions = adventureSceneEventArgs.playerPositions;
         for (int i = 0; i < playerPositions.PlayerPosition.Length; i++)
         {
             if (playerPositions.PlayerPosition[i].PlayerIndex == _playerIndex)
-                return;
-            _playerDic[playerPositions.PlayerPosition[i].PlayerIndex].EventMovement.CallPositionMovement(
+                continue;
+            _players[playerPositions.PlayerPosition[i].PlayerIndex].EventMovement.CallPositionMovement(
                 new Vector2(playerPositions.PlayerPosition[i].PositionX, playerPositions.PlayerPosition[i].PositionY));
         }
         
     }
 
+    private void Event_PlayerStateChanged(AdventureSceneEvent adventureSceneEvent,
+        AdventureSceneEventPlayerStateChangedArgs adventureSceneEventPlayerStateChangedArgs)
+    {
+        _players[adventureSceneEventPlayerStateChangedArgs.playerIndex].EventState
+            .CallStateChangedEvent(adventureSceneEventPlayerStateChangedArgs.state);
+    }
+
+    private void Event_PlayerDirectionChanged(AdventureSceneEvent adventureSceneEvent,
+        AdventureSceneEventPlayerDirectionChangedArgs adventureSceneEventPlayerDirectionChangedArgs)
+    {
+        _players[adventureSceneEventPlayerDirectionChangedArgs.playerIndex].EventDirection
+            .CallDirectionChanged(adventureSceneEventPlayerDirectionChangedArgs.direction);
+    }
 
     public MyPlayer GetMyPlayer()
     {

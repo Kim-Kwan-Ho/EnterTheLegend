@@ -25,6 +25,7 @@ public class Creature : BaseBehaviour
     {
         _direction = Direction.Down;
         _state = State.Idle;
+        _animator.speed = AnimationSettings.PlayerAnimationSpeed;
     }
 
 
@@ -41,7 +42,7 @@ public class Creature : BaseBehaviour
     {
         EventState.OnStateChanged -= Event_OnStateChanged;
         EventDirection.OnDirectionChanged -= Event_OnDirectionChanged;
-        EventMovement.OnPositionMovement += Event_OnMovement;
+        EventMovement.OnPositionMovement -= Event_OnMovement;
 
     }
 

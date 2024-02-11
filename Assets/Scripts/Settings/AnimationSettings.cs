@@ -8,5 +8,5 @@ public class AnimationSettings
     public static int IsAttacking = Animator.StringToHash("IsAttacking");
     public static int Vertical = Animator.StringToHash("Vertical");
     public static int Horizontal = Animator.StringToHash("Horizontal");
-    public static float MyPlayerAnimationSpeed = 1.8f;
+    public static float PlayerAnimationSpeed = 1.8f;
 }
