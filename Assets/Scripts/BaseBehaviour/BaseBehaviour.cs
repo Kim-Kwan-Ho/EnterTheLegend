@@ -37,7 +37,7 @@ public class BaseBehaviour : MonoBehaviour
         List<T> list = new List<T>();
         foreach (T component in components)
         {
-            if (component == this)
+            if (component.gameObject.GetInstanceID() == this.gameObject.GetInstanceID())
             {
                 continue;
             }
@@ -47,6 +47,23 @@ public class BaseBehaviour : MonoBehaviour
             }
         }
         return list;
+    }
+    protected T GetComponentInChildrenExceptThis<T>() where T : Component
+    {
+        T[] components = GetComponentsInChildren<T>();
+        foreach (T component in components)
+        {
+            if (component.gameObject.GetInstanceID() == this.gameObject.GetInstanceID())
+            {
+                continue;
+            }
+            else
+            {
+                return component;
+            }
+        }
+
+        return null;
     }
 
 #endif 

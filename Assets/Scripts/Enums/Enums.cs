@@ -31,3 +31,12 @@ public enum AdventureSceneState
     ClearFailed,
     ClearSucceed
 }
+
+public enum EquipmentType
+{
+    Character,
+    Weapon,
+    Helmet,
+    Armor,
+    Shoes
+}
