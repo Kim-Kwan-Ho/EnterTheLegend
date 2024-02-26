@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,9 +9,9 @@ public class ItemInfo : BaseBehaviour
 
     [Header("Texts")] 
     [SerializeField] 
-    private Text _nameText;
+    private TextMeshProUGUI _nameText;
     [SerializeField]
-    private Text _descriptionText;
+    private TextMeshProUGUI _descriptionText;
 
 
     [Header("Buttons")]
@@ -29,10 +30,11 @@ public class ItemInfo : BaseBehaviour
         _closeButton.onClick.AddListener(() => this.gameObject.SetActive(false));
         _equipButton.onClick.AddListener(OnEquip);
         _unequipButton.onClick.AddListener(OnUnequip);
+        gameObject.SetActive(false);
     }
 
 
-    public void SetItemInfo(Vector2 position, EquipmentSO equipment = null)
+    public void SetItemInfo(Vector2 position, EquipmentSO equipment)
     {
         transform.position = position;
         _equipButton.gameObject.SetActive(!equipment.IsEquipped);
@@ -61,8 +63,8 @@ public class ItemInfo : BaseBehaviour
         _equipButton = GameObject.Find("EquipButton").GetComponent<Button>();
         _closeButton = GameObject.Find("InfoCloseButton").GetComponent<Button>();
         _unequipButton = GameObject.Find("UnequipButton").GetComponent<Button>();
-        _nameText = GameObject.Find("ItemNameText").GetComponent<Text>();
-        _descriptionText = GameObject.Find("DescriptionText").GetComponent<Text>();
+        _nameText = GameObject.Find("ItemNameText").GetComponent<TextMeshProUGUI>();
+        _descriptionText = GameObject.Find("DescriptionText").GetComponent<TextMeshProUGUI>();
 
     }
 

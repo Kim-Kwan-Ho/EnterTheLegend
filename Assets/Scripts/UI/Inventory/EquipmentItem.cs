@@ -8,7 +8,7 @@ public class EquipmentItem : BaseBehaviour
     [SerializeField]
     private Image _itemImage;
     private EquipmentSO _equipment;
-
+    public EquipmentSO EquipmentSo { get { return _equipment; } }
 
     public void SetEquipmentItem(EquipmentSO equipment)
     {
