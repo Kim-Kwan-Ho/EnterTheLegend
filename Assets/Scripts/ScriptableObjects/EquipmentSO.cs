@@ -8,6 +8,7 @@ public class EquipmentSO : ScriptableObject
 {
     public bool IsEquipped;
     public Sprite ItemSprite;
+    public Sprite CharacterEquipmentSprite;
     public EquipmentType Type;
     public string Name;
     public string Description;

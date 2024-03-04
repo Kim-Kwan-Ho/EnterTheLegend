@@ -46,7 +46,9 @@ public class Inventory : BaseBehaviour
             int c = i;
             _toggles[i].onValueChanged.AddListener((value) => _toggles[c].transform.GetChild(0).gameObject.SetActive(value));
             _toggles[i].onValueChanged.AddListener((value)=> _itemInfo.gameObject.SetActive(false));
+            _toggles[c].transform.GetChild(0).gameObject.SetActive(false);
         }
+        _toggles[0].transform.GetChild(0).gameObject.SetActive(true);
 
     }
     public void SetInventory(EquipmentSO[] equipments)

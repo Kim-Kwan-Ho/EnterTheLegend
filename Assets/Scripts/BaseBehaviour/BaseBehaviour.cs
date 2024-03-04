@@ -48,6 +48,19 @@ public class BaseBehaviour : MonoBehaviour
         }
         return list;
     }
+
+    protected T FindGameObjectInChildren<T>(string name) where T : Component
+    {
+        T[] objects = GetComponentsInChildren<T>();
+        foreach (var obj in objects)
+        {
+            if (obj.gameObject.name.Equals(name))
+                return obj;
+        }
+        return null;
+    }
+
+
     protected T GetComponentInChildrenExceptThis<T>() where T : Component
     {
         T[] components = GetComponentsInChildren<T>();

@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using Assets.HeroEditor.InventorySystem.Scripts.Elements;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -23,38 +22,47 @@ public class ItemInfo : BaseBehaviour
     private Button _closeButton;
 
 
+    private EquipmentSO _equipment;
 
 
     private void Start()
     {
         _closeButton.onClick.AddListener(() => this.gameObject.SetActive(false));
         _equipButton.onClick.AddListener(OnEquip);
-        _unequipButton.onClick.AddListener(OnUnequip);
+        _unequipButton.onClick.AddListener( OnUnequip);
         gameObject.SetActive(false);
     }
 
 
     public void SetItemInfo(Vector2 position, EquipmentSO equipment)
     {
+        _equipment = equipment;
         transform.position = position;
-        _equipButton.gameObject.SetActive(!equipment.IsEquipped);
-        _unequipButton.gameObject.SetActive(equipment.IsEquipped);
         _nameText.text = equipment.Name;
         _descriptionText.text = equipment.Description;
+        SetEquipButton();
         gameObject.SetActive(true);
     }
 
     private void OnEquip()
     {
-
+        _equipment.IsEquipped = true;
+        LobbySceneManager.Instance.EventEquipChanged.CallOnEquipChanged(_equipment.Type , _equipment);
+        SetEquipButton();
     }
 
     private void OnUnequip()
     {
-
+        _equipment.IsEquipped = false;
+        LobbySceneManager.Instance.EventEquipChanged.CallOnEquipChanged(_equipment.Type, null);
+        SetEquipButton();
     }
 
-
+    private void SetEquipButton()
+    {
+        _equipButton.gameObject.SetActive(!_equipment.IsEquipped);
+        _unequipButton.gameObject.SetActive(_equipment.IsEquipped);
+    }
 
 #if UNITY_EDITOR
     protected override void OnBindField()

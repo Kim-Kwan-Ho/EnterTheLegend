@@ -8,16 +8,19 @@ public class MyGameManager : SingletonMonobehaviour<MyGameManager>
     {
         get { return _playerName; }
     }
-
-    public void SetPlayerName(string name)
-    {
-        _playerName = name;
-    }
     protected override void Awake()
     {
         base.Awake();
         DontDestroyGameObject();
     }
+
+    public void SetPlayerName(string name)
+    {
+        _playerName = name;
+    }
+
+
+
 
     private GameRoomType _roomType;
     public GameRoomType RoomType
