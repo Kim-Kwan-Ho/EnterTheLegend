@@ -23,14 +23,10 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
     private void Start()
     {
         TestUpdate();
-    }
-
-    private void OnEnable()
-    {
         EventEquipChanged.OnEquipChanged += Event_OnEquipChanged;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         EventEquipChanged.OnEquipChanged -= Event_OnEquipChanged;
     }

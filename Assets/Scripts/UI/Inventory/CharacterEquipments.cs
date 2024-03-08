@@ -85,7 +85,7 @@ public class CharacterEquipments : BaseBehaviour
                 _shoesImage.sprite = equipChangedEventArgs.equipment.ItemSprite;
             }
         }
-        else if (type == EquipmentType.Character)
+         else if (type == EquipmentType.Character)
         {
 
         }

@@ -26,5 +26,6 @@ public abstract class SingletonMonobehaviour<T> : BaseBehaviour where T : MonoBe
     { 
         DontDestroyOnLoad(this.gameObject);
     }
-    
+
+
 }

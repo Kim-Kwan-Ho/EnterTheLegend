@@ -34,7 +34,7 @@ public class AdventureSceneManager : SingletonMonobehaviour<AdventureSceneManage
         _state = AdventureSceneState.Loading;
 
     }
-    private void OnEnable()
+    private void Start()
     {
         EventAdventureScene.OnRoomInitialize += Event_InitializeRoom;
         EventAdventureScene.OnPlayerPositionChanged += Event_PlayerPositionChanged;
@@ -44,7 +44,7 @@ public class AdventureSceneManager : SingletonMonobehaviour<AdventureSceneManage
 
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
         EventAdventureScene.OnRoomInitialize -= Event_InitializeRoom;
         EventAdventureScene.OnPlayerPositionChanged -= Event_PlayerPositionChanged;

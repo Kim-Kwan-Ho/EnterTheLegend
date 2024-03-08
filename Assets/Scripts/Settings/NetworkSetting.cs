@@ -7,7 +7,11 @@ namespace StandardData
         public const int HeaderSize = 4;
         public const int BufferSize = 2048;
         public const int TempBufferSize = 1048;
-        public const int MaxNameSize = 10;
+        public const int MaxUDPNameLength = 10;
+        public const int MaxPlayerNameLength = 10;
+        public const int MaxIdLength = 10;
+        public const int MaxPasswordLength = 10;
+
     }
 
     public static class GameRoomSize
@@ -17,6 +21,7 @@ namespace StandardData
     }
     public static class MessageIdTcp
     {
+
         public const ushort RequestForMatch = 1;
         public const ushort AdventureRoomLoaded = 2;
         public const ushort CreateAdventureRoom = 3;
@@ -27,6 +32,7 @@ namespace StandardData
         public const ushort AdventureRoomPlayerStateChangedFromServer = 77;
         public const ushort AdventureRoomPlayerDirectionChangedToServer = 8;
         public const ushort AdventureRoomPlayerDirectionChangedFromServer = 88;
+
 
     }
 
@@ -67,13 +73,17 @@ namespace StandardData
     {
         public stHeaderTcp Header;
 
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 10)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NetworkSize.MaxUDPNameLength)]
         public string Name;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort UdpPortSend;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort UdpPortReceive;
     }
+
+    
+
+
 
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -105,7 +115,7 @@ namespace StandardData
     }
     public struct stAdventurePlayerInfo
     {
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = (int)(NetworkSize.MaxNameSize))]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = (int)(NetworkSize.MaxPlayerNameLength))]
         public string Name;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort Index;

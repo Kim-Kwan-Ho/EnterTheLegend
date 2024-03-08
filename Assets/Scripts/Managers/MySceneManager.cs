@@ -14,15 +14,19 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
     {
         base.Awake();
         DontDestroyGameObject();
+        Debug.Log("Qs");
     }
-    private void OnEnable()
+
+    private void Start()
     {
         EventSceneChanged.OnSceneChanged += Event_LoadSceneAsync;
+
     }
-    private void OnDisable()
+    private void OnDestroy()
     {
         EventSceneChanged.OnSceneChanged -= Event_LoadSceneAsync;
     }
+
 
 
     private void Event_LoadSceneAsync(SceneChangeEvent sceneChangeEvent, SceneChangeEventArgs sceneChangeEventArgs)
