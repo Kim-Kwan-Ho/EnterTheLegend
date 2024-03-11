@@ -10,7 +10,7 @@ using PlayFab;
 using PlayFab.ClientModels;
 using System.Security.Cryptography;
 
-public class LoginPopup : UIPopup
+public class LoginPopup : UIPopup, IPlayfabDataHandler
 {
     [Header("InputFields")]
     [SerializeField]
@@ -52,8 +52,10 @@ public class LoginPopup : UIPopup
     {
         Debug.Log("LoginStart");
         _id = _idInputField.text;
+        _password = _idInputField.text;
         var request = new LoginWithPlayFabRequest
-        { Username = _idInputField.text, Password = _passwordInputField.text };
+        { Username = _id, Password = _password};
+        PlayerPrefs.SetInt("PlayerInfo", (int)LoginPlatform.PlayFabAccount);
         PlayFabClientAPI.LoginWithPlayFab(request, OnLoginSucceed, CallErrorReport);
 
     }
@@ -61,7 +63,8 @@ public class LoginPopup : UIPopup
     private void OnLoginSucceed(LoginResult result)
     {
         PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), GetIpPortAddress, CallErrorReport);
-        Debug.Log("LoginSucceed");
+        PlayerPrefs.SetString("PlayerId", _id);
+        PlayerPrefs.SetString("PlayerPassword", _password);
     }
 
     private void OnRegister()
@@ -84,10 +87,12 @@ public class LoginPopup : UIPopup
         {
             CustomId = SystemInfo.deviceUniqueIdentifier, CreateAccount = true
         };
+
+        PlayerPrefs.SetInt("PlayerInfo", (int)LoginPlatform.Guest);
         PlayFabClientAPI.LoginWithCustomID(request, OnLoginSucceed, CallErrorReport);
     }
 
-    private void GetIpPortAddress(GetTitleDataResult result)
+    public void GetIpPortAddress(GetTitleDataResult result)
     {
         string ip = result.Data["IP"];
         string port = result.Data["Port"];
@@ -95,7 +100,7 @@ public class LoginPopup : UIPopup
         ClosePopup();
     }
 
-    private void CallErrorReport(PlayFabError error)
+    public void CallErrorReport(PlayFabError error)
     {
         UIManager.Instance.OpenNoticePopup(error.ToString());
     }
@@ -129,6 +134,11 @@ public class LoginPopup : UIPopup
     }
 
 #endif
+}
 
 
+public interface IPlayfabDataHandler
+{
+    void GetIpPortAddress(GetTitleDataResult result);
+    void CallErrorReport(PlayFabError error);
 }

@@ -11,7 +11,6 @@ public class UIManager : SingletonMonobehaviour<UIManager>
     private Dictionary<Type, GameObject> _commonPopupDic = new Dictionary<Type, GameObject>();
     private Dictionary<Type, GameObject> _dynamicPopupDic = new Dictionary<Type, GameObject>();
 
-    private int _layerOrder = 20;
 
     protected override void Awake()
     {

@@ -1,3 +1,12 @@
+public enum LoginPlatform
+{
+    Guest = 0,
+    PlayFabAccount = 1,
+    Facebook = 2,
+    Google = 3
+}
+
+
 public enum Direction
 {
     UpLeft = 0,

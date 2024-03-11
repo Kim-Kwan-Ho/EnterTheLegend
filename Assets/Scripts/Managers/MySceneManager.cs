@@ -14,7 +14,6 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
     {
         base.Awake();
         DontDestroyGameObject();
-        Debug.Log("Qs");
     }
 
     private void Start()
