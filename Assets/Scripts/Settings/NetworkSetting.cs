@@ -10,6 +10,8 @@ namespace StandardData
         public const int MaxUDPNameLength = 10;
         public const int MaxPlayerNameLength = 10;
         public const int MaxIdLength = 10;
+        public const int EquipedItemLength = 5;
+        public const int MaxItemLength = 100;
         public const int MaxPasswordLength = 10;
 
     }
@@ -32,6 +34,8 @@ namespace StandardData
         public const ushort AdventureRoomPlayerStateChangedFromServer = 77;
         public const ushort AdventureRoomPlayerDirectionChangedToServer = 8;
         public const ushort AdventureRoomPlayerDirectionChangedFromServer = 88;
+        public const ushort RequestPlayerData = 9;
+        public const ushort ResponsePlayerData = 999;
 
 
     }
@@ -81,7 +85,33 @@ namespace StandardData
         public ushort UdpPortReceive;
     }
 
-    
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct stRequestPlayerData
+    {
+        public stHeaderTcp Header;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NetworkSize.MaxPlayerNameLength)]
+        public string Id;
+    }
+
+
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct stResponsePlayerData
+    {
+        public stHeaderTcp Header;
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NetworkSize.MaxIdLength)]
+        public string Nickname;
+        [MarshalAs(UnmanagedType.U4, SizeConst = 4)]
+        public int Credit;
+        [MarshalAs(UnmanagedType.U4, SizeConst = 4)]
+        public int Gold;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = NetworkSize.EquipedItemLength)]
+        public int[] EquipedItems;
+        [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
+        public ushort ItemCount;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = NetworkSize.MaxItemLength)]
+        public int[] Items;
+    }
+
 
 
 

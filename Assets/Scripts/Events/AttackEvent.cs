@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class AttackEvent : MonoBehaviour
 {
-    public event Action<AttackEvent, AttackEventArgs> OnAttack;
+    public Action<AttackEvent, AttackEventArgs> OnAttack;
 
     public void CallAttackEvent(Direction direction, float aimAngle)
     {

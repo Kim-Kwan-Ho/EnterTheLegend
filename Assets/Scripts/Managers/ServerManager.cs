@@ -14,6 +14,7 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
 {
 
     private string _id = null;
+    public string ID { get { return _id; } }
     private string _ip = null;
     private int _port = 0;
     private bool _clientReady = false;
@@ -62,9 +63,9 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         LoginSceneEventLoginSucceedArgs loginSceneEventLoginSucceedArgs)
     {
         Debug.Log("서버 시작");
-        _id = loginSceneEventLoginSucceedArgs.Id;
-        _ip = loginSceneEventLoginSucceedArgs.Ip;
-        _port = loginSceneEventLoginSucceedArgs.Port;
+        _id = loginSceneEventLoginSucceedArgs.id;
+        _ip = loginSceneEventLoginSucceedArgs.ip;
+        _port = loginSceneEventLoginSucceedArgs.port;
         OpenServer();
     }
 
@@ -209,7 +210,9 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
                 _IPEndPointReceive = new IPEndPoint(IPAddress.Any, setPort.UdpPortReceive);
                 _udpSocketReceive = new UdpClient(_IPEndPointReceive);
                 break;
-
+            case MessageIdTcp.ResponsePlayerData:
+                stResponsePlayerData playerData = Utilities.GetObjectFromByte<stResponsePlayerData>(msgData);
+                break;
             case MessageIdTcp.CreateAdventureRoom:
                 stCreateAdventureRoom createRoom = Utilities.GetObjectFromByte<stCreateAdventureRoom>(msgData);
                 UnityMainThreadDispatcher.Instance().Enqueue(() => { MySceneManager.Instance.EventSceneChanged.CallSceneChanged("AdventureScene", createRoom, true, 3); });

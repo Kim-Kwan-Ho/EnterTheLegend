@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class LoginSceneEvents : MonoBehaviour
 {
-    public Action<LoginSceneEvents,LoginSceneEventLoginSucceedArgs> OnLoginSuccess;
+    public Action<LoginSceneEvents, LoginSceneEventLoginSucceedArgs> OnLoginSuccess;
     public Action<LoginSceneEvents, LoginSceneEventLoginFailedArgs> OnLoginFailed;
 
-    public void CallLoginSuccess(string Id, string Ip, int Port)
+    public void CallLoginSuccess(string id, string ip, int port)
     {
-        OnLoginSuccess?.Invoke(this, new LoginSceneEventLoginSucceedArgs() { Ip = Ip, Port = Port });
+        OnLoginSuccess?.Invoke(this, new LoginSceneEventLoginSucceedArgs() { id = id, ip = ip, port = port });
     }
     public void CallLoginFailed()
     {
@@ -23,9 +23,9 @@ public class LoginSceneEvents : MonoBehaviour
 
 public class LoginSceneEventLoginSucceedArgs : EventArgs
 {
-    public string Id;
-    public string Ip;
-    public int Port;
+    public string id;
+    public string ip;
+    public int port;
 }
 
 public class LoginSceneEventLoginFailedArgs : EventArgs

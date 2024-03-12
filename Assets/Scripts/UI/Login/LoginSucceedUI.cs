@@ -17,7 +17,7 @@ public class LoginSucceedUI : BaseBehaviour
     }
     private void GameStart()
     {
-        MySceneManager.Instance.EventSceneChanged.CallSceneChanged("LobbyScene", null, true, 3);
+        MySceneManager.Instance.EventSceneChanged.CallSceneChanged("LobbyScene", null, true, 5);
     }
 
     private void PlayerLogout()

@@ -1,5 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using StandardData;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,6 +21,7 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
     protected override void Awake()
     {
         base.Awake();
+        GetPlayerData();
     }
 
     private void Start()
@@ -35,6 +39,17 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
         var items = Resources.LoadAll<EquipmentSO>("Items");
         _inventory.SetInventory(items);
     }
+
+    private void GetPlayerData()
+    {
+        stRequestPlayerData request = new stRequestPlayerData();
+        request.Header.MsgID = MessageIdTcp.RequestPlayerData;
+        request.Header.PacketSize = (UInt16)Marshal.SizeOf(request);
+        request.Id = ServerManager.Instance.ID;
+        byte[] msg = Utilities.GetObjectToByte(request);
+        ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);
+    }
+
 
     public void Event_OnEquipChanged(EquipChangedEvent equipChangedEvent, EquipChangedEventArgs equipChangedEventArgs)
     {
