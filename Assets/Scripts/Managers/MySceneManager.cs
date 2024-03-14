@@ -35,12 +35,12 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
         DontDestroyGameObject();
     }
 
-    private void Start()
+    private void OnEnable()
     {
         EventSceneChanged.OnSceneChanged += Event_LoadSceneAsync;
 
     }
-    private void OnDestroy()
+    private void OnDisable()
     {
         EventSceneChanged.OnSceneChanged -= Event_LoadSceneAsync;
     }
@@ -51,21 +51,28 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
     {
 
         _loadingGage = 0;
-        SceneManager.sceneLoaded += InitializeScene;
         _sceneInitialize = sceneChangeEventArgs.sceneInitialize;
         StartCoroutine(FadeOut(sceneChangeEventArgs));
     }
 
-    private void InitializeScene(Scene scene, LoadSceneMode arg1)
+    private void InitializeScene(string name)
     {
-        if (scene.name == "AdventureScene")
+        if (_sceneInitialize == null)
+            return;
+        
+        if (name == "AdventureScene")
         {
             stCreateAdventureRoom roomInfo = (stCreateAdventureRoom)_sceneInitialize;
             AdventureSceneManager.Instance.EventAdventureScene.CallRoomInitialize(roomInfo.RoomId,
                 roomInfo.playersInfo);
         }
-        SceneManager.sceneLoaded -= InitializeScene;
+        else if (name == "LobbyScene")
+        {
+            stResponsePlayerData playerData = (stResponsePlayerData)_sceneInitialize;
+            LobbySceneManager.Instance.EventLobbyScene.CallLobbyInitialize(playerData);
+        }
 
+        _sceneInitialize = null;
     }
 
     private IEnumerator FadeIn()
@@ -103,13 +110,14 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
                 time += Time.deltaTime;
                 yield return null;
             }
+            while (!op.isDone)
+                yield return null;
         }
         else
         {
             while (!op.isDone)
             {
-                if (op.progress >= 0.9f)
-                    break;
+
                 _loadingGage = op.progress * 100;
                 _loadingSlider.value = _loadingGage;
                 _loadingGageText.text = $"Loading... {(int)_loadingGage}%";
@@ -123,6 +131,7 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
         SceneManager.UnloadSceneAsync("LoadingScene");
         _loadingGage = 1;
         op.allowSceneActivation = true;
+        InitializeScene(sceneName);
         StartCoroutine(FadeIn());
     }
     private IEnumerator FadeOut(SceneChangeEventArgs sceneChangeEventArgs = null)

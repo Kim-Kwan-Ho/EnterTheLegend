@@ -60,7 +60,7 @@ public class AdventureSceneManager : SingletonMonobehaviour<AdventureSceneManage
         for (ushort i = 0; i < GameRoomSize.AdventureRoomSize; i++)
         {
 
-            if (roomInfo.playersInfo[i].Name == MyGameManager.Instance.PlayerName)
+            if (roomInfo.playersInfo[i].Name == MyGameManager.Instance.Nickname)
             {
                 _playerIndex = i;
                 _players[i] = Instantiate(_playerPrefab).GetComponent<MyPlayer>();

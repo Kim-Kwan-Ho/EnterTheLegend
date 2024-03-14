@@ -47,14 +47,14 @@ public class ItemInfo : BaseBehaviour
     private void OnEquip()
     {
         _equipment.IsEquipped = true;
-        LobbySceneManager.Instance.EventEquipChanged.CallOnEquipChanged(_equipment.Type , _equipment);
+        LobbySceneManager.Instance.EventLobbyScene.CallOnEquipChanged(_equipment.Type , _equipment);
         SetEquipButton();
     }
 
     private void OnUnequip()
     {
         _equipment.IsEquipped = false;
-        LobbySceneManager.Instance.EventEquipChanged.CallOnEquipChanged(_equipment.Type, null);
+        LobbySceneManager.Instance.EventLobbyScene.CallOnEquipChanged(_equipment.Type, null);
         SetEquipButton();
     }
 

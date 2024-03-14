@@ -1,5 +1,8 @@
+using StandardData;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +20,12 @@ public class LoginSucceedUI : BaseBehaviour
     }
     private void GameStart()
     {
-        MySceneManager.Instance.EventSceneChanged.CallSceneChanged("LobbyScene", null, true, 5);
+        stRequestPlayerData request = new stRequestPlayerData();
+        request.Header.MsgID = MessageIdTcp.RequestPlayerData;
+        request.Header.PacketSize = (UInt16)Marshal.SizeOf(request);
+        request.Id = ServerManager.Instance.ID;
+        byte[] msg = Utilities.GetObjectToByte(request);
+        ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);
     }
 
     private void PlayerLogout()

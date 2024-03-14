@@ -204,7 +204,6 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         {
             case MessageIdTcp.SetUdpPort:
                 stSetUdpPort setPort = Utilities.GetObjectFromByte<stSetUdpPort>(msgData);
-                MyGameManager.Instance.SetPlayerName(setPort.Name);
                 _IPEndPointSend = new IPEndPoint(IPAddress.Parse(_ip), setPort.UdpPortSend);
                 _udpSocketSend = new UdpClient();
                 _IPEndPointReceive = new IPEndPoint(IPAddress.Any, setPort.UdpPortReceive);
@@ -212,6 +211,7 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
                 break;
             case MessageIdTcp.ResponsePlayerData:
                 stResponsePlayerData playerData = Utilities.GetObjectFromByte<stResponsePlayerData>(msgData);
+                UnityMainThreadDispatcher.Instance().Enqueue(() => { MySceneManager.Instance.EventSceneChanged.CallSceneChanged("LobbyScene", playerData, true, 5); });
                 break;
             case MessageIdTcp.CreateAdventureRoom:
                 stCreateAdventureRoom createRoom = Utilities.GetObjectFromByte<stCreateAdventureRoom>(msgData);

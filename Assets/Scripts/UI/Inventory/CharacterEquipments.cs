@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class CharacterEquipments : BaseBehaviour
 {
-    [Header("Equipments Images")] 
+    [Header("Equipments Images")]
     [SerializeField]
     private Image _helmetImage;
     [SerializeField]
@@ -28,16 +28,16 @@ public class CharacterEquipments : BaseBehaviour
 
     private void OnEnable()
     {
-        LobbySceneManager.Instance.EventEquipChanged.OnEquipChanged += OnEquipmentChanged;
+        LobbySceneManager.Instance.EventLobbyScene.OnEquipChanged += OnEquipmentChanged;
     }
 
     private void OnDisable()
     {
-        LobbySceneManager.Instance.EventEquipChanged.OnEquipChanged -= OnEquipmentChanged;
+        LobbySceneManager.Instance.EventLobbyScene.OnEquipChanged -= OnEquipmentChanged;
     }
 
 
-    private void OnEquipmentChanged(EquipChangedEvent equipChangedEvent, EquipChangedEventArgs equipChangedEventArgs)
+    private void OnEquipmentChanged(LobbySceneEvent lobbySceneEvent, LobbySceneEquipChangedArgs equipChangedEventArgs)
     {
         var type = equipChangedEventArgs.type;
 
@@ -85,7 +85,7 @@ public class CharacterEquipments : BaseBehaviour
                 _shoesImage.sprite = equipChangedEventArgs.equipment.ItemSprite;
             }
         }
-         else if (type == EquipmentType.Character)
+        else if (type == EquipmentType.Character)
         {
 
         }

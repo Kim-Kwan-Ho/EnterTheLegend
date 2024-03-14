@@ -6,6 +6,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Equipment_", menuName = "Scriptable Objects/Equipment")]
 public class EquipmentSO : ScriptableObject
 {
+    public int ItemId;
     public bool IsEquipped;
     public Sprite ItemSprite;
     public Sprite CharacterEquipmentSprite;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 
 public class BaseBehaviour : MonoBehaviour
@@ -94,7 +95,8 @@ public class BehaviourBaseEditor : UnityEditor.Editor
         
         if (GUILayout.Button("Bind Objects")) 
         {
-            _bindMethod.Invoke(target ,new object[]{}); 
+            _bindMethod.Invoke(target ,new object[]{});
+            EditorUtility.SetDirty(target);
         }
         base.OnInspectorGUI();
 
