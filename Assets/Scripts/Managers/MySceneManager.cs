@@ -57,9 +57,6 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
 
     private void InitializeScene(string name)
     {
-        if (_sceneInitialize == null)
-            return;
-        
         if (name == "AdventureScene")
         {
             stCreateAdventureRoom roomInfo = (stCreateAdventureRoom)_sceneInitialize;
@@ -68,8 +65,7 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
         }
         else if (name == "LobbyScene")
         {
-            stResponsePlayerData playerData = (stResponsePlayerData)_sceneInitialize;
-            LobbySceneManager.Instance.EventLobbyScene.CallLobbyInitialize(playerData);
+            MyGameManager.Instance.InitializeLobbyScene();
         }
 
         _sceneInitialize = null;

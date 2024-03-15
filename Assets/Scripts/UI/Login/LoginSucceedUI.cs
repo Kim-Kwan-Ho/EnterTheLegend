@@ -20,18 +20,13 @@ public class LoginSucceedUI : BaseBehaviour
     }
     private void GameStart()
     {
-        stRequestPlayerData request = new stRequestPlayerData();
-        request.Header.MsgID = MessageIdTcp.RequestPlayerData;
-        request.Header.PacketSize = (UInt16)Marshal.SizeOf(request);
-        request.Id = ServerManager.Instance.ID;
-        byte[] msg = Utilities.GetObjectToByte(request);
-        ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);
+        MySceneManager.Instance.EventSceneChanged.CallSceneChanged("LobbyScene", null, true, 3f);
     }
 
     private void PlayerLogout()
     {
         PlayerPrefs.DeleteAll();
-        LoginSceneManager.Instance.EventLoginScene.CallLoginFailed();
+        LoginSceneManager.Instance.EventLoginScene.CallLogout();
         gameObject.SetActive(false);
     }
     

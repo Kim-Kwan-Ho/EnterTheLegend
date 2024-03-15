@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using PimDeWitte.UnityMainThreadDispatcher;
 using StandardData;
 using UnityEngine.SceneManagement;
+using System.Runtime.InteropServices;
 
 [RequireComponent(typeof(ClientToServerEvent))]
 
@@ -49,6 +50,7 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         EventClientToServer.OnUdpSend += Event_OnUdpMessageSend;
         EventClientToServer.OnTcpSend += Event_OnTcpMessageSend;
         LoginSceneManager.Instance.EventLoginScene.OnLoginSuccess += Event_ConnectToServer;
+        LoginSceneManager.Instance.EventLoginScene.OnLogout += Event_Logout;
     }
 
     private void OnDestroy()
@@ -56,6 +58,7 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         EventClientToServer.OnUdpSend -= Event_OnUdpMessageSend;
         EventClientToServer.OnTcpSend -= Event_OnTcpMessageSend;
         LoginSceneManager.Instance.EventLoginScene.OnLoginSuccess -= Event_ConnectToServer;
+        LoginSceneManager.Instance.EventLoginScene.OnLogout -= Event_Logout;
     }
 
 
@@ -69,16 +72,21 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         OpenServer();
     }
 
-
+    private void Event_Logout(LoginSceneEvents loginSceneEvents,
+        LoginSceneEventLogoutArgs loginSceneEventLogoutArgs)
+    {
+        _id = null;
+        _ip = null;
+        _port = 0;
+        DisConnect();
+    }
     private void OpenServer()
     {
         _tcpListenerThread = new Thread(new ThreadStart(TcpListenForIncomingRequest));
         _tcpListenerThread.IsBackground = true;
         _tcpListenerThread.Start();
 
-        _udpListenerThread = new Thread(new ThreadStart(UdpListenForIncomingRequest));
-        _udpListenerThread.IsBackground = true;
-        _udpListenerThread.Start();
+
     }
 
 
@@ -208,10 +216,19 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
                 _udpSocketSend = new UdpClient();
                 _IPEndPointReceive = new IPEndPoint(IPAddress.Any, setPort.UdpPortReceive);
                 _udpSocketReceive = new UdpClient(_IPEndPointReceive);
+                _udpListenerThread = new Thread(new ThreadStart(UdpListenForIncomingRequest));
+                _udpListenerThread.IsBackground = true;
+                _udpListenerThread.Start();
+                stRequestPlayerData request = new stRequestPlayerData();
+                request.Header.MsgID = MessageIdTcp.RequestPlayerData;
+                request.Header.PacketSize = (UInt16)Marshal.SizeOf(request);
+                request.Id = ServerManager.Instance.ID;
+                byte[] msg = Utilities.GetObjectToByte(request);
+                EventClientToServer.CallOnTcpSend(msg);
                 break;
             case MessageIdTcp.ResponsePlayerData:
                 stResponsePlayerData playerData = Utilities.GetObjectFromByte<stResponsePlayerData>(msgData);
-                UnityMainThreadDispatcher.Instance().Enqueue(() => { MySceneManager.Instance.EventSceneChanged.CallSceneChanged("LobbyScene", playerData, true, 5); });
+                UnityMainThreadDispatcher.Instance().Enqueue(() => { MyGameManager.Instance.EventGameManager.CallDataInitialize(playerData); });
                 break;
             case MessageIdTcp.CreateAdventureRoom:
                 stCreateAdventureRoom createRoom = Utilities.GetObjectFromByte<stCreateAdventureRoom>(msgData);
@@ -248,7 +265,8 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         {
             while (true)
             {
-                if (_udpSocketReceive == null) continue;
+                if (_udpSocketReceive == null || _IPEndPointReceive == null) 
+                    continue;
 
                 byte[] processBuffer = new byte[NetworkSize.BufferSize];
                 processBuffer = _udpSocketReceive.Receive(ref _IPEndPointReceive);
@@ -256,6 +274,7 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
                 Array.Copy(processBuffer, 0, headerDataByte, 0, headerDataByte.Length);
                 stHeaderUdp header = Utilities.GetObjectFromByte<stHeaderUdp>(headerDataByte);
                 UdpIncomingDataProcess(header.MsgID, processBuffer);
+                Thread.Sleep(10);
             }
         }
         catch (SocketException socketException)
@@ -301,12 +320,13 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
 
         _clientReady = false;
         _socketConnection.Close();
-        _stream.Close();
-        _udpSocketSend.Close();
-        _udpSocketReceive.Close();
-
-        _socketConnection.Close();
         _socketConnection = null;
+        _stream.Close();
+        _stream = null;
+        _udpSocketSend.Close();
+        _udpSocketSend = null;
+        _udpSocketReceive.Close();
+        _udpSocketSend = null;
 
         _tcpListenerThread.Abort();
         _tcpListenerThread = null;

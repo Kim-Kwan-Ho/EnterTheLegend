@@ -36,6 +36,7 @@ namespace StandardData
         public const ushort AdventureRoomPlayerDirectionChangedFromServer = 88;
         public const ushort RequestPlayerData = 9;
         public const ushort ResponsePlayerData = 999;
+        public const ushort PlayerEquipChanged = 10;
 
 
     }
@@ -89,7 +90,7 @@ namespace StandardData
     public struct stRequestPlayerData
     {
         public stHeaderTcp Header;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NetworkSize.MaxPlayerNameLength)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NetworkSize.MaxIdLength)]
         public string Id;
     }
 
@@ -98,7 +99,7 @@ namespace StandardData
     public struct stResponsePlayerData
     {
         public stHeaderTcp Header;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NetworkSize.MaxIdLength)]
+        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = NetworkSize.MaxPlayerNameLength)]
         public string Nickname;
         [MarshalAs(UnmanagedType.U4, SizeConst = 4)]
         public int Credit;
@@ -112,7 +113,16 @@ namespace StandardData
         public int[] Items;
     }
 
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public struct stPlayerEquipChangedInfo
+    {
+        public stHeaderTcp Header;
+        [MarshalAs(UnmanagedType.U4, SizeConst = 4)]
+        public int BeforeItem;
+        [MarshalAs(UnmanagedType.U4, SizeConst = 4)]
+        public int AfterItem;
 
+    }
 
 
 

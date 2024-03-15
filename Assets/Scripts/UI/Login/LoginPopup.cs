@@ -52,7 +52,7 @@ public class LoginPopup : UIPopup, IPlayfabDataHandler
     {
         Debug.Log("LoginStart");
         _id = _idInputField.text;
-        _password = _idInputField.text;
+        _password = _passwordInputField.text;
         var request = new LoginWithPlayFabRequest
         { Username = _id, Password = _password};
         PlayerPrefs.SetInt("PlayerInfo", (int)LoginPlatform.PlayFabAccount);

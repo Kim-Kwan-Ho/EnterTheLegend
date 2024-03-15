@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,19 +29,57 @@ public class CharacterEquipments : BaseBehaviour
 
     private void OnEnable()
     {
-        LobbySceneManager.Instance.EventLobbyScene.OnEquipChanged += OnEquipmentChanged;
+        MyGameManager.Instance.EventGameManager.OnEquipChanged += Event_EquipChanged;
     }
 
     private void OnDisable()
     {
-        LobbySceneManager.Instance.EventLobbyScene.OnEquipChanged -= OnEquipmentChanged;
+        MyGameManager.Instance.EventGameManager.OnEquipChanged -= Event_EquipChanged;
     }
 
-
-    private void OnEquipmentChanged(LobbySceneEvent lobbySceneEvent, LobbySceneEquipChangedArgs equipChangedEventArgs)
+    public void SetEquipment([CanBeNull] EquipmentSO weaponEquip, [CanBeNull] EquipmentSO helmetEquip, [CanBeNull] EquipmentSO armorEquip, [CanBeNull] EquipmentSO shoesEquip)
     {
-        var type = equipChangedEventArgs.type;
+        if (weaponEquip == null)
+        {
+            _weaponImage.sprite = _weaponSprite;
+        }
+        else
+        {
+            _weaponImage.sprite = weaponEquip.ItemSprite;
+        }
 
+        if (helmetEquip == null)
+        {
+            _helmetImage.sprite = _helmetSprite;
+        }
+        else
+        {
+            _helmetImage.sprite = helmetEquip.ItemSprite;
+        }
+
+        if (armorEquip == null)
+        {
+            _armorImage.sprite = _armorSprite;
+        }
+        else
+        {
+            _armorImage.sprite = armorEquip.ItemSprite;
+        }
+
+        if (shoesEquip == null)
+        {
+            _shoesImage.sprite = _shoesSprite;
+        }
+        else
+        {
+            _shoesImage.sprite = shoesEquip.ItemSprite;
+        }
+        
+    }
+
+    private void Event_EquipChanged(MyGameManagerEvent myGameManagerEvent, GameEquipChangedEventArgs equipChangedEventArgs)
+    {
+        EquipmentType type = equipChangedEventArgs.type;
         if (type == EquipmentType.Armor)
         {
             if (equipChangedEventArgs.equipment == null)

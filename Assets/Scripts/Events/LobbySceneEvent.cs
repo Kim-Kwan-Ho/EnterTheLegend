@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 using StandardData;
 using UnityEngine;
@@ -6,27 +8,34 @@ using UnityEngine;
 public class LobbySceneEvent : MonoBehaviour
 {
     public Action<LobbySceneEvent, LobbySceneInitializeArgs> OnLobbyInitialize;
-    public Action<LobbySceneEvent, LobbySceneEquipChangedArgs> OnEquipChanged;
 
-    public void CallLobbyInitialize(stResponsePlayerData data)
+    public void CallLobbyInitialize(string nickname, int credit, int gold, [CanBeNull] EquipmentSO characterEquip,
+        [CanBeNull] EquipmentSO weaponEquip, [CanBeNull] EquipmentSO helmetEquip, [CanBeNull] EquipmentSO armorEquip,
+        [CanBeNull] EquipmentSO shoesEquip, List<EquipmentSO> ownedItems)
     {
-        OnLobbyInitialize?.Invoke(this, new LobbySceneInitializeArgs(){data = data});
+        OnLobbyInitialize?.Invoke(this,
+            new LobbySceneInitializeArgs()
+            {
+                nickname = nickname, credit = credit, gold = gold, characterEquip = characterEquip,
+                weaponEquip = weaponEquip,
+                helmetEquip = helmetEquip, armorEquip = armorEquip, shoesEquip = shoesEquip, ownedItems = ownedItems
+            });
     }
-    public void CallOnEquipChanged(EquipmentType type, [CanBeNull] EquipmentSO equipment)
-    {
-        OnEquipChanged?.Invoke(this, new LobbySceneEquipChangedArgs() {type = type, equipment = equipment });
-    }
-
 
 }
 
-public class LobbySceneEquipChangedArgs : EventArgs
-{
-    public EquipmentType type;
-    [CanBeNull] public EquipmentSO equipment;
-}
+
 
 public class LobbySceneInitializeArgs : EventArgs
 {
-    public stResponsePlayerData data;
+    public string nickname;
+    public int credit;
+    public int gold;
+    [CanBeNull] public EquipmentSO characterEquip;
+    [CanBeNull] public EquipmentSO weaponEquip;
+    [CanBeNull] public EquipmentSO helmetEquip;
+    [CanBeNull] public EquipmentSO armorEquip;
+    [CanBeNull] public EquipmentSO shoesEquip;
+    public List<EquipmentSO> ownedItems;
+
 }

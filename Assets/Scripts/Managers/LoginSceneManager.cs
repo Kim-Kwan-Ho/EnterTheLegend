@@ -18,14 +18,20 @@ public class LoginSceneManager : SingletonMonobehaviour<LoginSceneManager>, IPla
         base.Awake();
     }
 
-    private void Start()
+    private void OnEnable()
     {
         EventLoginScene.OnLoginFailed += Event_LoginFailed;
+        EventLoginScene.OnLogout += Event_Logout;
+    }
+
+    private void Start()
+    {
         CheckPlayerInfo();
     }
     private void OnDisable()
     {
         EventLoginScene.OnLoginFailed -= Event_LoginFailed;
+        EventLoginScene.OnLogout -= Event_Logout;
     }
 
 
@@ -70,7 +76,11 @@ public class LoginSceneManager : SingletonMonobehaviour<LoginSceneManager>, IPla
     {
         UIManager.Instance.OpenPopup<LoginPopup>();
     }
-
+    private void Event_Logout(LoginSceneEvents loginSceneEvents,
+        LoginSceneEventLogoutArgs loginSceneEventLogoutArgs)
+    {
+        UIManager.Instance.OpenPopup<LoginPopup>();
+    }
 
 
 #if UNITY_EDITOR
