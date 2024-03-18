@@ -19,7 +19,7 @@ MonoBehaviour:
   Type: 3
   Name: c
   Description: cccc
-  StatHp: 0
-  StatAtk: 0
-  StatDef: 0
-  StatSpd: 0
+  StatHp: 2
+  StatAttack: 2
+  StatDefense: 2
+  AttackDistance: 2

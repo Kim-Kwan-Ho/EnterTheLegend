@@ -7,7 +7,7 @@ public class MyGameManagerEvent : MonoBehaviour
 {
     public Action<MyGameManagerEvent, GameDataInitializeEventArgs> OnGameDataInitialize;
     public Action<MyGameManagerEvent, GameEquipChangedEventArgs> OnEquipChanged;
-
+    public Action<MyGameManagerEvent, GamePlayerStatChangedEventArgs> OnPlayerStatChanged;
 
     public void CallDataInitialize(stResponsePlayerData data)
     {
@@ -18,6 +18,10 @@ public class MyGameManagerEvent : MonoBehaviour
         OnEquipChanged?.Invoke(this, new GameEquipChangedEventArgs() { type = type, equipment = equipment });
     }
 
+    public void CallStatChanged(PlayerStat playerStat)
+    {
+        OnPlayerStatChanged?.Invoke(this, new GamePlayerStatChangedEventArgs(){playerStat = playerStat});
+    }
 }
 
 
@@ -29,4 +33,9 @@ public class GameEquipChangedEventArgs : EventArgs
 {
     public EquipmentType type;
     [CanBeNull] public EquipmentSO equipment;
+}
+
+public class GamePlayerStatChangedEventArgs : EventArgs
+{
+    public PlayerStat playerStat;
 }

@@ -162,6 +162,10 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         {
             Debug.Log(socketException.ToString());
             _clientReady = false;
+            UnityMainThreadDispatcher.Instance().Enqueue(() => UIManager.Instance.OpenNoticePopup("Unable to connect to the game server. Contact rlarhksgh010@naver.com"));
+            DisConnect();
+            Thread.Sleep(2000);
+            UnityMainThreadDispatcher.Instance().Enqueue(() => Application.Quit());
         }
     }
 
@@ -265,7 +269,7 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         {
             while (true)
             {
-                if (_udpSocketReceive == null || _IPEndPointReceive == null) 
+                if (_udpSocketReceive == null || _IPEndPointReceive == null)
                     continue;
 
                 byte[] processBuffer = new byte[NetworkSize.BufferSize];
@@ -279,7 +283,12 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         }
         catch (SocketException socketException)
         {
+            DisConnect();
+            UnityMainThreadDispatcher.Instance().Enqueue(() => UIManager.Instance.OpenNoticePopup("Unable to connect to the game server. Contact rlarhksgh010@naver.com"));
             Debug.Log("UDPSocketException " + socketException.ToString());
+            Thread.Sleep(2000);
+            UnityMainThreadDispatcher.Instance().Enqueue(() => Application.Quit());
+            
         }
     }
     private void UdpIncomingDataProcess(ushort msgId, byte[] msgData)

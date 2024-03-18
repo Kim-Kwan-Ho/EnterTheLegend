@@ -117,8 +117,8 @@ namespace StandardData
     public struct stPlayerEquipChangedInfo
     {
         public stHeaderTcp Header;
-        [MarshalAs(UnmanagedType.U4, SizeConst = 4)]
-        public int BeforeItem;
+        [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
+        public ushort ItemType;
         [MarshalAs(UnmanagedType.U4, SizeConst = 4)]
         public int AfterItem;
 

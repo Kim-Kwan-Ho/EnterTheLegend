@@ -5,12 +5,20 @@ using UnityEngine.UI;
 
 public class CharacterChange : BaseBehaviour
 {
-    [SerializeField]
-    private GameObject _characterChangePanel;
+    [Header("Buttons")]
     [SerializeField]
     private Button _characterChangeButton;
     [SerializeField]
+    private Button _closeButton;
+
+
+    [Header("Character & Stat &Equipment Change")]
+    [SerializeField]
+    private GameObject _characterChangePanel;
+    [SerializeField]
     private CharacterEquipments _characterEquipments;
+    [SerializeField]
+    private CharacterStat _characterStat;
     [SerializeField]
     private Inventory _inventory;
 
@@ -18,6 +26,7 @@ public class CharacterChange : BaseBehaviour
     {
         LobbySceneManager.Instance.EventLobbyScene.OnLobbyInitialize += Event_LobbyInitialize;
         _characterChangeButton.onClick.AddListener(() => _characterChangePanel.SetActive(true));
+        _closeButton.onClick.AddListener(()=> _characterChangePanel.SetActive(false));
         _characterChangePanel.SetActive(false);
     }
 
@@ -31,6 +40,7 @@ public class CharacterChange : BaseBehaviour
     {
         _characterEquipments.SetEquipment(lobbySceneInitializeArgs.weaponEquip, lobbySceneInitializeArgs.helmetEquip, lobbySceneInitializeArgs.armorEquip, lobbySceneInitializeArgs.shoesEquip);
         _inventory.SetInventory(lobbySceneInitializeArgs.ownedItems.ToArray());
+        _characterStat.SetStat(lobbySceneInitializeArgs);
     }
 
 #if UNITY_EDITOR
@@ -40,7 +50,9 @@ public class CharacterChange : BaseBehaviour
         _characterChangePanel = GameObject.Find("CharacterChangePanel");
         _characterChangeButton = FindGameObjectInChildren<Button>("CharacterChangeButton");
         _characterEquipments = GetComponentInChildren<CharacterEquipments>();
+        _characterStat = GetComponentInChildren<CharacterStat>();
         _inventory = GetComponentInChildren<Inventory>();
+        _closeButton = FindGameObjectInChildren<Button>("CloseButton");
     }
 
     private void OnValidate()
@@ -48,6 +60,7 @@ public class CharacterChange : BaseBehaviour
         CheckNullValue(this.name, _characterChangePanel);
         CheckNullValue(this.name, _characterChangeButton);
         CheckNullValue(this.name, _characterEquipments);
+        CheckNullValue(this.name, _characterStat);
         CheckNullValue(this.name, _inventory);
     }
 #endif

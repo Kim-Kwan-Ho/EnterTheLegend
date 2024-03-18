@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 using UnityEngine.UI;
@@ -7,6 +5,8 @@ using UnityEngine.UI;
 public class CharacterEquipments : BaseBehaviour
 {
     [Header("Equipments Images")]
+    [SerializeField]
+    private Image _characterImage;
     [SerializeField]
     private Image _helmetImage;
     [SerializeField]
@@ -18,6 +18,8 @@ public class CharacterEquipments : BaseBehaviour
 
     [Header("Equipments Unequiped Sprites")]
     [SerializeField]
+    private Sprite _characterSprite;
+    [SerializeField]
     private Sprite _helmetSprite;
     [SerializeField]
     private Sprite _armorSprite;
@@ -25,7 +27,6 @@ public class CharacterEquipments : BaseBehaviour
     private Sprite _weaponSprite;
     [SerializeField]
     private Sprite _shoesSprite;
-
 
     private void OnEnable()
     {
@@ -140,6 +141,7 @@ public class CharacterEquipments : BaseBehaviour
     {
         base.OnBindField();
 
+        _characterImage = FindGameObjectInChildren<Image>("CharacterImage");
         _helmetImage = FindGameObjectInChildren<Image>("HelmetImage");
         _armorImage = FindGameObjectInChildren<Image>("ArmorImage");
         _weaponImage = FindGameObjectInChildren<Image>("WeaponImage");
@@ -148,16 +150,17 @@ public class CharacterEquipments : BaseBehaviour
 
     private void OnValidate()
     {
+        CheckNullValue(this.name, _characterImage);
         CheckNullValue(this.name, _helmetImage);
         CheckNullValue(this.name, _armorImage);
         CheckNullValue(this.name, _weaponImage);
         CheckNullValue(this.name, _shoesImage);
 
+        CheckNullValue(this.name, _characterSprite);
         CheckNullValue(this.name, _helmetSprite);
         CheckNullValue(this.name, _armorSprite);
         CheckNullValue(this.name, _weaponSprite);
         CheckNullValue(this.name, _shoesSprite);
-
     }
 
 

@@ -34,11 +34,6 @@ public class MyPlayer : Creature
 
     }
 
-    private void Start()
-    {
-    }
-
-
     protected override void Event_OnMovement(MovementEvent movementEvent, MovementEventArgs movementEventArgs)
     {
         if (_state != State.Attack)

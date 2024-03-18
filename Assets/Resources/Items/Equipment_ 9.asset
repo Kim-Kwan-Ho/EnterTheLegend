@@ -15,11 +15,11 @@ MonoBehaviour:
   ItemId: 30000
   IsEquipped: 0
   ItemSprite: {fileID: 21300000, guid: 2e43b63e12974f46bab8fc2455944a8b, type: 3}
-  CharacterEquipmentSprite: {fileID: 0}
+  CharacterEquipmentSprite: {fileID: 21300000, guid: 2e43b63e12974f46bab8fc2455944a8b, type: 3}
   Type: 2
   Name: c
   Description: cccc
-  StatHp: 0
-  StatAtk: 0
-  StatDef: 0
-  StatSpd: 0
+  StatHp: 3
+  StatAttack: 3
+  StatDefense: 3
+  AttackDistance: 3

@@ -19,7 +19,7 @@ MonoBehaviour:
   Type: 4
   Name: d
   Description: dddd
-  StatHp: 0
-  StatAtk: 0
-  StatDef: 0
-  StatSpd: 0
+  StatHp: 1
+  StatAttack: 1
+  StatDefense: 1
+  AttackDistance: 1

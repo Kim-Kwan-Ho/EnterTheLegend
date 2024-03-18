@@ -13,10 +13,8 @@ public class EquipmentSO : ScriptableObject
     public EquipmentType Type;
     public string Name;
     public string Description;
-    public int StatHp;
-    public int StatAtk;
-    public int StatDef;
-    public int StatSpd;
-
-
+    public ushort StatHp;
+    public ushort StatAttack;
+    public ushort StatDefense;
+    public ushort AttackDistance;
 }

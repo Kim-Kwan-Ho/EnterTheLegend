@@ -19,7 +19,7 @@ MonoBehaviour:
   Type: 0
   Name: a
   Description: aaaa
-  StatHp: 0
-  StatAtk: 0
-  StatDef: 0
-  StatSpd: 0
+  StatHp: 5
+  StatAttack: 5
+  StatDefense: 5
+  AttackDistance: 5

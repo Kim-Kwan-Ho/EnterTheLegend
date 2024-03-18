@@ -17,16 +17,19 @@ public class MyGameManager : SingletonMonobehaviour<MyGameManager>
     [SerializeField]
     private string _nickname = "Client_1";
     public string Nickname { get { return _nickname; } }
-
     [SerializeField]
     private int _credit;
-
     public int Credit { get { return _credit; } }
     [SerializeField]
     private int _gold;
     public int Gold
     { get { return _gold; } }
 
+
+    [Header("Player Stats")]
+    private PlayerStat _playerStat = new PlayerStat();
+
+    [Header("Character Equipments")]
     [SerializeField][CanBeNull] private EquipmentSO _characterEquip;
     [SerializeField][CanBeNull] private EquipmentSO _weaponEquip;
     [SerializeField][CanBeNull] private EquipmentSO _helmetEquip;
@@ -80,6 +83,7 @@ public class MyGameManager : SingletonMonobehaviour<MyGameManager>
         _credit = gameDataInitializeEventArgs.data.Credit;
         _gold = gameDataInitializeEventArgs.data.Gold;
         _ownedItems = new List<EquipmentSO>(gameDataInitializeEventArgs.data.ItemCount);
+
         for (int i = 0; i < gameDataInitializeEventArgs.data.ItemCount; i++)
         {
             _ownedItems.Add(_items[gameDataInitializeEventArgs.data.Items[i]]);
@@ -87,31 +91,35 @@ public class MyGameManager : SingletonMonobehaviour<MyGameManager>
 
         for (int i = 0; i < gameDataInitializeEventArgs.data.EquipedItems.Length; i++)
         {
-            switch (gameDataInitializeEventArgs.data.EquipedItems[i])
+            int equipType = gameDataInitializeEventArgs.data.EquipedItems[i];
+            if (equipType == 0)
+                continue;
+
+            if (equipType < 20000)
             {
-                case 0:
-                    break;
-                case < 20000:
-                    _characterEquip = _items[gameDataInitializeEventArgs.data.EquipedItems[i]];
-                    _items[gameDataInitializeEventArgs.data.EquipedItems[i]].IsEquipped = true;
-                    break;
-                case < 30000:
-                    _weaponEquip = _items[gameDataInitializeEventArgs.data.EquipedItems[i]];
-                    _items[gameDataInitializeEventArgs.data.EquipedItems[i]].IsEquipped = true;
-                    break;
-                case < 40000:
-                    _helmetEquip = _items[gameDataInitializeEventArgs.data.EquipedItems[i]];
-                    _items[gameDataInitializeEventArgs.data.EquipedItems[i]].IsEquipped = true;
-                    break;
-                case < 50000:
-                    _armorEquip = _items[gameDataInitializeEventArgs.data.EquipedItems[i]];
-                    _items[gameDataInitializeEventArgs.data.EquipedItems[i]].IsEquipped = true;
-                    break;
-                case < 60000:
-                    _shoesEquip = _items[gameDataInitializeEventArgs.data.EquipedItems[i]];
-                    _items[gameDataInitializeEventArgs.data.EquipedItems[i]].IsEquipped = true;
-                    break;
+                _characterEquip = _items[gameDataInitializeEventArgs.data.EquipedItems[i]];
             }
+            else if (equipType < 30000)
+            {
+                _weaponEquip = _items[gameDataInitializeEventArgs.data.EquipedItems[i]];
+            }
+            else if (equipType < 40000)
+            {
+                _helmetEquip = _items[gameDataInitializeEventArgs.data.EquipedItems[i]];
+            }
+            else if (equipType < 50000)
+            {
+                _armorEquip = _items[gameDataInitializeEventArgs.data.EquipedItems[i]];
+            }
+            else if (equipType < 60000)
+            {
+                _shoesEquip = _items[gameDataInitializeEventArgs.data.EquipedItems[i]];
+            }
+            _items[gameDataInitializeEventArgs.data.EquipedItems[i]].IsEquipped = true;
+
+            var item = _items[gameDataInitializeEventArgs.data.EquipedItems[i]];
+            _playerStat.ChangeStat(true, item.StatHp, item.StatAttack, item.StatDefense, item.AttackDistance);
+            EventGameManager.CallStatChanged(_playerStat);
         }
     }
 
@@ -122,52 +130,52 @@ public class MyGameManager : SingletonMonobehaviour<MyGameManager>
         equipChangedInfo.Header.MsgID = MessageIdTcp.PlayerEquipChanged;
         equipChangedInfo.Header.PacketSize = (ushort)Marshal.SizeOf(equipChangedInfo);
 
+        EquipmentSO beforeItem = new EquipmentSO();
+
+
         if (equipChangedEventArgs.type == EquipmentType.Weapon)
         {
-            if (_weaponEquip == null)
-                equipChangedInfo.BeforeItem = 0;
-            else
-                equipChangedInfo.BeforeItem = _weaponEquip.ItemId;
+            beforeItem = _weaponEquip;
             _weaponEquip = equipChangedEventArgs.equipment;
         }
         else if (equipChangedEventArgs.type == EquipmentType.Helmet)
         {
-            if (_helmetEquip == null)
-                equipChangedInfo.BeforeItem = 0;
-            else
-                equipChangedInfo.BeforeItem = _helmetEquip.ItemId;
+            beforeItem = _helmetEquip;
             _helmetEquip = equipChangedEventArgs.equipment;
         }
         else if (equipChangedEventArgs.type == EquipmentType.Armor)
         {
-            if (_armorEquip == null)
-                equipChangedInfo.BeforeItem = 0;
-            else
-                equipChangedInfo.BeforeItem = _armorEquip.ItemId;
+            beforeItem = _armorEquip;
             _armorEquip = equipChangedEventArgs.equipment;
         }
         else if (equipChangedEventArgs.type == EquipmentType.Shoes)
         {
-            if (_shoesEquip == null)
-                equipChangedInfo.BeforeItem = 0;
-            else
-                equipChangedInfo.BeforeItem = _shoesEquip.ItemId;
+            beforeItem = _shoesEquip;
             _shoesEquip = equipChangedEventArgs.equipment;
         }
         else if (equipChangedEventArgs.type == EquipmentType.Character)
         {
-            if (_characterEquip == null)
-                equipChangedInfo.BeforeItem = 0;
-            else
-                equipChangedInfo.BeforeItem = _characterEquip.ItemId;
+            beforeItem = _characterEquip;
             _characterEquip = equipChangedEventArgs.equipment;
+        }
+
+        if (beforeItem != null)
+        {
+            _playerStat.ChangeStat(false, beforeItem.StatHp, beforeItem.StatAttack, beforeItem.StatDefense, beforeItem.AttackDistance);
+            EventGameManager.CallStatChanged(_playerStat);
         }
 
         if (equipChangedEventArgs.equipment == null)
             equipChangedInfo.AfterItem = 0;
         else
+        {
             equipChangedInfo.AfterItem = equipChangedEventArgs.equipment.ItemId;
+            var afterItem = equipChangedEventArgs.equipment;
+            _playerStat.ChangeStat(true, afterItem.StatHp, afterItem.StatAttack, afterItem.StatDefense, afterItem.AttackDistance);
+            EventGameManager.CallStatChanged(_playerStat);
+        }
 
+        equipChangedInfo.ItemType = (ushort)equipChangedEventArgs.type;
         byte[] msg = Utilities.GetObjectToByte(equipChangedInfo);
         ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);
 
