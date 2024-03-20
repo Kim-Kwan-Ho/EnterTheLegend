@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,7 +36,7 @@ public class CharacterChange : BaseBehaviour
     private void Event_LobbyInitialize(LobbySceneEvent lobbySceneEvent,
         LobbySceneInitializeArgs lobbySceneInitializeArgs)
     {
-        _characterEquipments.SetEquipment(lobbySceneInitializeArgs.weaponEquip, lobbySceneInitializeArgs.helmetEquip, lobbySceneInitializeArgs.armorEquip, lobbySceneInitializeArgs.shoesEquip);
+        _characterEquipments.SetEquipment(lobbySceneInitializeArgs.characterEquip,lobbySceneInitializeArgs.weaponEquip, lobbySceneInitializeArgs.helmetEquip, lobbySceneInitializeArgs.armorEquip, lobbySceneInitializeArgs.shoesEquip);
         _inventory.SetInventory(lobbySceneInitializeArgs.ownedItems.ToArray());
         _characterStat.SetStat(lobbySceneInitializeArgs);
     }

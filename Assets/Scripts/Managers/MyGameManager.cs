@@ -161,6 +161,7 @@ public class MyGameManager : SingletonMonobehaviour<MyGameManager>
 
         if (beforeItem != null)
         {
+            beforeItem.IsEquipped = false;
             _playerStat.ChangeStat(false, beforeItem.StatHp, beforeItem.StatAttack, beforeItem.StatDefense, beforeItem.AttackDistance);
             EventGameManager.CallStatChanged(_playerStat);
         }

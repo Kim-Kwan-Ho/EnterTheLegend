@@ -9,7 +9,8 @@ public class EquipmentSO : ScriptableObject
     public int ItemId;
     public bool IsEquipped;
     public Sprite ItemSprite;
-    public Sprite CharacterEquipmentSprite;
+    public Vector2 EquipmentSpriteOffSet;
+    public List<Sprite> CharacterEquipmentSprite;
     public EquipmentType Type;
     public string Name;
     public string Description;

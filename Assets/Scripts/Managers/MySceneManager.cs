@@ -1,4 +1,3 @@
-using System;
 using StandardData;
 using System.Collections;
 using TMPro;
@@ -52,15 +51,15 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
 
         _loadingGage = 0;
         _sceneInitialize = sceneChangeEventArgs.sceneInitialize;
-        StartCoroutine(FadeOut(sceneChangeEventArgs));
+        StartCoroutine(CoFadeOut(sceneChangeEventArgs));
     }
 
     private void InitializeScene(string name)
     {
-        if (name == "AdventureScene")
+        if (name == "TeamBattleScene")
         {
-            stCreateAdventureRoom roomInfo = (stCreateAdventureRoom)_sceneInitialize;
-            AdventureSceneManager.Instance.EventAdventureScene.CallRoomInitialize(roomInfo.RoomId,
+            stCreateTeamBattleRoom roomInfo = (stCreateTeamBattleRoom)_sceneInitialize;
+            TeamBattleSceneManager.Instance.EventTeamBattleScene.CallRoomInitialize(roomInfo.RoomId,
                 roomInfo.playersInfo);
         }
         else if (name == "LobbyScene")
@@ -71,7 +70,7 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
         _sceneInitialize = null;
     }
 
-    private IEnumerator FadeIn()
+    private IEnumerator CoFadeIn()
     {
         float time = 0;
         Color targetColor = new Color(0, 0, 0, 0);
@@ -89,7 +88,7 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
         _fadeImage.color = targetColor;
     }
 
-    private IEnumerator LoadScene(string sceneName ,bool hasDelay = true, float delayTime = 3)
+    private IEnumerator CoLoadScene(string sceneName ,bool hasDelay = true, float delayTime = 3)
     {
         _loadingGob.SetActive(true);
         float time = 0;
@@ -128,9 +127,9 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
         _loadingGage = 1;
         op.allowSceneActivation = true;
         InitializeScene(sceneName);
-        StartCoroutine(FadeIn());
+        StartCoroutine(CoFadeIn());
     }
-    private IEnumerator FadeOut(SceneChangeEventArgs sceneChangeEventArgs = null)
+    private IEnumerator CoFadeOut(SceneChangeEventArgs sceneChangeEventArgs = null)
     {
         float time = 0;
         Color targetColor = new Color(0, 0, 0, 1);
@@ -143,12 +142,12 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
             yield return null;
         }
         _fadeImage.color = targetColor;
-        yield return StartCoroutine(UnloadScene(sceneChangeEventArgs));
+        yield return StartCoroutine(CoUnloadScene(sceneChangeEventArgs));
     }
-    private IEnumerator UnloadScene(SceneChangeEventArgs sceneChangeEventArgs)
+    private IEnumerator CoUnloadScene(SceneChangeEventArgs sceneChangeEventArgs)
     {
         SceneManager.LoadScene("LoadingScene");
-        yield return StartCoroutine(LoadScene(sceneChangeEventArgs.sceneName,
+        yield return StartCoroutine(CoLoadScene(sceneChangeEventArgs.sceneName,
             sceneChangeEventArgs.hasDealy,
             sceneChangeEventArgs.delayTime));
     }

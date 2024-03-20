@@ -38,8 +38,16 @@ public class CharacterEquipments : BaseBehaviour
         MyGameManager.Instance.EventGameManager.OnEquipChanged -= Event_EquipChanged;
     }
 
-    public void SetEquipment([CanBeNull] EquipmentSO weaponEquip, [CanBeNull] EquipmentSO helmetEquip, [CanBeNull] EquipmentSO armorEquip, [CanBeNull] EquipmentSO shoesEquip)
+    public void SetEquipment([CanBeNull]EquipmentSO characterEquip, [CanBeNull] EquipmentSO weaponEquip, [CanBeNull] EquipmentSO helmetEquip, [CanBeNull] EquipmentSO armorEquip, [CanBeNull] EquipmentSO shoesEquip)
     {
+        if (characterEquip == null)
+        {
+            _characterImage.sprite = _characterSprite;
+        }
+        else
+        {
+            _characterImage.sprite = characterEquip.ItemSprite;
+        }
         if (weaponEquip == null)
         {
             _weaponImage.sprite = _weaponSprite;
@@ -127,7 +135,14 @@ public class CharacterEquipments : BaseBehaviour
         }
         else if (type == EquipmentType.Character)
         {
-
+            if (equipChangedEventArgs.equipment == null)
+            {
+                _characterImage.sprite = _characterSprite;
+            }
+            else
+            {
+                _characterImage.sprite = equipChangedEventArgs.equipment.ItemSprite;
+            }
         }
 
     }

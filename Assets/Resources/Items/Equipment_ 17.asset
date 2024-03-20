@@ -15,7 +15,9 @@ MonoBehaviour:
   ItemId: 50000
   IsEquipped: 0
   ItemSprite: {fileID: 21300000, guid: 9921cd6912fdc3f4a99a156c56c0e72f, type: 3}
-  CharacterEquipmentSprite: {fileID: 0}
+  EquipmentSpriteOffSet: {x: 0, y: 0}
+  CharacterEquipmentSprite:
+  - {fileID: 21300014, guid: c6442858735d49669fbc0abc940bef69, type: 3}
   Type: 4
   Name: d
   Description: dddd

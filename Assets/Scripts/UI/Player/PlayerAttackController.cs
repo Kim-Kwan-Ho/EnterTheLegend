@@ -25,7 +25,7 @@ public class PlayerAttackController : BaseBehaviour, IPointerDownHandler, IPoint
     private void Start()
     {
         _startPosition = transform.position;
-        _player = AdventureSceneManager.Instance.GetMyPlayer();
+        _player = TeamBattleSceneManager.Instance.GetMyPlayer();
     }
 
     private void Update()
@@ -64,8 +64,8 @@ public class PlayerAttackController : BaseBehaviour, IPointerDownHandler, IPoint
 
     private bool CanContinueUsing()
     {
-        return AdventureSceneManager.Instance.SceneState != AdventureSceneState.MyPlayerDeath &&
-               AdventureSceneManager.Instance.SceneState != AdventureSceneState.ClearFailed;
+        return TeamBattleSceneManager.Instance.SceneState != GameSceneState.MyPlayerDeath &&
+               TeamBattleSceneManager.Instance.SceneState != GameSceneState.ClearFailed;
     }
 
 

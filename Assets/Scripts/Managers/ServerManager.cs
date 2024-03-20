@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using PimDeWitte.UnityMainThreadDispatcher;
 using StandardData;
-using UnityEngine.SceneManagement;
 using System.Runtime.InteropServices;
 
 [RequireComponent(typeof(ClientToServerEvent))]
@@ -65,7 +64,6 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
     private void Event_ConnectToServer(LoginSceneEvents loginSceneEvents,
         LoginSceneEventLoginSucceedArgs loginSceneEventLoginSucceedArgs)
     {
-        Debug.Log("서버 시작");
         _id = loginSceneEventLoginSucceedArgs.id;
         _ip = loginSceneEventLoginSucceedArgs.ip;
         _port = loginSceneEventLoginSucceedArgs.port;
@@ -234,28 +232,28 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
                 stResponsePlayerData playerData = Utilities.GetObjectFromByte<stResponsePlayerData>(msgData);
                 UnityMainThreadDispatcher.Instance().Enqueue(() => { MyGameManager.Instance.EventGameManager.CallDataInitialize(playerData); });
                 break;
-            case MessageIdTcp.CreateAdventureRoom:
-                stCreateAdventureRoom createRoom = Utilities.GetObjectFromByte<stCreateAdventureRoom>(msgData);
-                UnityMainThreadDispatcher.Instance().Enqueue(() => { MySceneManager.Instance.EventSceneChanged.CallSceneChanged("AdventureScene", createRoom, true, 3); });
+            case MessageIdTcp.CreateTeamBattleRoom:
+                stCreateTeamBattleRoom createRoom = Utilities.GetObjectFromByte<stCreateTeamBattleRoom>(msgData);
+                UnityMainThreadDispatcher.Instance().Enqueue(() => { MySceneManager.Instance.EventSceneChanged.CallSceneChanged("TeamBattleScene", createRoom, true, 3); });
                 break;
-            case MessageIdTcp.AdventureRoomLoadInfo:
-                stAdventureRoomLoadInfo loadInfo = Utilities.GetObjectFromByte<stAdventureRoomLoadInfo>(msgData);
-                AdventureSceneManager.Instance.EventAdventureScene.CallGameStart(loadInfo.IsAllSucceed);
+            case MessageIdTcp.TeamBattleRoomLoadInfo:
+                stTeamBattleRoomLoadInfo loadInfo = Utilities.GetObjectFromByte<stTeamBattleRoomLoadInfo>(msgData);
+                TeamBattleSceneManager.Instance.EventTeamBattleScene.CallGameStart(loadInfo.IsAllSucceed);
                 break;
-            case MessageIdTcp.AdventureRoomPlayerStateChangedFromServer:
-                stAdventureRoomPlayerStateChangedFromServer stateChanged =
-                    Utilities.GetObjectFromByte<stAdventureRoomPlayerStateChangedFromServer>(msgData);
+            case MessageIdTcp.TeamBattleRoomPlayerStateChangedFromServer:
+                stTeamBattleRoomPlayerStateChangedFromServer stateChanged =
+                    Utilities.GetObjectFromByte<stTeamBattleRoomPlayerStateChangedFromServer>(msgData);
                 UnityMainThreadDispatcher.Instance().Enqueue(() =>
                 {
-                    AdventureSceneManager.Instance.EventAdventureScene.CallPlayerStateChanged(stateChanged.PlayerIndex, (State)stateChanged.State);
+                    TeamBattleSceneManager.Instance.EventTeamBattleScene.CallPlayerStateChanged(stateChanged.PlayerIndex, (State)stateChanged.State);
                 });
                 break;
-            case MessageIdTcp.AdventureRoomPlayerDirectionChangedFromServer:
-                stAdventureRoomPlayerDirectionChangedFromServer directionChanged =
-                    Utilities.GetObjectFromByte<stAdventureRoomPlayerDirectionChangedFromServer>(msgData);
+            case MessageIdTcp.TeamBattleRoomPlayerDirectionChangedFromServer:
+                stTeamBattleRoomPlayerDirectionChangedFromServer directionChanged =
+                    Utilities.GetObjectFromByte<stTeamBattleRoomPlayerDirectionChangedFromServer>(msgData);
                 UnityMainThreadDispatcher.Instance().Enqueue(() =>
                 {
-                    AdventureSceneManager.Instance.EventAdventureScene.CallPlayerDirectionChanged(directionChanged.PlayerIndex, (Direction)directionChanged.Direction);
+                    TeamBattleSceneManager.Instance.EventTeamBattleScene.CallPlayerDirectionChanged(directionChanged.PlayerIndex, (Direction)directionChanged.Direction);
                 });
                 break;
 
@@ -295,13 +293,13 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
     {
         switch (msgId)
         {
-            case MessageIdUdp.AdventurePlayerPositionFromServer:
-                stAdventurePlayerPositionFromSever playerPosition =
-                    Utilities.GetObjectFromByte<stAdventurePlayerPositionFromSever>(msgData);
+            case MessageIdUdp.TeamBattlePlayerPositionFromServer:
+                stTeamBattlePlayerPositionFromSever playerPosition =
+                    Utilities.GetObjectFromByte<stTeamBattlePlayerPositionFromSever>(msgData);
 
                 UnityMainThreadDispatcher.Instance().Enqueue(() =>
                 {
-                    AdventureSceneManager.Instance.EventAdventureScene.CallPlayerPositionChanged(playerPosition);
+                    TeamBattleSceneManager.Instance.EventTeamBattleScene.CallPlayerPositionChanged(playerPosition);
                 });
                 break;
         }

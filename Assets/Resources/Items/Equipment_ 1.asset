@@ -14,8 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemId: 10000
   IsEquipped: 0
-  ItemSprite: {fileID: 21300000, guid: c2d3ff617fbb42c3a588fc7c49787ce1, type: 3}
-  CharacterEquipmentSprite: {fileID: 0}
+  ItemSprite: {fileID: 21300000, guid: f74a8a6ff660a0243a961b137ce0517d, type: 3}
+  EquipmentSpriteOffSet: {x: 0, y: 0}
+  CharacterEquipmentSprite:
+  - {fileID: 21300000, guid: 2fe13f78cbe648edb11eea503cd69814, type: 3}
   Type: 0
   Name: a
   Description: aaaa

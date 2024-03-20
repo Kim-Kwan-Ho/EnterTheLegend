@@ -22,7 +22,7 @@ public class PlayerMovementController : BaseBehaviour, IPointerDownHandler ,IPoi
     {
         _startPosition = transform.position;
         _movementRange *= _canvas.scaleFactor;
-        _player = AdventureSceneManager.Instance.GetMyPlayer();
+        _player = TeamBattleSceneManager.Instance.GetMyPlayer();
     }
 
 
@@ -61,8 +61,8 @@ public class PlayerMovementController : BaseBehaviour, IPointerDownHandler ,IPoi
 
     private bool CanContinueUsing()
     {
-        return AdventureSceneManager.Instance.SceneState != AdventureSceneState.MyPlayerDeath &&
-               AdventureSceneManager.Instance.SceneState != AdventureSceneState.ClearFailed;
+        return TeamBattleSceneManager.Instance.SceneState != GameSceneState.MyPlayerDeath &&
+               TeamBattleSceneManager.Instance.SceneState != GameSceneState.ClearFailed;
     }
 
     

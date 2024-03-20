@@ -8,15 +8,15 @@ using static UnityEngine.CullingGroup;
 public class MyPlayerDataSender : BaseBehaviour
 {
     [SerializeField] private MyPlayer _player;
-    private stAdventureRoomPlayerInfo _playerInfo;
+    private stTeamBattleRoomPlayerInfo _playerInfo;
 
 
     private void Start()
     {
-        StartCoroutine(SendPlayerPosition());
-        _playerInfo = new stAdventureRoomPlayerInfo();
-        _playerInfo.RoomId = AdventureSceneManager.Instance.RoomId;
-        _playerInfo.PlayerIndex = AdventureSceneManager.Instance.PlayerIndex;
+        StartCoroutine(CoSendPlayerPosition());
+        _playerInfo = new stTeamBattleRoomPlayerInfo();
+        _playerInfo.RoomId = TeamBattleSceneManager.Instance.RoomId;
+        _playerInfo.PlayerIndex = TeamBattleSceneManager.Instance.PlayerIndex;
     }
 
     private void OnEnable()
@@ -37,28 +37,28 @@ public class MyPlayerDataSender : BaseBehaviour
 
     }
 
-    private IEnumerator SendPlayerPosition()
+    private IEnumerator CoSendPlayerPosition()
     {
-        yield return new WaitUntil(() => AdventureSceneManager.Instance.State == AdventureSceneState.StartGame);
+        yield return new WaitUntil(() => TeamBattleSceneManager.Instance.State == GameSceneState.StartGame);
         while (true)
         {
-            stAdventurePlayerPositionToServer position = new stAdventurePlayerPositionToServer();
-            position.Header.MsgID = MessageIdUdp.AdventurePlayerPositionToServer;
+            stTeamBattlePlayerPositionToServer position = new stTeamBattlePlayerPositionToServer();
+            position.Header.MsgID = MessageIdUdp.TeamBattlePlayerPositionToServer;
             position.RoomType = (ushort)MyGameManager.Instance.RoomType;
-            position.RoomId = AdventureSceneManager.Instance.RoomId;
-            position.PlayerPosition.PlayerIndex = AdventureSceneManager.Instance.PlayerIndex;
+            position.RoomId = TeamBattleSceneManager.Instance.RoomId;
+            position.PlayerPosition.PlayerIndex = TeamBattleSceneManager.Instance.PlayerIndex;
             position.PlayerPosition.PositionX = _player.transform.position.x;
             position.PlayerPosition.PositionY = _player.transform.position.y;
             byte[] msg = Utilities.GetObjectToByte(position);
             ServerManager.Instance.EventClientToServer.CallOnUdpSend(msg);
-            yield return new WaitForSeconds(UdpSendCycle.AdventureRoomSendCycle);
+            yield return new WaitForSeconds(UdpSendCycle.TeamBattleRoomSendCycle);
         }
     }
 
     private void Event_SendPlayerStateChanged(StateEvent stateEvent, StateEventArgs stateEventArgs)
     {
-        stAdventureRoomPlayerStateChangedToServer stateChanged = new stAdventureRoomPlayerStateChangedToServer();
-        stateChanged.Header.MsgID = MessageIdTcp.AdventureRoomPlayerStateChangedToServer;
+        stTeamBattleRoomPlayerStateChangedToServer stateChanged = new stTeamBattleRoomPlayerStateChangedToServer();
+        stateChanged.Header.MsgID = MessageIdTcp.TeamBattleRoomPlayerStateChangedToServer;
         stateChanged.Header.PacketSize = (ushort)Marshal.SizeOf(stateChanged);
         stateChanged.PlayerInfo = _playerInfo;
         stateChanged.State = (ushort)stateEventArgs.state;
@@ -67,8 +67,8 @@ public class MyPlayerDataSender : BaseBehaviour
     }
     private void Event_SendPlayerDirectionChanged(DirectionEvent directionEvent, DirectionEventArgs directionEventArgs)
     {
-        stAdventureRoomPlayerDirectionChangedToServer directionChanged = new stAdventureRoomPlayerDirectionChangedToServer();
-        directionChanged.Header.MsgID = MessageIdTcp.AdventureRoomPlayerDirectionChangedToServer;
+        stTeamBattleRoomPlayerDirectionChangedToServer directionChanged = new stTeamBattleRoomPlayerDirectionChangedToServer();
+        directionChanged.Header.MsgID = MessageIdTcp.TeamBattleRoomPlayerDirectionChangedToServer;
         directionChanged.Header.PacketSize = (ushort)Marshal.SizeOf(directionChanged);
         directionChanged.PlayerInfo = _playerInfo;
         directionChanged.Direction = (ushort)directionEventArgs.direction;

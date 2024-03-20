@@ -56,12 +56,12 @@ public class MyPlayer : Creature
     {
         if (_canAttack)
         {
-            StartCoroutine(Event_OnAttackCoroutine(attackEventArgs));
+            StartCoroutine(CoOnAttack(attackEventArgs));
         }
         
     }
 
-    private IEnumerator Event_OnAttackCoroutine(AttackEventArgs attackEventArgs)
+    private IEnumerator CoOnAttack(AttackEventArgs attackEventArgs)
     {
         _canAttack = false;
         EventState.CallStateChangedEvent(State.Attack);

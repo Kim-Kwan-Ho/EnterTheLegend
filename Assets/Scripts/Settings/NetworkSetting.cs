@@ -19,21 +19,21 @@ namespace StandardData
     public static class GameRoomSize
     {
         public const int BattleRoomSize = 4;
-        public const int AdventureRoomSize = 3;
+        public const int TeamBattleRoomSize = 3;
     }
     public static class MessageIdTcp
     {
 
         public const ushort RequestForMatch = 1;
-        public const ushort AdventureRoomLoaded = 2;
-        public const ushort CreateAdventureRoom = 3;
-        public const ushort AdventurePlayerLoadInfo = 4;
-        public const ushort AdventureRoomLoadInfo = 5;
+        public const ushort TeamBattleRoomLoaded = 2;
+        public const ushort CreateTeamBattleRoom = 3;
+        public const ushort TeamBattlePlayerLoadInfo = 4;
+        public const ushort TeamBattleRoomLoadInfo = 5;
         public const ushort SetUdpPort = 6;
-        public const ushort AdventureRoomPlayerStateChangedToServer = 7;
-        public const ushort AdventureRoomPlayerStateChangedFromServer = 77;
-        public const ushort AdventureRoomPlayerDirectionChangedToServer = 8;
-        public const ushort AdventureRoomPlayerDirectionChangedFromServer = 88;
+        public const ushort TeamBattleRoomPlayerStateChangedToServer = 7;
+        public const ushort TeamBattleRoomPlayerStateChangedFromServer = 77;
+        public const ushort TeamBattleRoomPlayerDirectionChangedToServer = 8;
+        public const ushort TeamBattleRoomPlayerDirectionChangedFromServer = 88;
         public const ushort RequestPlayerData = 9;
         public const ushort ResponsePlayerData = 999;
         public const ushort PlayerEquipChanged = 10;
@@ -43,8 +43,8 @@ namespace StandardData
 
     public static class MessageIdUdp
     {
-        public const ushort AdventurePlayerPositionToServer = 1;
-        public const ushort AdventurePlayerPositionFromServer = 2;
+        public const ushort TeamBattlePlayerPositionToServer = 1;
+        public const ushort TeamBattlePlayerPositionFromServer = 2;
 
     }
 
@@ -54,14 +54,9 @@ namespace StandardData
 
     public static class UdpSendCycle
     {
-        public const float AdventureRoomSendCycle = 0.016f;
+        public const float TeamBattleRoomSendCycle = 0.016f;
     }
-    public enum GameRoomType
-    {
-        BattleRoom,
-        AdventureRoom,
 
-    }
 
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -135,7 +130,7 @@ namespace StandardData
 
     }
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stAdventureRoomPlayerLoadInfo
+    public struct stTeamBattleRoomPlayerLoadInfo
     {
         public stHeaderTcp Header;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
@@ -146,14 +141,14 @@ namespace StandardData
 
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stCreateAdventureRoom
+    public struct stCreateTeamBattleRoom
     {
         public stHeaderTcp Header;
         public ushort RoomId;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = (int)GameRoomSize.AdventureRoomSize)]
-        public stAdventurePlayerInfo[] playersInfo;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = (int)GameRoomSize.TeamBattleRoomSize)]
+        public stTeamBattlePlayerInfo[] playersInfo;
     }
-    public struct stAdventurePlayerInfo
+    public struct stTeamBattlePlayerInfo
     {
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = (int)(NetworkSize.MaxPlayerNameLength))]
         public string Name;
@@ -162,7 +157,7 @@ namespace StandardData
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stAdventureRoomPlayerInfo
+    public struct stTeamBattleRoomPlayerInfo
     {
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort RoomId;
@@ -171,7 +166,7 @@ namespace StandardData
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stAdventureRoomLoadInfo
+    public struct stTeamBattleRoomLoadInfo
     {
         public stHeaderTcp Header;
         [MarshalAs(UnmanagedType.Bool, SizeConst = 1)]
@@ -179,15 +174,15 @@ namespace StandardData
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stAdventureRoomPlayerStateChangedToServer
+    public struct stTeamBattleRoomPlayerStateChangedToServer
     {
         public stHeaderTcp Header;
-        public stAdventureRoomPlayerInfo PlayerInfo;
+        public stTeamBattleRoomPlayerInfo PlayerInfo;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort State;
     }
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stAdventureRoomPlayerStateChangedFromServer
+    public struct stTeamBattleRoomPlayerStateChangedFromServer
     {
         public stHeaderTcp Header;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
@@ -196,14 +191,14 @@ namespace StandardData
         public ushort State;
     }
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stAdventureRoomPlayerDirectionChangedToServer
+    public struct stTeamBattleRoomPlayerDirectionChangedToServer
     {
         public stHeaderTcp Header;
-        public stAdventureRoomPlayerInfo PlayerInfo;
+        public stTeamBattleRoomPlayerInfo PlayerInfo;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort Direction;
     }
-    public struct stAdventureRoomPlayerDirectionChangedFromServer
+    public struct stTeamBattleRoomPlayerDirectionChangedFromServer
     {
         public stHeaderTcp Header;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
@@ -212,10 +207,10 @@ namespace StandardData
         public ushort Direction;
     }
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stAdventureRoomPlayerOnAttack
+    public struct stTeamBattleRoomPlayerOnAttack
     {
         public stHeaderTcp Header;
-        public stAdventureRoomPlayerInfo PlayerInfo;
+        public stTeamBattleRoomPlayerInfo PlayerInfo;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort State;
     }
@@ -240,7 +235,7 @@ namespace StandardData
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    public struct stAdventurePlayerPositionToServer
+    public struct stTeamBattlePlayerPositionToServer
     {
         public stHeaderUdp Header;
         [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
@@ -250,11 +245,11 @@ namespace StandardData
         public stPlayerPosition PlayerPosition;
     }
 
-    public struct stAdventurePlayerPositionFromSever
+    public struct stTeamBattlePlayerPositionFromSever
     {
         public stHeaderUdp Header;
 
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = GameRoomSize.AdventureRoomSize)]
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = GameRoomSize.TeamBattleRoomSize)]
         public stPlayerPosition[] PlayerPosition;
 
     }

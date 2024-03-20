@@ -15,7 +15,9 @@ MonoBehaviour:
   ItemId: 30000
   IsEquipped: 0
   ItemSprite: {fileID: 21300000, guid: 2e43b63e12974f46bab8fc2455944a8b, type: 3}
-  CharacterEquipmentSprite: {fileID: 21300000, guid: 2e43b63e12974f46bab8fc2455944a8b, type: 3}
+  EquipmentSpriteOffSet: {x: 0, y: 0}
+  CharacterEquipmentSprite:
+  - {fileID: 21300000, guid: f66c924bb9fa4d06943791a4d86d0a1e, type: 3}
   Type: 2
   Name: c
   Description: cccc

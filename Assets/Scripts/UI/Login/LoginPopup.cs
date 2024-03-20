@@ -1,14 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using StandardData;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using PlayFab;
 using PlayFab.ClientModels;
-using System.Security.Cryptography;
 
 public class LoginPopup : UIPopup, IPlayfabDataHandler
 {
@@ -38,6 +33,7 @@ public class LoginPopup : UIPopup, IPlayfabDataHandler
     private string _password;
 
 
+    private bool _waitingResponse = false;
 
     private void Awake()
     {
@@ -50,11 +46,14 @@ public class LoginPopup : UIPopup, IPlayfabDataHandler
 
     private void OnLogin()
     {
-        Debug.Log("LoginStart");
+        if (_waitingResponse)
+            return;
+
+        _waitingResponse = true;
         _id = _idInputField.text;
         _password = _passwordInputField.text;
         var request = new LoginWithPlayFabRequest
-        { Username = _id, Password = _password};
+        { Username = _id, Password = _password };
         PlayerPrefs.SetInt("PlayerInfo", (int)LoginPlatform.PlayFabAccount);
         PlayFabClientAPI.LoginWithPlayFab(request, OnLoginSucceed, CallErrorReport);
 
@@ -65,11 +64,16 @@ public class LoginPopup : UIPopup, IPlayfabDataHandler
         PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), GetIpPortAddress, CallErrorReport);
         PlayerPrefs.SetString("PlayerId", _id);
         PlayerPrefs.SetString("PlayerPassword", _password);
+        _waitingResponse = false;
     }
 
     private void OnRegister()
     {
-        Debug.Log("RegisterStart");
+        if (_waitingResponse)
+            return;
+
+
+        _waitingResponse = true;
         var request = new RegisterPlayFabUserRequest()
         { Email = $"{_idInputField.text}@testexampletest.com", Username = _idInputField.text, Password = _passwordInputField.text };
         PlayFabClientAPI.RegisterPlayFabUser(request, OnRegisterSucceed, CallErrorReport);
@@ -79,13 +83,19 @@ public class LoginPopup : UIPopup, IPlayfabDataHandler
     private void OnRegisterSucceed(RegisterPlayFabUserResult result)
     {
         UIManager.Instance.OpenNoticePopup("RegisterSucceed");
+        _waitingResponse = false;
     }
 
     private void OnGuestLogin()
     {
+        if (_waitingResponse)
+            return;
+
+        _waitingResponse = true;
         var request = new LoginWithCustomIDRequest()
         {
-            CustomId = SystemInfo.deviceUniqueIdentifier, CreateAccount = true
+            CustomId = SystemInfo.deviceUniqueIdentifier,
+            CreateAccount = true
         };
 
         PlayerPrefs.SetInt("PlayerInfo", (int)LoginPlatform.Guest);
@@ -103,6 +113,7 @@ public class LoginPopup : UIPopup, IPlayfabDataHandler
     public void CallErrorReport(PlayFabError error)
     {
         UIManager.Instance.OpenNoticePopup(error.ToString());
+        _waitingResponse = false;
     }
 
 
