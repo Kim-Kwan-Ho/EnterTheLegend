@@ -8,34 +8,31 @@ public class EquipmentItem : BaseBehaviour
     [SerializeField]
     private GameObject _equipedFrameGameObject;
 
-
-    private EquipmentSO _equipment;
+    private EquipmentInfoSO _equipmentInfo;
     
-    public EquipmentSO EquipmentSo { get { return _equipment; } }
 
     private void OnEnable()
     {
-        MyGameManager.Instance.EventGameManager.OnEquipChanged += Event_EquipChanged;
+        LobbySceneManager.Instance.EventLobbyScene.OnEquipChanged += Event_EquipChanged;
     }
 
 
     private void OnDisable()
     {
-        MyGameManager.Instance.EventGameManager.OnEquipChanged -= Event_EquipChanged;
+        LobbySceneManager.Instance.EventLobbyScene.OnEquipChanged -= Event_EquipChanged;
     }
 
-    public void SetEquipmentItem(EquipmentSO equipment)
+    public void SetEquipmentItem(EquipmentInfoSO equipmentInfo)
     {
-        _equipment = equipment;
-        _itemImage.sprite = _equipment.ItemSprite;
-        _equipedFrameGameObject.SetActive(equipment.IsEquipped);
+        _equipmentInfo = equipmentInfo;
+        _itemImage.sprite = _equipmentInfo.ItemIcon;
+        _equipedFrameGameObject.SetActive(_equipmentInfo.IsEquipped);
     }
 
-    private void Event_EquipChanged(MyGameManagerEvent myGameManagerEvent,
-        GameEquipChangedEventArgs equipChangedEventArgs)
+    private void Event_EquipChanged(LobbySceneEvent lobbySceneEvent,
+        LobbySceneEquipChangedEventArgs lobbySceneEquipChangedEventArgs)
     {
-
-        if (_equipment == equipChangedEventArgs.equipment)
+        if (_equipmentInfo == lobbySceneEquipChangedEventArgs.equipmentInfo)
         {
             _equipedFrameGameObject.SetActive(true);
         }

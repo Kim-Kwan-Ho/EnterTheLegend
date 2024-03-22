@@ -30,60 +30,20 @@ public class CharacterStat : BaseBehaviour
     }
     private void OnEnable()
     {
-        MyGameManager.Instance.EventGameManager.OnPlayerStatChanged += Event_OnPlayerStatChanged;
+        LobbySceneManager.Instance.EventLobbyScene.OnPlayerStatChanged += Event_OnPlayerStatChanged;
     }
 
     private void OnDisable()
     {
-        MyGameManager.Instance.EventGameManager.OnPlayerStatChanged -= Event_OnPlayerStatChanged;
+        LobbySceneManager.Instance.EventLobbyScene.OnPlayerStatChanged -= Event_OnPlayerStatChanged;
     }
 
 
-
-    public void SetStat(LobbySceneInitializeArgs lobbySceneInitializeArgs)
+    private void Event_OnPlayerStatChanged(LobbySceneEvent lobbySceneEvent,
+        LobbyScenePlayerStatChangedEventArgs lobbyScenePlayerStatChangedEventArgs)
     {
-        ushort hp = 0;
-        ushort attack = 0;
-        ushort defense = 0;
-
-        if (lobbySceneInitializeArgs.characterEquip != null)
-        {
-            hp += lobbySceneInitializeArgs.characterEquip.StatHp;
-            attack += lobbySceneInitializeArgs.characterEquip.StatAttack;
-            defense += lobbySceneInitializeArgs.characterEquip.StatDefense;
-        }
-        if (lobbySceneInitializeArgs.weaponEquip != null)
-        {
-            hp += lobbySceneInitializeArgs.weaponEquip.StatHp;
-            attack += lobbySceneInitializeArgs.weaponEquip.StatAttack;
-            defense += lobbySceneInitializeArgs.weaponEquip.StatDefense;
-        }
-        if (lobbySceneInitializeArgs.helmetEquip != null)
-        {
-            hp += lobbySceneInitializeArgs.helmetEquip.StatHp;
-            attack += lobbySceneInitializeArgs.helmetEquip.StatAttack;
-            defense += lobbySceneInitializeArgs.helmetEquip.StatDefense;
-        }
-        if (lobbySceneInitializeArgs.armorEquip != null)
-        {
-            hp += lobbySceneInitializeArgs.armorEquip.StatHp;
-            attack += lobbySceneInitializeArgs.armorEquip.StatAttack;
-            defense += lobbySceneInitializeArgs.armorEquip.StatDefense;
-        }
-        if (lobbySceneInitializeArgs.shoesEquip != null)
-        {
-            hp += lobbySceneInitializeArgs.shoesEquip.StatHp;
-            attack += lobbySceneInitializeArgs.shoesEquip.StatAttack;
-            defense += lobbySceneInitializeArgs.shoesEquip.StatDefense;
-        }
-        SetStats(hp,attack,defense);
-    }
-
-    private void Event_OnPlayerStatChanged(MyGameManagerEvent myGameManagerEvent,
-        GamePlayerStatChangedEventArgs gamePlayerStatChangedEventArgs)
-    {
-        SetStats(gamePlayerStatChangedEventArgs.playerStat.Hp, gamePlayerStatChangedEventArgs.playerStat.Attack,
-            gamePlayerStatChangedEventArgs.playerStat.Defense);
+        SetStats(lobbyScenePlayerStatChangedEventArgs.playerStat.Hp, lobbyScenePlayerStatChangedEventArgs.playerStat.Attack,
+            lobbyScenePlayerStatChangedEventArgs.playerStat.Defense);
     }
 
     private void SetStats(ushort hp, ushort attack, ushort defense)

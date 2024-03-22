@@ -25,9 +25,9 @@ public class PlayerProperty : BaseBehaviour
     private void Event_SceneInitialize(LobbySceneEvent lobbySceneEvent,
         LobbySceneInitializeArgs lobbySceneInitializeArgs)
     {
-        _nicknameText.text = lobbySceneInitializeArgs.nickname;
-        _creditText.text = lobbySceneInitializeArgs.credit.ToString();
-        _goldText.text = lobbySceneInitializeArgs.gold.ToString();
+        _nicknameText.text = lobbySceneInitializeArgs.playerData.Nickname;
+        _creditText.text = lobbySceneInitializeArgs.playerData.Credit.ToString();
+        _goldText.text = lobbySceneInitializeArgs.playerData.Gold.ToString();
 
     }
 

@@ -1,3 +1,6 @@
+using StandardData;
+using System.Runtime.InteropServices;
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,18 +11,38 @@ public class LoginSucceedUI : BaseBehaviour
     [SerializeField]
     private Button _logoutButton;
 
+    private bool _isWaitingForRequest = false;
     private void Start()
     {
         _startButton.onClick.AddListener(GameStart);
         _logoutButton.onClick.AddListener(PlayerLogout);
     }
+
+    private void OnDisable()
+    {
+        _isWaitingForRequest = false;
+    }
     private void GameStart()
     {
-        MySceneManager.Instance.EventSceneChanged.CallSceneChanged("LobbyScene", null, true, 3f);
+        if (_isWaitingForRequest)
+            return;
+
+        _isWaitingForRequest = true;
+
+        stRequestPlayerData request = new stRequestPlayerData();
+        request.Header.MsgID = MessageIdTcp.RequestPlayerData;
+        request.Header.PacketSize = (UInt16)Marshal.SizeOf(request);
+        request.Id = ServerManager.Instance.ID;
+        byte[] msg = Utilities.GetObjectToByte(request);
+        ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);
     }
 
     private void PlayerLogout()
     {
+        if (_isWaitingForRequest)
+            return;
+
+        _isWaitingForRequest = true;
         PlayerPrefs.DeleteAll();
         LoginSceneManager.Instance.EventLoginScene.CallLogout();
         gameObject.SetActive(false);

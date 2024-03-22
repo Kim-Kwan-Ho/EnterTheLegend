@@ -10,18 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52a5749e27bcac44d89b5b7e49c0933e, type: 3}
-  m_Name: Equipment_ 17
+  m_Name: 20000
   m_EditorClassIdentifier: 
-  ItemId: 50000
-  IsEquipped: 0
-  ItemSprite: {fileID: 21300000, guid: 9921cd6912fdc3f4a99a156c56c0e72f, type: 3}
-  EquipmentSpriteOffSet: {x: 0, y: 0}
+  ItemId: 20000
+  Type: 2
+  EquipmentSpriteOffSet: {x: 0.51, y: -0.82}
   CharacterEquipmentSprite:
-  - {fileID: 21300014, guid: c6442858735d49669fbc0abc940bef69, type: 3}
-  Type: 4
-  Name: d
-  Description: dddd
-  StatHp: 1
-  StatAttack: 1
-  StatDefense: 1
-  AttackDistance: 1
+  - {fileID: 21300000, guid: 2a7ea29e1c2446849a2152b53ebb00d5, type: 3}
+  StatHp: 4
+  StatAttack: 4
+  StatDefense: 4
+  AttackDistance: 4

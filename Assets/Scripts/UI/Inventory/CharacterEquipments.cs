@@ -1,4 +1,4 @@
-using JetBrains.Annotations;
+#nullable enable
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,118 +30,72 @@ public class CharacterEquipments : BaseBehaviour
 
     private void OnEnable()
     {
-        MyGameManager.Instance.EventGameManager.OnEquipChanged += Event_EquipChanged;
+        LobbySceneManager.Instance.EventLobbyScene.OnEquipChanged += Event_EquipChanged;
     }
 
     private void OnDisable()
     {
-        MyGameManager.Instance.EventGameManager.OnEquipChanged -= Event_EquipChanged;
-    }
-
-    public void SetEquipment([CanBeNull]EquipmentSO characterEquip, [CanBeNull] EquipmentSO weaponEquip, [CanBeNull] EquipmentSO helmetEquip, [CanBeNull] EquipmentSO armorEquip, [CanBeNull] EquipmentSO shoesEquip)
-    {
-        if (characterEquip == null)
-        {
-            _characterImage.sprite = _characterSprite;
-        }
-        else
-        {
-            _characterImage.sprite = characterEquip.ItemSprite;
-        }
-        if (weaponEquip == null)
-        {
-            _weaponImage.sprite = _weaponSprite;
-        }
-        else
-        {
-            _weaponImage.sprite = weaponEquip.ItemSprite;
-        }
-
-        if (helmetEquip == null)
-        {
-            _helmetImage.sprite = _helmetSprite;
-        }
-        else
-        {
-            _helmetImage.sprite = helmetEquip.ItemSprite;
-        }
-
-        if (armorEquip == null)
-        {
-            _armorImage.sprite = _armorSprite;
-        }
-        else
-        {
-            _armorImage.sprite = armorEquip.ItemSprite;
-        }
-
-        if (shoesEquip == null)
-        {
-            _shoesImage.sprite = _shoesSprite;
-        }
-        else
-        {
-            _shoesImage.sprite = shoesEquip.ItemSprite;
-        }
         
+        LobbySceneManager.Instance.EventLobbyScene.OnEquipChanged -= Event_EquipChanged;
     }
 
-    private void Event_EquipChanged(MyGameManagerEvent myGameManagerEvent, GameEquipChangedEventArgs equipChangedEventArgs)
+
+    private void Event_EquipChanged(LobbySceneEvent lobbySceneEvent, LobbySceneEquipChangedEventArgs lobbySceneEquipChangedEventArgs)
     {
-        EquipmentType type = equipChangedEventArgs.type;
+        EquipmentType type = lobbySceneEquipChangedEventArgs.type;
         if (type == EquipmentType.Armor)
         {
-            if (equipChangedEventArgs.equipment == null)
+            if (lobbySceneEquipChangedEventArgs.equipmentInfo == null)
             {
                 _armorImage.sprite = _armorSprite;
             }
             else
             {
-                _armorImage.sprite = equipChangedEventArgs.equipment.ItemSprite;
+                _armorImage.sprite = lobbySceneEquipChangedEventArgs.equipmentInfo.ItemIcon;
             }
         }
         else if (type == EquipmentType.Weapon)
         {
-            if (equipChangedEventArgs.equipment == null)
+            if (lobbySceneEquipChangedEventArgs.equipmentInfo == null)
             {
                 _weaponImage.sprite = _weaponSprite;
             }
             else
             {
-                _weaponImage.sprite = equipChangedEventArgs.equipment.ItemSprite;
+                _weaponImage.sprite = lobbySceneEquipChangedEventArgs.equipmentInfo.ItemIcon;
             }
         }
         else if (type == EquipmentType.Helmet)
         {
-            if (equipChangedEventArgs.equipment == null)
+            if (lobbySceneEquipChangedEventArgs.equipmentInfo == null)
             {
                 _helmetImage.sprite = _helmetSprite;
             }
             else
             {
-                _helmetImage.sprite = equipChangedEventArgs.equipment.ItemSprite;
+                _helmetImage.sprite = lobbySceneEquipChangedEventArgs.equipmentInfo.ItemIcon;
             }
         }
         else if (type == EquipmentType.Shoes)
         {
-            if (equipChangedEventArgs.equipment == null)
+            if (lobbySceneEquipChangedEventArgs.equipmentInfo == null)
             {
                 _shoesImage.sprite = _shoesSprite;
             }
             else
             {
-                _shoesImage.sprite = equipChangedEventArgs.equipment.ItemSprite;
+                _shoesImage.sprite = lobbySceneEquipChangedEventArgs.equipmentInfo.ItemIcon;
             }
         }
         else if (type == EquipmentType.Character)
         {
-            if (equipChangedEventArgs.equipment == null)
+            if (lobbySceneEquipChangedEventArgs.equipmentInfo == null)
             {
                 _characterImage.sprite = _characterSprite;
             }
             else
             {
-                _characterImage.sprite = equipChangedEventArgs.equipment.ItemSprite;
+                _characterImage.sprite = lobbySceneEquipChangedEventArgs.equipmentInfo.ItemIcon;
             }
         }
 

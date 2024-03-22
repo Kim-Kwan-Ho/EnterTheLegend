@@ -4,18 +4,18 @@ using UnityEngine.UI;
 public class Inventory : BaseBehaviour
 {
 
-    [Header("Toggles")] 
-    [SerializeField] 
+    [Header("Toggles")]
+    [SerializeField]
     private Toggle[] _toggles;
 
     [Header("Slots")]
-    [SerializeField] 
+    [SerializeField]
     private GameObject _characterSlot;
-    [SerializeField] 
+    [SerializeField]
     private GameObject _weaponSlot;
     [SerializeField]
     private GameObject _helmetSlot;
-    [SerializeField] 
+    [SerializeField]
     private GameObject _armorSlot;
     [SerializeField]
     private GameObject _shoesSlot;
@@ -23,19 +23,30 @@ public class Inventory : BaseBehaviour
 
 
     [Header("Item Info")]
-    [SerializeField] 
+    [SerializeField]
     private ItemInfo _itemInfo;
-    [SerializeField] 
+    [SerializeField]
     private Vector2 _infoOffSet;
 
-    [Header("Prefabs")] 
-    [SerializeField] 
+    [Header("Prefabs")]
+    [SerializeField]
     private GameObject EquipmentItemPrefab;
 
-    private void Start()
+    private void Awake()
     {
         SetToggles();
     }
+
+    private void OnEnable()
+    {
+        LobbySceneManager.Instance.EventLobbyScene.OnLobbyInitialize += Event_LobbyInitialize;
+    }
+
+    private void OnDisable()
+    {
+        LobbySceneManager.Instance.EventLobbyScene.OnLobbyInitialize -= Event_LobbyInitialize;
+    }
+
 
     private void SetToggles()
     {
@@ -43,45 +54,48 @@ public class Inventory : BaseBehaviour
         {
             int c = i;
             _toggles[i].onValueChanged.AddListener((value) => _toggles[c].transform.GetChild(0).gameObject.SetActive(value));
-            _toggles[i].onValueChanged.AddListener((value)=> _itemInfo.gameObject.SetActive(false));
+            _toggles[i].onValueChanged.AddListener((value) => _itemInfo.gameObject.SetActive(false));
             _toggles[c].transform.GetChild(0).gameObject.SetActive(false);
         }
         _toggles[0].transform.GetChild(0).gameObject.SetActive(true);
 
     }
-    public void SetInventory(EquipmentSO[] equipments)
+    private void Event_LobbyInitialize(LobbySceneEvent lobbySceneEvent,
+        LobbySceneInitializeArgs lobbySceneInitializeArgs)
     {
-        for (int i = 0; i < equipments.Length; i++)
+
+        for (int i = 0; i < lobbySceneInitializeArgs.playerData.ItemCount; i++)
         {
+            EquipmentInfoSO itemInfo = Utilities.ResourceLoader<EquipmentInfoSO>("ItemInfos", lobbySceneInitializeArgs.playerData.Items[i]);
             EquipmentItem item = Instantiate(EquipmentItemPrefab).GetComponent<EquipmentItem>();
-            item.SetEquipmentItem(equipments[i]);
-            item.GetComponent<Button>().onClick.AddListener(() => OpenItemInfo(item.transform.position, item.EquipmentSo));
-            if (equipments[i].Type == EquipmentType.Character)
+            item.SetEquipmentItem(itemInfo);
+            item.GetComponent<Button>().onClick.AddListener(() => OpenItemInfo(item.transform.position, itemInfo));
+            if (itemInfo.Equipment.Type == EquipmentType.Character)
             {
                 item.transform.SetParent(_characterSlot.transform);
             }
-            else if (equipments[i].Type == EquipmentType.Weapon)
+            else if (itemInfo.Equipment.Type == EquipmentType.Weapon)
             {
                 item.transform.SetParent(_weaponSlot.transform);
             }
-            else if (equipments[i].Type == EquipmentType.Helmet)
+            else if (itemInfo.Equipment.Type == EquipmentType.Helmet)
             {
                 item.transform.SetParent(_helmetSlot.transform);
             }
-            else if (equipments[i].Type == EquipmentType.Armor)
+            else if (itemInfo.Equipment.Type == EquipmentType.Armor)
             {
                 item.transform.SetParent(_armorSlot.transform);
             }
-            else if (equipments[i].Type == EquipmentType.Shoes)
+            else if (itemInfo.Equipment.Type == EquipmentType.Shoes)
             {
                 item.transform.SetParent(_shoesSlot.transform);
             }
         }
     }
 
-    private void OpenItemInfo(Vector2 position, EquipmentSO item)
+    private void OpenItemInfo(Vector2 position, EquipmentInfoSO itemInfo)
     {
-        _itemInfo.SetItemInfo(position + _infoOffSet, item);
+        _itemInfo.SetItemInfo(position + _infoOffSet, itemInfo);
     }
 
 

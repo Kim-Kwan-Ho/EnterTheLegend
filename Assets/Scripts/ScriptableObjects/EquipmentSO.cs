@@ -3,17 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[CreateAssetMenu(fileName = "Equipment_", menuName = "Scriptable Objects/Equipment")]
-public class EquipmentSO : ScriptableObject
+[CreateAssetMenu(menuName = "Scriptable Objects/Equipment/Item")]
+public class EquipmentSO : ScriptableObject  // 아이템 정보 (게임씬)
 {
     public int ItemId;
-    public bool IsEquipped;
-    public Sprite ItemSprite;
+    public EquipmentType Type;
+    
     public Vector2 EquipmentSpriteOffSet;
     public List<Sprite> CharacterEquipmentSprite;
-    public EquipmentType Type;
-    public string Name;
-    public string Description;
+    
     public ushort StatHp;
     public ushort StatAttack;
     public ushort StatDefense;

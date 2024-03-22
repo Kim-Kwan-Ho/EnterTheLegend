@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -36,6 +38,25 @@ public static class Utilities
         float degrees = radians * Mathf.Rad2Deg;
         return degrees;
     }
+
+
+    public static T ResourceLoader<T>(string path, int itemId) where T : ScriptableObject
+    {
+        return Resources.Load<T>(path + "/" + itemId.ToString());
+    }
+    public static List<T> ResourcesLoader<T>(string path, int[] itemId) where T : ScriptableObject
+    {
+        T[] resources = new T[itemId.Length];
+
+        for (int i = 0; i < itemId.Length; i++)
+        {
+            resources[i] = Resources.Load<T>(path + "/" + itemId[i].ToString());
+        }
+        return resources.ToList();
+
+    }
+
+
     public static byte[] GetObjectToByte<T>(T str) where T : struct
     {
         int size = Marshal.SizeOf(str);

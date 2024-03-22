@@ -43,6 +43,7 @@ public enum GameSceneState
 
 public enum EquipmentType
 {
+    None,
     Character,
     Weapon,
     Helmet,

@@ -16,60 +16,56 @@ public class CharacterDisplay : BaseBehaviour
     private SpriteRenderer[] _shoesSprs = new SpriteRenderer[2];
 
 
-    private void Awake()
+
+    private void OnEnable()
     {
-        MyGameManager.Instance.EventGameManager.OnEquipChanged += Event_EquipChanged;
-    }
-    private void Start()
-    {
-        LobbySceneManager.Instance.EventLobbyScene.OnLobbyInitialize += Event_LobbyInitialize;
-        
+        LobbySceneManager.Instance.EventLobbyScene.OnEquipChanged += Event_EquipChanged;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
-        MyGameManager.Instance.EventGameManager.OnEquipChanged -= Event_EquipChanged;
-        LobbySceneManager.Instance.EventLobbyScene.OnLobbyInitialize -= Event_LobbyInitialize;
+        LobbySceneManager.Instance.EventLobbyScene.OnEquipChanged -= Event_EquipChanged;
     }
-    private void Event_EquipChanged(MyGameManagerEvent myGameManagerEvent, GameEquipChangedEventArgs gameEquipChangedEventArgs)
+
+    private void Event_EquipChanged(LobbySceneEvent lobbySceneEvent, LobbySceneEquipChangedEventArgs lobbySceneEquipChangedEventArgs)
     {
-        if (gameEquipChangedEventArgs.type == EquipmentType.Character)
+        if (lobbySceneEquipChangedEventArgs.type == EquipmentType.Character)
         {
-            if (gameEquipChangedEventArgs.equipment == null)
+            if (lobbySceneEquipChangedEventArgs.equipmentInfo == null)
             {
                 _characterSpr.sprite = null;
             }
             else
             {
-                _characterSpr.sprite = gameEquipChangedEventArgs.equipment.CharacterEquipmentSprite[0];
+                _characterSpr.sprite = lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.CharacterEquipmentSprite[0];
             }
         }
-        else if (gameEquipChangedEventArgs.type == EquipmentType.Weapon)
+        else if (lobbySceneEquipChangedEventArgs.type == EquipmentType.Weapon)
         {
-            if (gameEquipChangedEventArgs.equipment == null)
+            if (lobbySceneEquipChangedEventArgs.equipmentInfo == null)
             {
                 _weaponSpr.sprite = null;
             }
             else
             {
-                _weaponSpr.transform.localPosition = gameEquipChangedEventArgs.equipment.EquipmentSpriteOffSet;
-                _weaponSpr.sprite = gameEquipChangedEventArgs.equipment.CharacterEquipmentSprite[0];
+                _weaponSpr.transform.localPosition = lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.EquipmentSpriteOffSet;
+                _weaponSpr.sprite = lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.CharacterEquipmentSprite[0];
             }
         }
-        else if (gameEquipChangedEventArgs.type == EquipmentType.Helmet)
+        else if (lobbySceneEquipChangedEventArgs.type == EquipmentType.Helmet)
         {
-            if (gameEquipChangedEventArgs.equipment == null)
+            if (lobbySceneEquipChangedEventArgs.equipmentInfo == null)
             {
                 _helmetSpr.sprite = null;
             }
             else
             {
-                _helmetSpr.sprite = gameEquipChangedEventArgs.equipment.CharacterEquipmentSprite[0];
+                _helmetSpr.sprite = lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.CharacterEquipmentSprite[0];
             }
         }
-        else if (gameEquipChangedEventArgs.type == EquipmentType.Armor)
+        else if (lobbySceneEquipChangedEventArgs.type == EquipmentType.Armor)
         {
-            if (gameEquipChangedEventArgs.equipment == null)
+            if (lobbySceneEquipChangedEventArgs.equipmentInfo == null)
             {
                 for (int i = 0; i < _armorSprList.Count; i++)
                 {
@@ -78,60 +74,29 @@ public class CharacterDisplay : BaseBehaviour
             }
             else
             {
-                for (int i = 0; i < gameEquipChangedEventArgs.equipment.CharacterEquipmentSprite.Count; i++)
+                for (int i = 0; i < lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.CharacterEquipmentSprite.Count; i++)
                 {
-                    _armorSprList[i].sprite = gameEquipChangedEventArgs.equipment.CharacterEquipmentSprite[i];
+                    _armorSprList[i].sprite = lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.CharacterEquipmentSprite[i];
                 }
-                _armorSprList[^1].sprite = gameEquipChangedEventArgs.equipment.CharacterEquipmentSprite[^1];
+                _armorSprList[^1].sprite = lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.CharacterEquipmentSprite[^1];
             }
         }
-        else if (gameEquipChangedEventArgs.type == EquipmentType.Shoes)
+        else if (lobbySceneEquipChangedEventArgs.type == EquipmentType.Shoes)
         {
-            if (gameEquipChangedEventArgs.equipment == null)
+            if (lobbySceneEquipChangedEventArgs.equipmentInfo == null)
             {
                 _shoesSprs[0].sprite = null;
                 _shoesSprs[1].sprite = null;
             }
             else
             {
-                _shoesSprs[0].sprite = gameEquipChangedEventArgs.equipment.CharacterEquipmentSprite[0];
-                _shoesSprs[1].sprite = gameEquipChangedEventArgs.equipment.CharacterEquipmentSprite[0];
+                _shoesSprs[0].sprite = lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.CharacterEquipmentSprite[0];
+                _shoesSprs[1].sprite = lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.CharacterEquipmentSprite[0];
             }
         }
-    }
-
-    private void Event_LobbyInitialize(LobbySceneEvent lobbySceneEvent,
-        LobbySceneInitializeArgs lobbySceneInitializeArgs)
-    {
-        if (lobbySceneInitializeArgs.characterEquip != null)
-        {
-            _characterSpr.sprite = lobbySceneInitializeArgs.characterEquip.CharacterEquipmentSprite[0];
-        }
-        if (lobbySceneInitializeArgs.weaponEquip != null)
-        {
-            _weaponSpr.sprite = lobbySceneInitializeArgs.weaponEquip.CharacterEquipmentSprite[0];
-            _weaponSpr.transform.localPosition = lobbySceneInitializeArgs.weaponEquip.EquipmentSpriteOffSet;
-        }
-        if (lobbySceneInitializeArgs.helmetEquip != null)
-        {
-            _helmetSpr.sprite = lobbySceneInitializeArgs.helmetEquip.CharacterEquipmentSprite[0];
-        }
-        if (lobbySceneInitializeArgs.shoesEquip != null)
-        {
-            _shoesSprs[0].sprite = lobbySceneInitializeArgs.shoesEquip.CharacterEquipmentSprite[0];
-            _shoesSprs[1].sprite = lobbySceneInitializeArgs.shoesEquip.CharacterEquipmentSprite[0];
-        }
-        if (lobbySceneInitializeArgs.armorEquip != null)
-        {
-            for (int i = 0; i < lobbySceneInitializeArgs.armorEquip.CharacterEquipmentSprite.Count; i++)
-            {
-                _armorSprList[i].sprite = lobbySceneInitializeArgs.armorEquip.CharacterEquipmentSprite[i];
-            }
-            _armorSprList[^1].sprite = lobbySceneInitializeArgs.armorEquip.CharacterEquipmentSprite[^1];
-        }
-
     }
     
+
 #if UNITY_EDITOR
     protected override void OnBindField()
     {

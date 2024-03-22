@@ -12,13 +12,10 @@ namespace StandardData
         public const int MaxIdLength = 10;
         public const int EquipedItemLength = 5;
         public const int MaxItemLength = 100;
-        public const int MaxPasswordLength = 10;
-
     }
 
     public static class GameRoomSize
     {
-        public const int BattleRoomSize = 4;
         public const int TeamBattleRoomSize = 3;
     }
     public static class MessageIdTcp

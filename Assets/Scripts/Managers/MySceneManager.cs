@@ -37,11 +37,12 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
     private void OnEnable()
     {
         EventSceneChanged.OnSceneChanged += Event_LoadSceneAsync;
-
+        SceneManager.sceneLoaded += InitializeScene;
     }
     private void OnDisable()
     {
         EventSceneChanged.OnSceneChanged -= Event_LoadSceneAsync;
+        SceneManager.sceneLoaded -= InitializeScene;
     }
 
 
@@ -54,17 +55,21 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
         StartCoroutine(CoFadeOut(sceneChangeEventArgs));
     }
 
-    private void InitializeScene(string name)
+    private void InitializeScene(Scene scene, LoadSceneMode mode)
     {
-        if (name == "TeamBattleScene")
+        if (scene.name == "LoadingScene")
+            return;
+
+        if (scene.name == "TeamBattleScene")
         {
             stCreateTeamBattleRoom roomInfo = (stCreateTeamBattleRoom)_sceneInitialize;
             TeamBattleSceneManager.Instance.EventTeamBattleScene.CallRoomInitialize(roomInfo.RoomId,
                 roomInfo.playersInfo);
         }
-        else if (name == "LobbyScene")
+        else if (scene.name == "LobbyScene")
         {
-            MyGameManager.Instance.InitializeLobbyScene();
+            stResponsePlayerData playerData = (stResponsePlayerData)_sceneInitialize;
+            LobbySceneManager.Instance.EventLobbyScene.CallLobbyInitialize(playerData);
         }
 
         _sceneInitialize = null;
@@ -126,7 +131,6 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
         SceneManager.UnloadSceneAsync("LoadingScene");
         _loadingGage = 1;
         op.allowSceneActivation = true;
-        InitializeScene(sceneName);
         StartCoroutine(CoFadeIn());
     }
     private IEnumerator CoFadeOut(SceneChangeEventArgs sceneChangeEventArgs = null)

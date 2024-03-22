@@ -221,16 +221,10 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
                 _udpListenerThread = new Thread(new ThreadStart(UdpListenForIncomingRequest));
                 _udpListenerThread.IsBackground = true;
                 _udpListenerThread.Start();
-                stRequestPlayerData request = new stRequestPlayerData();
-                request.Header.MsgID = MessageIdTcp.RequestPlayerData;
-                request.Header.PacketSize = (UInt16)Marshal.SizeOf(request);
-                request.Id = ServerManager.Instance.ID;
-                byte[] msg = Utilities.GetObjectToByte(request);
-                EventClientToServer.CallOnTcpSend(msg);
                 break;
             case MessageIdTcp.ResponsePlayerData:
                 stResponsePlayerData playerData = Utilities.GetObjectFromByte<stResponsePlayerData>(msgData);
-                UnityMainThreadDispatcher.Instance().Enqueue(() => { MyGameManager.Instance.EventGameManager.CallDataInitialize(playerData); });
+                UnityMainThreadDispatcher.Instance().Enqueue(() => { MySceneManager.Instance.EventSceneChanged.CallSceneChanged("LobbyScene", playerData, true, 3); });
                 break;
             case MessageIdTcp.CreateTeamBattleRoom:
                 stCreateTeamBattleRoom createRoom = Utilities.GetObjectFromByte<stCreateTeamBattleRoom>(msgData);

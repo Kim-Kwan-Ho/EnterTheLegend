@@ -22,7 +22,7 @@ public class ItemInfo : BaseBehaviour
     private Button _closeButton;
 
 
-    private EquipmentSO _equipment;
+    private EquipmentInfoSO _equipmentInfo;
 
 
     private void Start()
@@ -34,34 +34,34 @@ public class ItemInfo : BaseBehaviour
     }
 
 
-    public void SetItemInfo(Vector2 position, EquipmentSO equipment)
+    public void SetItemInfo(Vector2 position, EquipmentInfoSO equipmentInfo)
     {
-        _equipment = equipment;
+        _equipmentInfo = equipmentInfo;
         transform.position = position;
-        _nameText.text = equipment.Name;
-        _descriptionText.text = equipment.Description;
+        _nameText.text = _equipmentInfo.Name;
+        _descriptionText.text = _equipmentInfo.Description;
         SetEquipButton();
         gameObject.SetActive(true);
     }
 
     private void OnEquip()
     {
-        _equipment.IsEquipped = true;
-        MyGameManager.Instance.EventGameManager.CallOnEquipChanged(_equipment.Type , _equipment);
+        _equipmentInfo.IsEquipped = true;
+        LobbySceneManager.Instance.EventLobbyScene.CallOnEquipChanged(_equipmentInfo.Equipment.Type , _equipmentInfo);
         SetEquipButton();
     }
 
     private void OnUnequip()
     {
-        _equipment.IsEquipped = false;
-        MyGameManager.Instance.EventGameManager.CallOnEquipChanged(_equipment.Type, null);
+        _equipmentInfo.IsEquipped = false;
+        LobbySceneManager.Instance.EventLobbyScene.CallOnEquipChanged(_equipmentInfo.Equipment.Type, null);
         SetEquipButton();
     }
 
     private void SetEquipButton()
     {
-        _equipButton.gameObject.SetActive(!_equipment.IsEquipped);
-        _unequipButton.gameObject.SetActive(_equipment.IsEquipped);
+        _equipButton.gameObject.SetActive(!_equipmentInfo.IsEquipped);
+        _unequipButton.gameObject.SetActive(_equipmentInfo.IsEquipped);
     }
 
 #if UNITY_EDITOR

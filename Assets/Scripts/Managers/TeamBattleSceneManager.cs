@@ -89,7 +89,6 @@ public class TeamBattleSceneManager : SingletonMonobehaviour<TeamBattleSceneMana
         if (loadInfo)
         {
             _state = GameSceneState.StartGame;
-            TestDebugLog.DebugLog("Game Start");
             // 게임 시작 작성
         }
         else
