@@ -43,16 +43,22 @@ public enum GameSceneState
 
 public enum EquipmentType
 {
-    None,
     Character,
     Weapon,
     Helmet,
     Armor,
-    Shoes
+    Shoes,
+    None,
 }
 public enum GameRoomType
 {
     Duel,
     TeamBattle,
     TrioDefense
+}
+
+public enum SceneType
+{
+    LobbyScene,
+    TeamBattleScene
 }

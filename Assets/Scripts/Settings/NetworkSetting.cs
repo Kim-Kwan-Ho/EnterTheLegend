@@ -16,7 +16,7 @@ namespace StandardData
 
     public static class GameRoomSize
     {
-        public const int TeamBattleRoomSize = 3;
+        public const int TeamBattleRoomSize = 6;
     }
     public static class MessageIdTcp
     {
@@ -141,6 +141,7 @@ namespace StandardData
     public struct stCreateTeamBattleRoom
     {
         public stHeaderTcp Header;
+        [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
         public ushort RoomId;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = (int)GameRoomSize.TeamBattleRoomSize)]
         public stTeamBattlePlayerInfo[] playersInfo;

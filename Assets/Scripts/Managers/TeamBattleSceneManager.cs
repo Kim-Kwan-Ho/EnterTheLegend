@@ -32,9 +32,8 @@ public class TeamBattleSceneManager : SingletonMonobehaviour<TeamBattleSceneMana
     {
         base.Awake();
         _state = GameSceneState.Loading;
-
     }
-    private void Start()
+    private void OnEnable()
     {
         EventTeamBattleScene.OnRoomInitialize += Event_InitializeRoom;
         EventTeamBattleScene.OnPlayerPositionChanged += Event_PlayerPositionChanged;

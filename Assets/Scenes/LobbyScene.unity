@@ -4216,8 +4216,8 @@ Camera:
   m_TargetTexture: {fileID: 8400000, guid: 9a9c29088bb630d4abc68824dc95bc44, type: 2}
   m_TargetDisplay: 0
   m_TargetEye: 3
-  m_HDR: 1
-  m_AllowMSAA: 1
+  m_HDR: 0
+  m_AllowMSAA: 0
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 1
@@ -7168,7 +7168,6 @@ GameObject:
   - component: {fileID: 1232311001}
   - component: {fileID: 1232311000}
   - component: {fileID: 1232310999}
-  - component: {fileID: 1232310998}
   m_Layer: 5
   m_Name: CancelMatchButton
   m_TagString: Untagged
@@ -7197,18 +7196,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -150}
   m_SizeDelta: {x: 150, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1232310998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1232310996}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19fdbdb99820a214980682668aae81f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1232310999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7253,9 +7240,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1232310998}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TestMatchButton, Assembly-CSharp
-        m_MethodName: Match
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9340,7 +9327,6 @@ GameObject:
   - component: {fileID: 1641983879}
   - component: {fileID: 1641983878}
   - component: {fileID: 1641983877}
-  - component: {fileID: 1641983876}
   m_Layer: 5
   m_Name: MatchButton
   m_TagString: Untagged
@@ -9369,18 +9355,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -150}
   m_SizeDelta: {x: 150, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1641983876
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1641983874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 19fdbdb99820a214980682668aae81f8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1641983877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9425,9 +9399,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1641983876}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TestMatchButton, Assembly-CSharp
-        m_MethodName: Match
+        m_MethodName: 
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -120,15 +120,13 @@ public class GameMode : BaseBehaviour
         _isMatching = true;
         _cancelMatchButton.gameObject.SetActive(true);
         _matchButton.gameObject.SetActive(false);
-        Debug.Log(_gameRoomSO.RoomTypeList[_curIndex]);
-        /*
+        
         stRequestForMatch requestMatch = new stRequestForMatch();
         requestMatch.Header.MsgID = MessageIdTcp.RequestForMatch;
         requestMatch.Header.PacketSize = (ushort)Marshal.SizeOf(requestMatch);
         requestMatch.MatchType = (ushort)_gameRoomSO.RoomTypeList[_curIndex];
         byte[] msg = Utilities.GetObjectToByte(requestMatch);
         ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);
-        */
     }
 
     private void CancelMatch()

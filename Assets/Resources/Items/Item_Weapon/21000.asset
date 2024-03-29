@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52a5749e27bcac44d89b5b7e49c0933e, type: 3}
+  m_Name: 21000
+  m_EditorClassIdentifier: 
+  ItemId: 21000
+  Type: 1
+  EquipmentSpriteOffSet: {x: 0.51, y: -0.82}
+  CharacterEquipmentSprite:
+  - {fileID: 21300000, guid: abb280dadab44db4eb5b9b49a406841b, type: 3}
+  StatHp: 4
+  StatAttack: 4
+  StatDefense: 4
+  AttackDistance: 4

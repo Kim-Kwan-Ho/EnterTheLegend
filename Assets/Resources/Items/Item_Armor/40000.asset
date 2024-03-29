@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 40000
   m_EditorClassIdentifier: 
   ItemId: 40000
-  Type: 4
+  Type: 3
   EquipmentSpriteOffSet: {x: 0, y: 0}
   CharacterEquipmentSprite:
   - {fileID: 21300004, guid: c6442858735d49669fbc0abc940bef69, type: 3}

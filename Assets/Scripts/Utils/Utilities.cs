@@ -53,9 +53,12 @@ public static class Utilities
             resources[i] = Resources.Load<T>(path + "/" + itemId[i].ToString());
         }
         return resources.ToList();
-
     }
-
+    public static List<T> ResourcesLoader<T>(string path) where T : ScriptableObject
+    {
+        var resources = Resources.LoadAll<T>(path);
+        return resources.ToList();
+    }
 
     public static byte[] GetObjectToByte<T>(T str) where T : struct
     {

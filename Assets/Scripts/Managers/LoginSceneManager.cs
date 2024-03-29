@@ -34,18 +34,21 @@ public class LoginSceneManager : SingletonMonobehaviour<LoginSceneManager>, IPla
 
     private void CheckPlayerInfo()
     {
-        if (PlayerPrefs.HasKey("PlayerId"))
+        if (PlayerPrefs.HasKey("PlayerInfo"))
         {
             int platform = PlayerPrefs.GetInt("PlayerInfo");
 
             switch (platform)
             {
                 case (int)LoginPlatform.Guest:
+                    var guestRequest = new LoginWithCustomIDRequest()
+                        { CustomId = SystemInfo.deviceUniqueIdentifier};
+                    PlayFabClientAPI.LoginWithCustomID(guestRequest, ((result) => PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), GetIpPortAddress, CallErrorReport)), CallErrorReport);
                     break;
                 case (int)LoginPlatform.PlayFabAccount:
-                    var request = new LoginWithPlayFabRequest
+                    var playFabRequest = new LoginWithPlayFabRequest
                     { Username = PlayerPrefs.GetString("PlayerId"), Password = PlayerPrefs.GetString("PlayerPassword") };
-                    PlayFabClientAPI.LoginWithPlayFab(request, ((result) => PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), GetIpPortAddress, CallErrorReport)), CallErrorReport);
+                    PlayFabClientAPI.LoginWithPlayFab(playFabRequest, ((result) => PlayFabClientAPI.GetTitleData(new GetTitleDataRequest(), GetIpPortAddress, CallErrorReport)), CallErrorReport);
                     break;
             }
         }
@@ -64,6 +67,7 @@ public class LoginSceneManager : SingletonMonobehaviour<LoginSceneManager>, IPla
     }
     public void CallErrorReport(PlayFabError error)
     {
+        Debug.Log(error.ErrorMessage);
         PlayerPrefs.DeleteAll();
         CheckPlayerInfo();
     }

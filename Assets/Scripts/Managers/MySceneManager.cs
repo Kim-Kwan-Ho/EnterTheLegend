@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-
+using System;
 [RequireComponent(typeof(SceneChangeEvent))]
 public class MySceneManager : SingletonMonobehaviour<MySceneManager>
 {
@@ -93,11 +93,11 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
         _fadeImage.color = targetColor;
     }
 
-    private IEnumerator CoLoadScene(string sceneName ,bool hasDelay = true, float delayTime = 3)
+    private IEnumerator CoLoadScene(SceneType sceneType, bool hasDelay = true, float delayTime = 3)
     {
         _loadingGob.SetActive(true);
         float time = 0;
-        AsyncOperation op = SceneManager.LoadSceneAsync(sceneName,LoadSceneMode.Additive);
+        AsyncOperation op = SceneManager.LoadSceneAsync(Enum.GetName(typeof(SceneType),sceneType), LoadSceneMode.Additive);
         op.allowSceneActivation = false;
 
         if (hasDelay)
@@ -151,7 +151,7 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
     private IEnumerator CoUnloadScene(SceneChangeEventArgs sceneChangeEventArgs)
     {
         SceneManager.LoadScene("LoadingScene");
-        yield return StartCoroutine(CoLoadScene(sceneChangeEventArgs.sceneName,
+        yield return StartCoroutine(CoLoadScene(sceneChangeEventArgs.sceneType,
             sceneChangeEventArgs.hasDealy,
             sceneChangeEventArgs.delayTime));
     }

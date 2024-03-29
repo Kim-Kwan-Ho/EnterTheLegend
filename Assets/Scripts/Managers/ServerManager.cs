@@ -159,7 +159,6 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         catch (SocketException socketException)
         {
             Debug.Log(socketException.ToString());
-            _clientReady = false;
             UnityMainThreadDispatcher.Instance().Enqueue(() => UIManager.Instance.OpenNoticePopup("Unable to connect to the game server. Contact rlarhksgh010@naver.com"));
             DisConnect();
             Thread.Sleep(2000);
@@ -224,11 +223,11 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
                 break;
             case MessageIdTcp.ResponsePlayerData:
                 stResponsePlayerData playerData = Utilities.GetObjectFromByte<stResponsePlayerData>(msgData);
-                UnityMainThreadDispatcher.Instance().Enqueue(() => { MySceneManager.Instance.EventSceneChanged.CallSceneChanged("LobbyScene", playerData, true, 3); });
+                UnityMainThreadDispatcher.Instance().Enqueue(() => { MySceneManager.Instance.EventSceneChanged.CallSceneChanged(SceneType.LobbyScene, playerData, true, 3); });
                 break;
             case MessageIdTcp.CreateTeamBattleRoom:
                 stCreateTeamBattleRoom createRoom = Utilities.GetObjectFromByte<stCreateTeamBattleRoom>(msgData);
-                UnityMainThreadDispatcher.Instance().Enqueue(() => { MySceneManager.Instance.EventSceneChanged.CallSceneChanged("TeamBattleScene", createRoom, true, 3); });
+                UnityMainThreadDispatcher.Instance().Enqueue(() => { MySceneManager.Instance.EventSceneChanged.CallSceneChanged(SceneType.TeamBattleScene, createRoom, true, 3); });
                 break;
             case MessageIdTcp.TeamBattleRoomLoadInfo:
                 stTeamBattleRoomLoadInfo loadInfo = Utilities.GetObjectFromByte<stTeamBattleRoomLoadInfo>(msgData);

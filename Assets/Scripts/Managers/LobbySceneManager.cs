@@ -1,4 +1,3 @@
-#nullable enable
 using StandardData;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
@@ -28,11 +27,11 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
     private PlayerStat _playerStat = new PlayerStat();
 
     [Header("Character Equipments")]
-    [SerializeField] private EquipmentInfoSO? _characterEquip;
-    [SerializeField] private EquipmentInfoSO? _weaponEquip;
-    [SerializeField] private EquipmentInfoSO? _helmetEquip;
-    [SerializeField] private EquipmentInfoSO? _armorEquip;
-    [SerializeField] private EquipmentInfoSO? _shoesEquip;
+    [SerializeField] private EquipmentInfoSO _characterEquip;
+    [SerializeField] private EquipmentInfoSO _weaponEquip;
+    [SerializeField] private EquipmentInfoSO _helmetEquip;
+    [SerializeField] private EquipmentInfoSO _armorEquip;
+    [SerializeField] private EquipmentInfoSO _shoesEquip;
 
 
 
@@ -99,7 +98,7 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
         equipChangedInfo.Header.MsgID = MessageIdTcp.PlayerEquipChanged;
         equipChangedInfo.Header.PacketSize = (ushort)Marshal.SizeOf(equipChangedInfo);
 
-        EquipmentInfoSO? beforeItem = null;
+        EquipmentInfoSO beforeItem = null;
 
         if (lobbySceneEquipChangedEventArgs.type == EquipmentType.Weapon)
         {

@@ -1,4 +1,3 @@
-#nullable enable
 using System;
 using StandardData;
 using UnityEngine;
@@ -20,7 +19,7 @@ public class LobbySceneEvent : MonoBehaviour
         OnPlayerStatChanged?.Invoke(this, new LobbyScenePlayerStatChangedEventArgs() { playerStat = playerStat });
     }
 
-    public void CallOnEquipChanged(EquipmentType type, EquipmentInfoSO? equipmentInfo)
+    public void CallOnEquipChanged(EquipmentType type, EquipmentInfoSO equipmentInfo)
     {
         OnEquipChanged?.Invoke(this, new LobbySceneEquipChangedEventArgs() { type = type, equipmentInfo = equipmentInfo });
     }
@@ -38,5 +37,5 @@ public class LobbyScenePlayerStatChangedEventArgs : EventArgs
 public class LobbySceneEquipChangedEventArgs : EventArgs
 {
     public EquipmentType type;
-    public EquipmentInfoSO? equipmentInfo;
+    public EquipmentInfoSO equipmentInfo;
 }
