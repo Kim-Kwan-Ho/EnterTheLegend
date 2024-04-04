@@ -73,18 +73,16 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
     private void Event_Logout(LoginSceneEvents loginSceneEvents,
         LoginSceneEventLogoutArgs loginSceneEventLogoutArgs)
     {
+        DisConnect();
         _id = null;
         _ip = null;
         _port = 0;
-        DisConnect();
     }
     private void OpenServer()
     {
         _tcpListenerThread = new Thread(new ThreadStart(TcpListenForIncomingRequest));
         _tcpListenerThread.IsBackground = true;
         _tcpListenerThread.Start();
-
-
     }
 
 
@@ -231,22 +229,22 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
                 break;
             case MessageIdTcp.TeamBattleRoomLoadInfo:
                 stTeamBattleRoomLoadInfo loadInfo = Utilities.GetObjectFromByte<stTeamBattleRoomLoadInfo>(msgData);
-                TeamBattleSceneManager.Instance.EventTeamBattleScene.CallGameStart(loadInfo.IsAllSucceed);
+                UnityMainThreadDispatcher.Instance().Enqueue(() => { TeamBattleSceneManager.Instance.EventBattleScene.CallGameStart(loadInfo.IsAllSucceed); });
                 break;
-            case MessageIdTcp.TeamBattleRoomPlayerStateChangedFromServer:
-                stTeamBattleRoomPlayerStateChangedFromServer stateChanged =
-                    Utilities.GetObjectFromByte<stTeamBattleRoomPlayerStateChangedFromServer>(msgData);
+            case MessageIdTcp.BattleRoomPlayerStateChangedFromServer:
+                stBattleRoomPlayerStateChangedFromServer stateChanged =
+                    Utilities.GetObjectFromByte<stBattleRoomPlayerStateChangedFromServer>(msgData);
                 UnityMainThreadDispatcher.Instance().Enqueue(() =>
                 {
-                    TeamBattleSceneManager.Instance.EventTeamBattleScene.CallPlayerStateChanged(stateChanged.PlayerIndex, (State)stateChanged.State);
+                    TeamBattleSceneManager.Instance.EventBattleScene.CallPlayerStateChanged(stateChanged.PlayerIndex, (State)stateChanged.State);
                 });
                 break;
-            case MessageIdTcp.TeamBattleRoomPlayerDirectionChangedFromServer:
-                stTeamBattleRoomPlayerDirectionChangedFromServer directionChanged =
-                    Utilities.GetObjectFromByte<stTeamBattleRoomPlayerDirectionChangedFromServer>(msgData);
+            case MessageIdTcp.BattleRoomPlayerDirectionChangedFromServer:
+                stBattleRoomPlayerDirectionChangedFromServer directionChanged =
+                    Utilities.GetObjectFromByte<stBattleRoomPlayerDirectionChangedFromServer>(msgData);
                 UnityMainThreadDispatcher.Instance().Enqueue(() =>
                 {
-                    TeamBattleSceneManager.Instance.EventTeamBattleScene.CallPlayerDirectionChanged(directionChanged.PlayerIndex, (Direction)directionChanged.Direction);
+                    TeamBattleSceneManager.Instance.EventBattleScene.CallPlayerDirectionChanged(directionChanged.PlayerIndex, (Direction)directionChanged.Direction);
                 });
                 break;
 
@@ -279,20 +277,20 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
             Debug.Log("UDPSocketException " + socketException.ToString());
             Thread.Sleep(2000);
             UnityMainThreadDispatcher.Instance().Enqueue(() => Application.Quit());
-            
+
         }
     }
     private void UdpIncomingDataProcess(ushort msgId, byte[] msgData)
     {
         switch (msgId)
         {
-            case MessageIdUdp.TeamBattlePlayerPositionFromServer:
-                stTeamBattlePlayerPositionFromSever playerPosition =
-                    Utilities.GetObjectFromByte<stTeamBattlePlayerPositionFromSever>(msgData);
+            case MessageIdUdp.BattlePlayerPositionFromServer:
+                stBattlePlayerPositionFromSever playerPosition =
+                    Utilities.GetObjectFromByte<stBattlePlayerPositionFromSever>(msgData);
 
                 UnityMainThreadDispatcher.Instance().Enqueue(() =>
                 {
-                    TeamBattleSceneManager.Instance.EventTeamBattleScene.CallPlayerPositionChanged(playerPosition);
+                    TeamBattleSceneManager.Instance.EventBattleScene.CallPlayerPositionChanged(playerPosition);
                 });
                 break;
         }
@@ -323,15 +321,19 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
         _socketConnection = null;
         _stream.Close();
         _stream = null;
-        _udpSocketSend.Close();
+        if (_udpSocketSend != null)
+            _udpSocketSend.Close();
         _udpSocketSend = null;
-        _udpSocketReceive.Close();
+        if (_udpSocketReceive != null)
+            _udpSocketReceive.Close();
         _udpSocketSend = null;
 
-        _tcpListenerThread.Abort();
+        if (_tcpListenerThread != null)
+            _tcpListenerThread.Abort();
         _tcpListenerThread = null;
 
-        _udpListenerThread.Abort();
+        if (_udpListenerThread != null)
+            _udpListenerThread.Abort();
         _udpListenerThread = null;
     }
 

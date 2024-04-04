@@ -37,12 +37,11 @@ public class MyPlayerDataSender : BaseBehaviour
 
     private IEnumerator CoSendPlayerPosition()
     {
-        yield return new WaitUntil(() => TeamBattleSceneManager.Instance.State == GameSceneState.StartGame);
+        yield return new WaitUntil(() => BattleSceneManager.Instance.SceneState == GameSceneState.StartGame);
         while (true)
         {
             stTeamBattlePlayerPositionToServer position = new stTeamBattlePlayerPositionToServer();
             position.Header.MsgID = MessageIdUdp.TeamBattlePlayerPositionToServer;
-            position.RoomType = (ushort)MyGameManager.Instance.RoomType;
             position.RoomId = TeamBattleSceneManager.Instance.RoomId;
             position.PlayerPosition.PlayerIndex = TeamBattleSceneManager.Instance.PlayerIndex;
             position.PlayerPosition.PositionX = _player.transform.position.x;

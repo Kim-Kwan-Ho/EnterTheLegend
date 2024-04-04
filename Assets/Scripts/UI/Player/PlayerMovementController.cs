@@ -4,12 +4,6 @@ using UnityEngine.EventSystems;
 public class PlayerMovementController : BaseBehaviour, IPointerDownHandler ,IPointerUpHandler, IDragHandler
 {
     
-
-
-
-    [Header("Size Ratio")]
-    [SerializeField] private Canvas _canvas = null;
-
     [Header("UI SETTINGS TEST")]
     [SerializeField] private float _movementRange = 25;
 
@@ -21,8 +15,7 @@ public class PlayerMovementController : BaseBehaviour, IPointerDownHandler ,IPoi
     private void Start()
     {
         _startPosition = transform.position;
-        _movementRange *= _canvas.scaleFactor;
-        _player = TeamBattleSceneManager.Instance.GetMyPlayer();
+        _player = BattleSceneManager.Instance.Player;
     }
 
 
@@ -73,12 +66,10 @@ public class PlayerMovementController : BaseBehaviour, IPointerDownHandler ,IPoi
     protected override void OnBindField()
     {
         base.OnBindField();
-        _canvas = GetComponentInParent<Canvas>();
     }
 
     private void OnValidate()
     {
-        CheckNullValue(this.name, _canvas);
     }
 
 #endif 

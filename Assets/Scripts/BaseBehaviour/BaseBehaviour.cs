@@ -60,7 +60,11 @@ public class BaseBehaviour : MonoBehaviour
         }
         return null;
     }
-
+    protected T[] GetComponentsInGameObject<T>(string name) where T : Component
+    {
+        GameObject gob = GameObject.Find(name);
+        return gob.GetComponentsInChildren<T>();
+    }
 
     protected T GetComponentInChildrenExceptThis<T>() where T : Component
     {

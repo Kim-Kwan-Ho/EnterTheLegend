@@ -63,8 +63,8 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
         if (scene.name == "TeamBattleScene")
         {
             stCreateTeamBattleRoom roomInfo = (stCreateTeamBattleRoom)_sceneInitialize;
-            TeamBattleSceneManager.Instance.EventTeamBattleScene.CallRoomInitialize(roomInfo.RoomId,
-                roomInfo.playersInfo);
+            TeamBattleSceneManager.Instance.EventBattleScene.CallRoomInitialize(roomInfo.RoomId, roomInfo.PlayerIndex,
+                roomInfo.PlayersInfo);
         }
         else if (scene.name == "LobbyScene")
         {
@@ -151,8 +151,11 @@ public class MySceneManager : SingletonMonobehaviour<MySceneManager>
     private IEnumerator CoUnloadScene(SceneChangeEventArgs sceneChangeEventArgs)
     {
         SceneManager.LoadScene("LoadingScene");
+        //yield return StartCoroutine(CoLoadScene(sceneChangeEventArgs.sceneType,
+        //    sceneChangeEventArgs.hasDealy,
+        //    sceneChangeEventArgs.delayTime));
         yield return StartCoroutine(CoLoadScene(sceneChangeEventArgs.sceneType,
-            sceneChangeEventArgs.hasDealy,
+            false,
             sceneChangeEventArgs.delayTime));
     }
 

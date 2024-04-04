@@ -6163,14 +6163,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   EventGameManager: {fileID: 957143933}
   _nickname: Client_1
-  _credit: 0
-  _gold: 0
-  _characterEquip: {fileID: 0}
-  _weaponEquip: {fileID: 0}
-  _helmetEquip: {fileID: 0}
-  _armorEquip: {fileID: 0}
-  _shoesEquip: {fileID: 0}
-  _ownedItems: []
 --- !u!114 &957143933
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11813,7 +11805,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.9254902, g: 0.8862745, b: 0.6509804, a: 0.8}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
