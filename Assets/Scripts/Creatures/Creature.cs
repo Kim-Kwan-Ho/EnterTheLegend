@@ -1,7 +1,6 @@
 using UnityEngine;
 
 
-[RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(StateEvent))]
 [RequireComponent(typeof(DirectionEvent))]
 [RequireComponent(typeof(MovementEvent))]
@@ -141,10 +140,10 @@ public class Creature : BaseBehaviour
     protected override void OnBindField()
     {
         base.OnBindField();
-        _animator = GetComponent<Animator>();
+        _animator = GetComponentInChildren<Animator>();
         EventState = GetComponent<StateEvent>();
         EventDirection = GetComponent<DirectionEvent>();
-        
+        EventMovement = GetComponent<MovementEvent>();
     }
 
     protected virtual void OnValidate()
@@ -152,6 +151,7 @@ public class Creature : BaseBehaviour
         CheckNullValue(this.name, _animator);
         CheckNullValue(this.name, EventState);
         CheckNullValue(this.name, EventDirection);
+        CheckNullValue(this.name, EventMovement);
     }
 
 #endif

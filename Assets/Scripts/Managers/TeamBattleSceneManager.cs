@@ -1,21 +1,15 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using StandardData;
-using Unity.VisualScripting;
 using UnityEngine;
+using System.Linq;
 
 [RequireComponent(typeof(TeamBattleSceneEvent))]
 public class TeamBattleSceneManager : BattleSceneManager
 {
-
-    [Header("Prefabs")]
-    [SerializeField] private GameObject _playerPrefab;
-    [SerializeField] private GameObject _otherPlayerPrefab;
-
-  
-
+    [Header("Players")]
+    [SerializeField]
     private Creature[] _players = new Creature[GameRoomSize.TeamBattleRoomSize];
-    private GameObject _playerController;
 
 
     [Header("Events")]
@@ -36,7 +30,7 @@ public class TeamBattleSceneManager : BattleSceneManager
         EventBattleScene.OnPlayerDirectionChanged += Event_PlayerDirectionChanged;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         EventBattleScene.OnRoomInitialize -= Event_InitializeTeamBattleRoom;
         EventBattleScene.OnPlayerPositionChanged -= Event_PlayerPositionChanged;
@@ -45,21 +39,18 @@ public class TeamBattleSceneManager : BattleSceneManager
         EventBattleScene.OnPlayerDirectionChanged -= Event_PlayerDirectionChanged;
     }
 
-    private void Event_InitializeTeamBattleRoom(BattleSceneEvent teamBattleSceneEvent, BattleSceneEventRoomInfoArgs teamBattleSceneEventArgs)
+    private void Event_InitializeTeamBattleRoom(BattleSceneEvent battleSceneEvent, BattleSceneEventRoomInfoArgs battleSceneEventArgs)
     {
-        stBattleRoomInfo roomInfo = teamBattleSceneEventArgs.roomInfo;
+        stBattleRoomInfo roomInfo = battleSceneEventArgs.roomInfo;
         _roomId = roomInfo.roomId;
-        _playerIndex = teamBattleSceneEventArgs.roomInfo.playerIndex;
+        _playerIndex = battleSceneEventArgs.roomInfo.playerIndex;
         for (ushort i = 0; i < GameRoomSize.TeamBattleRoomSize; i++)
         {
             if (i == _playerIndex)
             {
-                _players[i] = Instantiate(_playerPrefab).GetComponent<MyPlayer>();
-                _player = (MyPlayer)_players[i];
-            }
-            else
-            {
-                _players[i] = Instantiate(_otherPlayerPrefab).GetComponent<OtherPlayer>();
+                _player.transform.position = _players[i].transform.position;
+                Destroy(_players[i].gameObject);
+                _players[i] = _player;
             }
             _players[i].Initialize();
         }
@@ -87,10 +78,10 @@ public class TeamBattleSceneManager : BattleSceneManager
         }
     }
 
-    private void Event_PlayerPositionChanged(BattleSceneEvent teamBattleSceneEvent,
-        BattleScenePlayerPositionChangedEventArgs teamBattleSceneEventArgs)
+    private void Event_PlayerPositionChanged(BattleSceneEvent battleSceneEvent,
+        BattleScenePlayerPositionChangedEventArgs battleSceneEventArgs)
     {
-        stBattlePlayerPositionFromSever playerPositions = teamBattleSceneEventArgs.playerPositions;
+        stBattlePlayerPositionFromSever playerPositions = battleSceneEventArgs.playerPositions;
         for (int i = 0; i < playerPositions.PlayerPosition.Length; i++)
         {
             if (playerPositions.PlayerPosition[i].PlayerIndex == _playerIndex)
@@ -98,27 +89,28 @@ public class TeamBattleSceneManager : BattleSceneManager
             _players[playerPositions.PlayerPosition[i].PlayerIndex].EventMovement.CallPositionMovement(
                 new Vector2(playerPositions.PlayerPosition[i].PositionX, playerPositions.PlayerPosition[i].PositionY));
         }
-        
+
     }
 
-    private void Event_PlayerStateChanged(BattleSceneEvent teamBattleSceneEvent,
-        BattleSceneEventPlayerStateChangedEventArgs teamBattleSceneEventPlayerStateChangedArgs)
+    private void Event_PlayerStateChanged(BattleSceneEvent battleSceneEvent,
+        BattleSceneEventPlayerStateChangedEventArgs battleSceneEventPlayerStateChangedArgs)
     {
-        _players[teamBattleSceneEventPlayerStateChangedArgs.playerIndex].EventState
-            .CallStateChangedEvent(teamBattleSceneEventPlayerStateChangedArgs.state);
+        if (battleSceneEventPlayerStateChangedArgs.playerIndex == _playerIndex)
+            return;
+        _players[battleSceneEventPlayerStateChangedArgs.playerIndex].EventState
+            .CallStateChangedEvent(battleSceneEventPlayerStateChangedArgs.state);
     }
 
-    private void Event_PlayerDirectionChanged(BattleSceneEvent teamBattleSceneEvent,
-        BattleScenePlayerDirectionChangedEventArgs teamBattleSceneEventPlayerDirectionChangedArgs)
+    private void Event_PlayerDirectionChanged(BattleSceneEvent battleSceneEvent,
+        BattleScenePlayerDirectionChangedEventArgs battleSceneEventPlayerDirectionChangedArgs)
     {
-        _players[teamBattleSceneEventPlayerDirectionChangedArgs.playerIndex].EventDirection
-            .CallDirectionChanged(teamBattleSceneEventPlayerDirectionChangedArgs.direction);
+        if (battleSceneEventPlayerDirectionChangedArgs.playerIndex == _playerIndex)
+            return;
+
+        _players[battleSceneEventPlayerDirectionChangedArgs.playerIndex].EventDirection
+            .CallDirectionChanged(battleSceneEventPlayerDirectionChangedArgs.direction);
     }
 
-    public MyPlayer GetMyPlayer()
-    {
-        return _players[_playerIndex] as MyPlayer;
-    }
 
 #if UNITY_EDITOR
 
@@ -126,14 +118,14 @@ public class TeamBattleSceneManager : BattleSceneManager
     {
         base.OnBindField();
         EventTeamBattleScene = GetComponent<TeamBattleSceneEvent>();
+        _players = FindObjectsOfType<OtherPlayer>().OrderBy(t => t.name).ToArray();
     }
 
     protected override void OnValidate()
     {
         base.OnValidate();
-        CheckNullValue(this.name, _playerPrefab);
-        CheckNullValue(this.name, _otherPlayerPrefab);
         CheckNullValue(this.name, EventTeamBattleScene);
+        CheckNullValue(this.name, _players);
     }
 #endif
 }

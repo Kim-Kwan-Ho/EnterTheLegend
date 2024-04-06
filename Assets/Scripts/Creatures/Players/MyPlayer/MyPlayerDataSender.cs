@@ -12,32 +12,34 @@ public class MyPlayerDataSender : BaseBehaviour
     private void Start()
     {
         StartCoroutine(CoSendPlayerPosition());
-        _playerInfo = new stTeamBattleRoomPlayerInfo();
-        _playerInfo.RoomId = TeamBattleSceneManager.Instance.RoomId;
-        _playerInfo.PlayerIndex = TeamBattleSceneManager.Instance.PlayerIndex;
+        _playerInfo = new stTeamBattleRoomPlayerInfo
+        {
+            RoomId = TeamBattleSceneManager.Instance.RoomId,
+            PlayerIndex = TeamBattleSceneManager.Instance.PlayerIndex
+        };
     }
 
     private void OnEnable()
     {
+        BattleSceneManager.Instance.EventBattleScene.OnGameStart += Event_OnGameStart;
         _player.EventState.OnStateChanged += Event_SendPlayerStateChanged;
         _player.EventDirection.OnDirectionChanged += Event_SendPlayerDirectionChanged;
     }
 
     private void OnDisable()
     {
+        BattleSceneManager.Instance.EventBattleScene.OnGameStart -= Event_OnGameStart;
         _player.EventState.OnStateChanged -= Event_SendPlayerStateChanged;
         _player.EventDirection.OnDirectionChanged -= Event_SendPlayerDirectionChanged;
 
     }
 
-    private void Update()
+    private void Event_OnGameStart(BattleSceneEvent battleSceneEvent, bool loadInfo)
     {
-
+        StartCoroutine(CoSendPlayerPosition());
     }
-
     private IEnumerator CoSendPlayerPosition()
     {
-        yield return new WaitUntil(() => BattleSceneManager.Instance.SceneState == GameSceneState.StartGame);
         while (true)
         {
             stTeamBattlePlayerPositionToServer position = new stTeamBattlePlayerPositionToServer();

@@ -10,6 +10,12 @@ public class OtherPlayer : Creature
     protected override void OnBindField()
     {
         base.OnBindField();
+
+    }
+
+    protected override void OnValidate()
+    {
+        base.OnValidate();
     }
 #endif
 

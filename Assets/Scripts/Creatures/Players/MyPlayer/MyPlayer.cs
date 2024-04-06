@@ -3,10 +3,9 @@ using StandardData;
 using UnityEngine;
 
 
+[RequireComponent(typeof(MyPlayerDataSender))]
 [RequireComponent(typeof(AttackEvent))]
 [RequireComponent(typeof(Rigidbody2D))]
-
-
 public class MyPlayer : Creature
 {
     public AttackEvent EventAttack;
@@ -85,7 +84,6 @@ public class MyPlayer : Creature
 
     protected override void OnBindField()
     {
-        EventMovement = GetComponent<MovementEvent>();
         EventAttack = GetComponent<AttackEvent>();
         _rigid = GetComponent<Rigidbody2D>();
         base.OnBindField();
@@ -94,7 +92,6 @@ public class MyPlayer : Creature
     protected override void OnValidate()
     {
         base.OnValidate();
-        CheckNullValue(this.name, EventMovement);
         CheckNullValue(this.name, EventAttack);
         CheckNullValue(this.name, _rigid);
     }
