@@ -1,4 +1,3 @@
-using Assets.HeroEditor.InventorySystem.Scripts.Elements;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

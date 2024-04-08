@@ -7,7 +7,7 @@ public class PlayerMovementController : BaseBehaviour, IPointerDownHandler ,IPoi
     [Header("UI SETTINGS TEST")]
     [SerializeField] private float _movementRange = 25;
 
-    private MyPlayer _player = null;
+    private MyCharacter _player = null;
 
     private Vector3 _startPosition = Vector3.zero;
     private Vector2 _velocity = Vector2.zero;

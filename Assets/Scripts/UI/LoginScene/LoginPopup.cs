@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using PlayFab;
 using PlayFab.ClientModels;
-using Assets.FantasyMonsters.Scripts.EditorScripts;
 
 public class LoginPopup : UIPopup, IPlayfabDataHandler
 {

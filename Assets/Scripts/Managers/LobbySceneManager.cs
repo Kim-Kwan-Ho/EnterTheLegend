@@ -1,5 +1,4 @@
 using StandardData;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -24,7 +23,7 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
 
 
     [Header("Player Stats")]
-    private PlayerStat _playerStat = new PlayerStat();
+    private CharacterStat _characterStat = new CharacterStat();
 
     [Header("Character Equipments")]
     [SerializeField] private EquipmentInfoSO _characterEquip;
@@ -129,8 +128,8 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
         if (beforeItem != null)
         {
             beforeItem.IsEquipped = false;
-            _playerStat.ChangeStat(false, beforeItem.Equipment.StatHp, beforeItem.Equipment.StatAttack, beforeItem.Equipment.StatDefense, beforeItem.Equipment.AttackDistance);
-            EventLobbyScene.CallStatChanged(_playerStat);
+            _characterStat.ChangeStat(false, beforeItem.Equipment.StatHp, beforeItem.Equipment.StatAttack, beforeItem.Equipment.StatDefense, beforeItem.Equipment.AttackDistance);
+            EventLobbyScene.CallStatChanged(_characterStat);
         }
 
         if (lobbySceneEquipChangedEventArgs.equipmentInfo == null)
@@ -139,10 +138,10 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
         {
             equipChangedInfo.AfterItem = lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.ItemId;
             lobbySceneEquipChangedEventArgs.equipmentInfo.IsEquipped = true;
-            _playerStat.ChangeStat(true, lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.StatHp,
+            _characterStat.ChangeStat(true, lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.StatHp,
                 lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.StatAttack, lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.StatDefense,
                 lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.AttackDistance);
-            EventLobbyScene.CallStatChanged(_playerStat);
+            EventLobbyScene.CallStatChanged(_characterStat);
         }
 
         equipChangedInfo.ItemType = (ushort)lobbySceneEquipChangedEventArgs.type;

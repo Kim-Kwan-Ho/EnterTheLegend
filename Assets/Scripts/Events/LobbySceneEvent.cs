@@ -14,9 +14,9 @@ public class LobbySceneEvent : MonoBehaviour
         OnLobbyInitialize?.Invoke(this, new LobbySceneInitializeArgs() { playerData = playerData });
     }
 
-    public void CallStatChanged(PlayerStat playerStat)
+    public void CallStatChanged(CharacterStat characterStat)
     {
-        OnPlayerStatChanged?.Invoke(this, new LobbyScenePlayerStatChangedEventArgs() { playerStat = playerStat });
+        OnPlayerStatChanged?.Invoke(this, new LobbyScenePlayerStatChangedEventArgs() { characterStat = characterStat });
     }
 
     public void CallOnEquipChanged(EquipmentType type, EquipmentInfoSO equipmentInfo)
@@ -31,7 +31,7 @@ public class LobbySceneInitializeArgs : EventArgs
 }
 public class LobbyScenePlayerStatChangedEventArgs : EventArgs
 {
-    public PlayerStat playerStat;
+    public CharacterStat characterStat;
 }
 
 public class LobbySceneEquipChangedEventArgs : EventArgs

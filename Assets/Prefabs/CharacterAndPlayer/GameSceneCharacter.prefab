@@ -380,7 +380,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4305107873441922}
-  - component: {fileID: 8926738709632724064}
   - component: {fileID: 715327265}
   m_Layer: 0
   m_Name: GameSceneCharacter
@@ -405,37 +404,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8926738709632724064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1109987028385428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a28ff9ff958df5b48aaa812721464cab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _characterSpr: {fileID: 212200309160402172}
-  _weaponSpr: {fileID: 4229444270449166602}
-  _helmetSpr: {fileID: 212528125262377380}
-  _armorSprList:
-  - {fileID: 212369511419120330}
-  - {fileID: 212827618663375408}
-  - {fileID: 212168918037731208}
-  - {fileID: 212928843680139312}
-  - {fileID: 212137197121702422}
-  - {fileID: 212640146920888306}
-  - {fileID: 212872448116924830}
-  - {fileID: 212720537327226536}
-  - {fileID: 212610341130831568}
-  - {fileID: 212924519056024418}
-  - {fileID: 212237477656432154}
-  - {fileID: 4229251433977362766}
-  _shoesSprs:
-  - {fileID: 4229588124342868334}
-  - {fileID: 212092736956069232}
 --- !u!50 &715327265
 Rigidbody2D:
   serializedVersion: 4

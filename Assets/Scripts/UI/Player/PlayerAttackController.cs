@@ -11,7 +11,7 @@ public class PlayerAttackController : BaseBehaviour, IPointerDownHandler, IPoint
     private bool _isDragging = false;
     private Vector2 _distance = Vector2.zero;
 
-    private MyPlayer _player = null;
+    private MyCharacter _player = null;
 
     
 

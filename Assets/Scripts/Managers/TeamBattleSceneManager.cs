@@ -9,7 +9,7 @@ public class TeamBattleSceneManager : BattleSceneManager
 {
     [Header("Players")]
     [SerializeField]
-    private Creature[] _players = new Creature[GameRoomSize.TeamBattleRoomSize];
+    private Character[] _players = new Character[GameRoomSize.TeamBattleRoomSize];
 
 
     [Header("Events")]
@@ -52,7 +52,7 @@ public class TeamBattleSceneManager : BattleSceneManager
                 Destroy(_players[i].gameObject);
                 _players[i] = _player;
             }
-            _players[i].Initialize();
+            _players[i].Initialize(roomInfo.playersInfo[i].EquipedItems);
         }
 
         stTeamBattleRoomPlayerLoadInfo playerLoadInfo = new stTeamBattleRoomPlayerLoadInfo();
@@ -118,7 +118,7 @@ public class TeamBattleSceneManager : BattleSceneManager
     {
         base.OnBindField();
         EventTeamBattleScene = GetComponent<TeamBattleSceneEvent>();
-        _players = FindObjectsOfType<OtherPlayer>().OrderBy(t => t.name).ToArray();
+        _players = FindObjectsOfType<OtherCharacter>().OrderBy(t => t.name).ToArray();
     }
 
     protected override void OnValidate()

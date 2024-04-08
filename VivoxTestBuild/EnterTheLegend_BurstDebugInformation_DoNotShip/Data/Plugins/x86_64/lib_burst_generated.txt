@@ -130,7 +130,6 @@ Library: lib_burst_generated
 --generate-link-xml=Temp\burst.link.xml
 --output=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\UnityEngine.UI.dll
---root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Internal.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.VisualScripting.Flow.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Mathematics.dll
@@ -146,6 +145,7 @@ Library: lib_burst_generated
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.TextMeshPro.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Timeline.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
+--root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Environments.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Authentication.PlayerAccounts.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Analytics.dll
@@ -301,7 +301,6 @@ Library: lib_burst_generated
 --generate-link-xml=Temp\burst.link.xml
 --output=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Plugins\x86_64\lib_burst_generated
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\UnityEngine.UI.dll
---root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Internal.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.VisualScripting.Flow.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Mathematics.dll
@@ -317,6 +316,7 @@ Library: lib_burst_generated
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.TextMeshPro.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Timeline.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
+--root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Environments.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Authentication.PlayerAccounts.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Analytics.dll

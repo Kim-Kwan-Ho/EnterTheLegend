@@ -19,8 +19,8 @@ public class BattleSceneManager : SingletonMonobehaviour<BattleSceneManager>
 
     [Header("My Character")]
     [SerializeField]
-    protected MyPlayer _player;
-    public MyPlayer Player { get { return _player; } }
+    protected MyCharacter _player;
+    public MyCharacter Player { get { return _player; } }
 
 
 
@@ -29,7 +29,7 @@ public class BattleSceneManager : SingletonMonobehaviour<BattleSceneManager>
     {
         base.OnBindField();
         EventBattleScene = GetComponent<BattleSceneEvent>();
-        _player = FindObjectOfType<MyPlayer>();
+        _player = FindObjectOfType<MyCharacter>();
     }
 
     protected virtual void OnValidate()
