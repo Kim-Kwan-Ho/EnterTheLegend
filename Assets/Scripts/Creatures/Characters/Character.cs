@@ -9,6 +9,12 @@ using UnityEngine;
 
 public class Character : BaseBehaviour
 {
+    [Header("UI")]
+    [SerializeField]
+    private CharacterInfo _characterInfo;
+
+
+
     [Header("State & LookPosition")]
     protected Direction _direction;
     protected State _state;
@@ -40,6 +46,7 @@ public class Character : BaseBehaviour
     [SerializeField]
     private SpriteRenderer[] _shoesSprs = new SpriteRenderer[2];
 
+    
 
 
     private void Awake()
@@ -48,8 +55,9 @@ public class Character : BaseBehaviour
         _state = State.Idle;
         _animator.speed = AnimationSettings.PlayerAnimationSpeed;
     }
-    public virtual void Initialize(int[] equipedItems)
+    public virtual void Initialize(string nickname, bool isEnemy, bool isPlayer ,int[] equipedItems)
     {
+        _characterInfo.SetCharacterInfoUi(nickname, isEnemy, isPlayer);
         for (int i = 0; i < equipedItems.Length; i++)
         {
             SetEquipment((EquipmentType)i, equipedItems[i]);
@@ -201,38 +209,50 @@ public class Character : BaseBehaviour
     {
         switch (_direction)
         {
-            case Direction.Down:
-                _animator.SetFloat(AnimationSettings.Vertical, -1);
-                _animator.SetFloat(AnimationSettings.Horizontal, 0);
-                break;
-            case Direction.DownLeft:
-                _animator.SetFloat(AnimationSettings.Vertical, -1);
-                _animator.SetFloat(AnimationSettings.Horizontal, -1);
-                break;
-            case Direction.DownRight:
-                _animator.SetFloat(AnimationSettings.Vertical, -1);
-                _animator.SetFloat(AnimationSettings.Horizontal, 1);
-                break;
-            case Direction.Up:
-                _animator.SetFloat(AnimationSettings.Vertical, 1);
-                _animator.SetFloat(AnimationSettings.Horizontal, 0);
-                break;
-            case Direction.UpRight:
-                _animator.SetFloat(AnimationSettings.Vertical, 1);
-                _animator.SetFloat(AnimationSettings.Horizontal, 1);
-                break;
-            case Direction.UpLeft:
-                _animator.SetFloat(AnimationSettings.Vertical, 1);
-                _animator.SetFloat(AnimationSettings.Horizontal, -1);
-                break;
+            //case Direction.Down:
+            //    _animator.SetFloat(AnimationSettings.Vertical, -1);
+            //    _animator.SetFloat(AnimationSettings.Horizontal, 0);
+            //    break;
+            //case Direction.DownLeft:
+            //    _animator.SetFloat(AnimationSettings.Vertical, -1);
+            //    _animator.SetFloat(AnimationSettings.Horizontal, -1);
+            //    break;
+            //case Direction.DownRight:
+            //    _animator.SetFloat(AnimationSettings.Vertical, -1);
+            //    _animator.SetFloat(AnimationSettings.Horizontal, 1);
+            //    break;
+            //case Direction.Up:
+            //    _animator.SetFloat(AnimationSettings.Vertical, 1);
+            //    _animator.SetFloat(AnimationSettings.Horizontal, 0);
+            //    break;
+            //case Direction.UpRight:
+            //    _animator.SetFloat(AnimationSettings.Vertical, 1);
+            //    _animator.SetFloat(AnimationSettings.Horizontal, 1);
+            //    break;
+            //case Direction.UpLeft:
+            //    _animator.SetFloat(AnimationSettings.Vertical, 1);
+            //    _animator.SetFloat(AnimationSettings.Horizontal, -1);
+            //    break;
+            //case Direction.Left:
+            //    _animator.SetFloat(AnimationSettings.Vertical, 0);
+            //    _animator.SetFloat(AnimationSettings.Horizontal, -1);
+            //    break;
+            //case Direction.Right:
+            //    _animator.SetFloat(AnimationSettings.Vertical, 0);
+            //    _animator.SetFloat(AnimationSettings.Horizontal, 1);
+            //    break;
+
             case Direction.Left:
-                _animator.SetFloat(AnimationSettings.Vertical, 0);
-                _animator.SetFloat(AnimationSettings.Horizontal, -1);
+            case Direction.DownLeft:
+                case Direction.UpLeft:
+                _animator.transform.localScale = new Vector3(-1, 1, 1);
                 break;
             case Direction.Right:
-                _animator.SetFloat(AnimationSettings.Vertical, 0);
-                _animator.SetFloat(AnimationSettings.Horizontal, 1);
+            case Direction.DownRight:
+                case Direction.UpRight:
+                _animator.transform.localScale = new Vector3(1, 1, 1);
                 break;
+
         }
     }
 
@@ -246,6 +266,7 @@ public class Character : BaseBehaviour
     protected override void OnBindField()
     {
         base.OnBindField();
+        _characterInfo = GetComponentInChildren<CharacterInfo>();
         _animator = GetComponentInChildren<Animator>();
         EventState = GetComponent<StateEvent>();
         EventDirection = GetComponent<DirectionEvent>();
@@ -259,6 +280,7 @@ public class Character : BaseBehaviour
 
     protected virtual void OnValidate()
     {
+        CheckNullValue(this.name, _characterInfo);
         CheckNullValue(this.name, _animator);
         CheckNullValue(this.name, EventState);
         CheckNullValue(this.name, EventDirection);

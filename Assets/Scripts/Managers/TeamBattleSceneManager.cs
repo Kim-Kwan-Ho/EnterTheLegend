@@ -44,6 +44,10 @@ public class TeamBattleSceneManager : BattleSceneManager
         stBattleRoomInfo roomInfo = battleSceneEventArgs.roomInfo;
         _roomId = roomInfo.roomId;
         _playerIndex = battleSceneEventArgs.roomInfo.playerIndex;
+
+        bool isPlayerBlueTeam = _playerIndex < GameRoomSize.TeamBattleRoomSize / 2;
+
+
         for (ushort i = 0; i < GameRoomSize.TeamBattleRoomSize; i++)
         {
             if (i == _playerIndex)
@@ -52,7 +56,23 @@ public class TeamBattleSceneManager : BattleSceneManager
                 Destroy(_players[i].gameObject);
                 _players[i] = _player;
             }
-            _players[i].Initialize(roomInfo.playersInfo[i].EquipedItems);
+
+            if (i == _playerIndex)
+            {
+                _players[i].Initialize(roomInfo.playersInfo[i].Nickname, false, true, roomInfo.playersInfo[i].EquipedItems);
+            }
+            else if (isPlayerBlueTeam && i < GameRoomSize.TeamBattleRoomSize / 2)
+            {
+                _players[i].Initialize(roomInfo.playersInfo[i].Nickname, false, false, roomInfo.playersInfo[i].EquipedItems);
+            }
+            else if (!isPlayerBlueTeam && i >= GameRoomSize.TeamBattleRoomSize / 2)
+            {
+                _players[i].Initialize(roomInfo.playersInfo[i].Nickname, false, false, roomInfo.playersInfo[i].EquipedItems);
+            }
+            else
+            {
+                _players[i].Initialize(roomInfo.playersInfo[i].Nickname, true, false, roomInfo.playersInfo[i].EquipedItems);
+            }
         }
 
         stTeamBattleRoomPlayerLoadInfo playerLoadInfo = new stTeamBattleRoomPlayerLoadInfo();

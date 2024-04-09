@@ -20,15 +20,15 @@ public class MatchPlayer : BaseBehaviour
         _playerNicknameText.text = nickname;
         if (isEnemy)
         {
-            _playerNicknameText.color = TextColors.EnemyColor;
+            _playerNicknameText.color = Color.red;
         }
         else if (isPlayer)
         {
-            _playerNicknameText.color = TextColors.PlayerColor;
+            _playerNicknameText.color = Color.green;
         }
         else
         {
-            _playerNicknameText.color = TextColors.TeamColor;
+            _playerNicknameText.color = Color.blue;
         }
     }
 
