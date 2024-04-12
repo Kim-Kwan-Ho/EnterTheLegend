@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 330dd86b515de5a44bbca925bf8daa69, type: 3}
   m_Name: 20000
   m_EditorClassIdentifier: 
-  Name: DarkSword
-  Description: DarkSword
+  Name: Axe
+  Description: AxeAxe
   IsEquipped: 0
-  ItemIcon: {fileID: 21300000, guid: 2a7ea29e1c2446849a2152b53ebb00d5, type: 3}
+  ItemIcon: {fileID: 21300000, guid: d467d6fa07b7fd9438b8332d2912b313, type: 3}
   Equipment: {fileID: 11400000, guid: bfb273d0dc285474abd208d58d5abef1, type: 2}

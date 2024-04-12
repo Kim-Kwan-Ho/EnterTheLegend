@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 330dd86b515de5a44bbca925bf8daa69, type: 3}
   m_Name: 51000
   m_EditorClassIdentifier: 
-  Name: BlueSand
-  Description: BlueSky
+  Name: Sandals
+  Description: SandalsSandals
   IsEquipped: 0
-  ItemIcon: {fileID: 21300000, guid: def8aaf4b903155448fff513da5646ee, type: 3}
+  ItemIcon: {fileID: 21300000, guid: ff95eb506e6a88b469afc8b641bee1f0, type: 3}
   Equipment: {fileID: 11400000, guid: 40b75a339c9b4c3449846959090a06ba, type: 2}

@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 330dd86b515de5a44bbca925bf8daa69, type: 3}
   m_Name: 30000
   m_EditorClassIdentifier: 
-  Name: DipperHat
-  Description: DipperHat
+  Name: PlayeHelm
+  Description: PlayeHelmPlayeHelm
   IsEquipped: 0
-  ItemIcon: {fileID: 21300000, guid: 2e43b63e12974f46bab8fc2455944a8b, type: 3}
+  ItemIcon: {fileID: 21300000, guid: 347c98d51aaa3744bacd3c7f7794e00b, type: 3}
   Equipment: {fileID: 11400000, guid: c749232972a0e784994062c539ca81fb, type: 2}

@@ -15,6 +15,7 @@ public class MyGameManager : SingletonMonobehaviour<MyGameManager>
     [SerializeField]
     private string _nickname = "Client_1";
     public string Nickname { get { return _nickname; } }
+
     public void SetPlayerNickname(string name)
     {
         _nickname = name; 

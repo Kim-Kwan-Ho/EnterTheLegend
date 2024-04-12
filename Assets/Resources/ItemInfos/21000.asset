@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 330dd86b515de5a44bbca925bf8daa69, type: 3}
   m_Name: 21000
   m_EditorClassIdentifier: 
-  Name: PickAxe
-  Description: PickMe
+  Name: Sword
+  Description: SwordSword
   IsEquipped: 0
-  ItemIcon: {fileID: 21300000, guid: abb280dadab44db4eb5b9b49a406841b, type: 3}
+  ItemIcon: {fileID: 21300000, guid: f84cee3528026f943a795491aa3be184, type: 3}
   Equipment: {fileID: 11400000, guid: 64a27c026ab2cf74c96e5809eaf35467, type: 2}

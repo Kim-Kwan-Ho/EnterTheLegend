@@ -1,4 +1,5 @@
 using System;
+using CustomizableCharacters;
 using StandardData;
 using UnityEngine;
 
@@ -19,9 +20,9 @@ public class LobbySceneEvent : MonoBehaviour
         OnPlayerStatChanged?.Invoke(this, new LobbyScenePlayerStatChangedEventArgs() { characterStat = characterStat });
     }
 
-    public void CallOnEquipChanged(EquipmentType type, EquipmentInfoSO equipmentInfo)
+    public void CallOnEquipChanged(EquipmentType type, EquipmentInfoSO equipmentInfo, CustomizationCategory category = null)
     {
-        OnEquipChanged?.Invoke(this, new LobbySceneEquipChangedEventArgs() { type = type, equipmentInfo = equipmentInfo });
+        OnEquipChanged?.Invoke(this, new LobbySceneEquipChangedEventArgs() { type = type, equipmentInfo = equipmentInfo, category = category});
     }
 }
 
@@ -38,4 +39,5 @@ public class LobbySceneEquipChangedEventArgs : EventArgs
 {
     public EquipmentType type;
     public EquipmentInfoSO equipmentInfo;
+    public CustomizationCategory category;
 }

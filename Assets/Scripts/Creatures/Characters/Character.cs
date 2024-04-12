@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using CustomizableCharacters;
+using StandardData;
 using UnityEngine;
 
 
@@ -34,19 +36,11 @@ public class Character : BaseBehaviour
     private EquipmentSO _armorEquip;
     private EquipmentSO _shoesEquip;
 
-    [Header("Sprite Renderer")]
+    [Header("Customizer ")]
     [SerializeField]
-    private SpriteRenderer _characterSpr;
-    [SerializeField]
-    private SpriteRenderer _weaponSpr;
-    [SerializeField]
-    private SpriteRenderer _helmetSpr;
-    [SerializeField]
-    private List<SpriteRenderer> _armorSprList;
-    [SerializeField]
-    private SpriteRenderer[] _shoesSprs = new SpriteRenderer[2];
+    private Customizer _customizer;
 
-    
+
 
 
     private void Awake()
@@ -55,7 +49,7 @@ public class Character : BaseBehaviour
         _state = State.Idle;
         _animator.speed = AnimationSettings.PlayerAnimationSpeed;
     }
-    public virtual void Initialize(string nickname, bool isEnemy, bool isPlayer ,int[] equipedItems)
+    public virtual void Initialize(string nickname, bool isEnemy, bool isPlayer, int[] equipedItems)
     {
         _characterInfo.SetCharacterInfoUi(nickname, isEnemy, isPlayer);
         for (int i = 0; i < equipedItems.Length; i++)
@@ -71,79 +65,29 @@ public class Character : BaseBehaviour
             Utilities.ResourceLoader<EquipmentSO>($"Items/Item_{type.ToString()}", itemId);
         if (type == EquipmentType.Character)
         {
-            if (equipment == null)
-            {
-                _characterSpr.sprite = null;
-            }
-            else
-            {
-                _characterEquip = equipment;
-                _characterSpr.sprite = equipment.CharacterEquipmentSprite[0];
-            }
+            _characterEquip = equipment;
         }
         else if (type == EquipmentType.Weapon)
         {
-            if (equipment == null)
-            {
-                _weaponSpr.sprite = null;
-            }
-            else
-            {
-                _weaponEquip = equipment;
-                _weaponSpr.transform.localPosition = equipment.EquipmentSpriteOffSet;
-                _weaponSpr.sprite = equipment.CharacterEquipmentSprite[0];
-            }
+            _weaponEquip = equipment;
         }
         else if (type == EquipmentType.Helmet)
         {
-            if (equipment == null)
-            {
-                _helmetSpr.sprite = null;
-            }
-            else
-            {
-                _helmetEquip = equipment;
-                _helmetSpr.sprite = equipment.CharacterEquipmentSprite[0];
-            }
+            _helmetEquip = equipment;
         }
         else if (type == EquipmentType.Armor)
         {
-            if (equipment == null)
-            {
-                for (int i = 0; i < _armorSprList.Count; i++)
-                {
-                    _armorSprList[i].sprite = null;
-                }
-            }
-            else
-            {
-                _armorEquip = equipment;
-                for (int i = 0; i < equipment.CharacterEquipmentSprite.Count; i++)
-                {
-                    _armorSprList[i].sprite = equipment.CharacterEquipmentSprite[i];
-                }
-                _armorSprList[^1].sprite = equipment.CharacterEquipmentSprite[^1];
-            }
+            _armorEquip = equipment;
         }
         else if (type == EquipmentType.Shoes)
         {
-            if (equipment == null)
-            {
-                _shoesSprs[0].sprite = null;
-                _shoesSprs[1].sprite = null;
-            }
-            else
-            {
-                _shoesEquip = equipment;
-                _shoesSprs[0].sprite = equipment.CharacterEquipmentSprite[0];
-                _shoesSprs[1].sprite = equipment.CharacterEquipmentSprite[0];
-            }
+            _shoesEquip = equipment;
         }
     }
 
 
 
-    protected  virtual void OnEnable()
+    protected virtual void OnEnable()
     {
         EventState.OnStateChanged += Event_OnStateChanged;
         EventDirection.OnDirectionChanged += Event_OnDirectionChanged;
@@ -244,22 +188,22 @@ public class Character : BaseBehaviour
 
             case Direction.Left:
             case Direction.DownLeft:
-                case Direction.UpLeft:
+            case Direction.UpLeft:
                 _animator.transform.localScale = new Vector3(-1, 1, 1);
                 break;
             case Direction.Right:
             case Direction.DownRight:
-                case Direction.UpRight:
+            case Direction.UpRight:
                 _animator.transform.localScale = new Vector3(1, 1, 1);
                 break;
 
         }
     }
 
-    protected  virtual void InitializeDirection()
+    protected virtual void InitializeDirection()
     {
-        _animator.SetFloat(AnimationSettings.Vertical, 0);
-        _animator.SetFloat(AnimationSettings.Horizontal, 0);
+        _animator.SetInteger(AnimationSettings.Vertical, 0);
+        _animator.SetInteger(AnimationSettings.Horizontal, 0);
     }
 
 #if UNITY_EDITOR
@@ -271,11 +215,7 @@ public class Character : BaseBehaviour
         EventState = GetComponent<StateEvent>();
         EventDirection = GetComponent<DirectionEvent>();
         EventMovement = GetComponent<MovementEvent>();
-        _characterSpr = FindGameObjectInChildren<SpriteRenderer>("Hair");
-        _helmetSpr = FindGameObjectInChildren<SpriteRenderer>("Helmet");
-        _weaponSpr = FindGameObjectInChildren<SpriteRenderer>("Weapon");
-        _shoesSprs[0] = FindGameObjectInChildren<SpriteRenderer>("ShinL[Armor]");
-        _shoesSprs[1] = FindGameObjectInChildren<SpriteRenderer>("ShinR[Armor]");
+        _customizer = GetComponent<Customizer>();
     }
 
     protected virtual void OnValidate()
@@ -285,10 +225,7 @@ public class Character : BaseBehaviour
         CheckNullValue(this.name, EventState);
         CheckNullValue(this.name, EventDirection);
         CheckNullValue(this.name, EventMovement);
-        CheckNullValue(this.name, _characterSpr);
-        CheckNullValue(this.name, _helmetSpr);
-        CheckNullValue(this.name, _weaponSpr);
-        CheckNullValue(this.name, _shoesSprs);
+        CheckNullValue(this.name, _customizer);
     }
 
 #endif

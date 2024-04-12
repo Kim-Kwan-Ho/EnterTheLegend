@@ -32,10 +32,12 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
     [SerializeField] private EquipmentInfoSO _armorEquip;
     [SerializeField] private EquipmentInfoSO _shoesEquip;
 
+    private bool _isInitialize;
 
 
     private void OnEnable()
     {
+        _isInitialize = true;
         EventLobbyScene.OnLobbyInitialize += Event_LobbySceneInitialize;
         EventLobbyScene.OnEquipChanged += Event_EquipChanged;
 
@@ -87,6 +89,8 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
             }
             EventLobbyScene.CallOnEquipChanged(type, itemInfo);
         }
+
+        _isInitialize = false;
     }
 
 
@@ -144,6 +148,8 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
             EventLobbyScene.CallStatChanged(_characterStat);
         }
 
+        if (_isInitialize)
+            return;
         equipChangedInfo.ItemType = (ushort)lobbySceneEquipChangedEventArgs.type;
         byte[] msg = Utilities.GetObjectToByte(equipChangedInfo);
         ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);

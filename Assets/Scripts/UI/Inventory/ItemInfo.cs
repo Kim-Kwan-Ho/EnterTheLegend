@@ -53,7 +53,7 @@ public class ItemInfo : BaseBehaviour
     private void OnUnequip()
     {
         _equipmentInfo.IsEquipped = false;
-        LobbySceneManager.Instance.EventLobbyScene.CallOnEquipChanged(_equipmentInfo.Equipment.Type, null);
+        LobbySceneManager.Instance.EventLobbyScene.CallOnEquipChanged(_equipmentInfo.Equipment.Type, null, _equipmentInfo.Equipment.ItemCustomData.Category);
         SetEquipButton();
     }
 

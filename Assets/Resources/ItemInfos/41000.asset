@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 330dd86b515de5a44bbca925bf8daa69, type: 3}
   m_Name: 41000
   m_EditorClassIdentifier: 
-  Name: Necro
-  Description: Necro
+  Name: Tunic
+  Description: TunicTunic
   IsEquipped: 0
-  ItemIcon: {fileID: 21300000, guid: c7b045a4370b48d5b4add8c21206dbfc, type: 3}
+  ItemIcon: {fileID: 21300000, guid: 670c45b9e1d41264a878104741d19024, type: 3}
   Equipment: {fileID: 11400000, guid: d9de823e80e02a34d818e98522a525dc, type: 2}

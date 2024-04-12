@@ -16,7 +16,8 @@ public class CharacterInfo : BaseBehaviour
     private Slider _hpSlider;
     [SerializeField]
     private Image _hpGageImage;
-    
+    [SerializeField]
+    private TextMeshProUGUI _hpText;
     public void SetCharacterInfoUi(string nickname, bool isEnemy, bool isPlayer)
     {
         _nicknameText.text = nickname;
@@ -29,11 +30,11 @@ public class CharacterInfo : BaseBehaviour
         {
             if (isPlayer)
             {
-                _nicknameText.color = Color.white;
+                _nicknameText.color = Color.green;
             }
             else
             {
-                _nicknameText.color = Color.green;
+                _nicknameText.color = Color.blue;
             }
             _hpGageImage.color = Color.green;
         }
@@ -47,6 +48,7 @@ public class CharacterInfo : BaseBehaviour
         _hpSlider = FindGameObjectInChildren<Slider>("HpSlider");
         _hpGageImage = FindGameObjectInChildren<Image>("HpGageImage");
         _nicknameText = FindGameObjectInChildren<TextMeshProUGUI>("NicknameText");
+        _hpText = FindGameObjectInChildren<TextMeshProUGUI>("HpText");
     }
 
     private void OnValidate()
@@ -54,6 +56,7 @@ public class CharacterInfo : BaseBehaviour
         CheckNullValue(this.name, _hpSlider);
         CheckNullValue(this.name, _hpGageImage);
         CheckNullValue(this.name, _nicknameText);
+        CheckNullValue(this.name, _hpText);
     }
 
 

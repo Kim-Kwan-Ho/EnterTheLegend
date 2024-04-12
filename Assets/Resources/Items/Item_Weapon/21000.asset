@@ -14,9 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ItemId: 21000
   Type: 1
-  EquipmentSpriteOffSet: {x: 0.51, y: -0.82}
-  CharacterEquipmentSprite:
-  - {fileID: 21300000, guid: abb280dadab44db4eb5b9b49a406841b, type: 3}
+  ItemCustomData: {fileID: 11400000, guid: e1a2a9ccfdc20fc44a6b976e2a7bb2c6, type: 2}
   StatHp: 4
   StatAttack: 4
   StatDefense: 4

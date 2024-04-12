@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 52a5749e27bcac44d89b5b7e49c0933e, type: 3}
-  m_Name: 41000
+  m_Name: New Equipment SO
   m_EditorClassIdentifier: 
-  ItemId: 41000
-  Type: 3
-  ItemCustomData: {fileID: 11400000, guid: 8b13eb9e0b8351244b63fae64eeceb9e, type: 2}
-  StatHp: 6
-  StatAttack: 6
-  StatDefense: 6
-  AttackDistance: 6
+  ItemId: 0
+  Type: 0
+  ItemCustomData: {fileID: 11400000, guid: fbab025afb0dfbc4a848bf878233dccf, type: 2}
+  EquipmentSpriteOffSet: {x: 0, y: 0}
+  CharacterEquipmentSprite: []
+  StatHp: 0
+  StatAttack: 0
+  StatDefense: 0
+  AttackDistance: 0

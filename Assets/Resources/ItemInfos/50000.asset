@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 330dd86b515de5a44bbca925bf8daa69, type: 3}
   m_Name: 50000
   m_EditorClassIdentifier: 
-  Name: Sand
-  Description: Sand
+  Name: Sabatons
+  Description: SabatonsSabatons
   IsEquipped: 0
-  ItemIcon: {fileID: 21300000, guid: ef7e34bf9d121aa4bb7df48da007efd9, type: 3}
+  ItemIcon: {fileID: 21300000, guid: b6a29447492bf3e46a0754b9a8db03e0, type: 3}
   Equipment: {fileID: 11400000, guid: 331989f194fd10c4592eed169b82d4de, type: 2}
