@@ -8,22 +8,14 @@ public static class Utilities
 {
     private static Direction GetDirection(float degrees)
     {
-        if (degrees >= -22.5f && degrees < 22.5f)
+        if ((degrees >= -45f && degrees < 45f))
             return Direction.Right;
-        else if (degrees >= 22.5f && degrees < 67.5f)
-            return Direction.UpRight;
-        else if (degrees >= 67.5f && degrees < 112.5f)
+        else if ((degrees >= 45f && degrees < 135f))
             return Direction.Up;
-        else if (degrees >= 112.5f && degrees < 157.5f)
-            return Direction.UpLeft;
-        else if ((degrees >= 157.5f && degrees <= 180) || (degrees >= -180 && degrees < -157.5f))
-            return Direction.Left;
-        else if (degrees >= -157.5f && degrees < -112.5f)
-            return Direction.DownLeft;
-        else if (degrees >= -112.5f && degrees < -67.5f)
+        else if ((degrees >= -135f && degrees < -45f))
             return Direction.Down;
         else 
-            return Direction.DownRight;
+            return Direction.Left;
     }
 
     public static Direction GetDirectionFromVector(Vector2 vector)

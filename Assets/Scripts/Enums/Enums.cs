@@ -9,15 +9,11 @@ public enum LoginPlatform
 
 public enum Direction
 {
-    UpLeft = 0,
-    Up = 1,
-    UpRight = 2,
-    Left = 3,
-    Right = 4,
-    DownLeft = 5,
-    Down = 6,
-    DownRight = 7,
-    Previous = 8,
+    Up = 0,
+    Left = 1,
+    Right = 2,
+    Down = 3,
+    Previous = 4,
 }
 
 public enum State

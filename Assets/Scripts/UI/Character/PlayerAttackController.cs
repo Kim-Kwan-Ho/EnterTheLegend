@@ -10,15 +10,14 @@ public class PlayerAttackController : BaseBehaviour, IPointerDownHandler, IPoint
     private Vector3 _startPosition = Vector3.zero;
     private bool _isDragging = false;
     private Vector2 _distance = Vector2.zero;
-
-    private MyCharacter _player = null;
-
     
+    [SerializeField]
+    private MyCharacter _player;
+
 
     private void Start()
     {
         _startPosition = transform.position;
-        _player = BattleSceneManager.Instance.Player;
     }
 
     private void Update()
@@ -49,17 +48,10 @@ public class PlayerAttackController : BaseBehaviour, IPointerDownHandler, IPoint
 
         transform.position = _startPosition;
 
-        if (CanContinueUsing())
-        {
-            _player.EventMovement.CallStopMovement();
-        }
+        _player.EventMovement.CallStopMovement();
     }
 
-    private bool CanContinueUsing()
-    {
-        return TeamBattleSceneManager.Instance.SceneState != GameSceneState.MyPlayerDeath &&
-               TeamBattleSceneManager.Instance.SceneState != GameSceneState.ClearFailed;
-    }
+
 
 
 #if UNITY_EDITOR
@@ -67,9 +59,13 @@ public class PlayerAttackController : BaseBehaviour, IPointerDownHandler, IPoint
     protected override void OnBindField()
     {
         base.OnBindField();
+        _player = FindAnyObjectByType<MyCharacter>();
     }
+
     private void OnValidate()
     {
-    }   
+        CheckNullValue(this.name, _player);
+    }
+
 #endif
 }

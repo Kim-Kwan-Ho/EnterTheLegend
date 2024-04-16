@@ -17,6 +17,15 @@ public class Character : BaseBehaviour
 
 
 
+    [Header("Rig")]
+    [SerializeField]
+    protected GameObject _downRig;
+    [SerializeField]
+    protected GameObject _upRig;
+    [SerializeField]
+    protected GameObject _sideRig;
+
+
     [Header("State & LookPosition")]
     protected Direction _direction;
     protected State _state;
@@ -86,6 +95,12 @@ public class Character : BaseBehaviour
     }
 
 
+    private void ResetRig()
+    {
+        _downRig.SetActive(false);
+        _upRig.SetActive(false);
+        _sideRig.SetActive(false);
+    }
 
     protected virtual void OnEnable()
     {
@@ -115,13 +130,11 @@ public class Character : BaseBehaviour
         switch (_state)
         {
             case State.Idle:
-                _animator.SetBool(AnimationSettings.IsIdle, true);
                 break;
             case State.Move:
-                _animator.SetBool(AnimationSettings.IsMoving, true);
+                _animator.SetFloat(AnimationSettings.Speed, 1);
                 break;
             case State.Attack:
-                _animator.SetBool(AnimationSettings.IsAttacking, true);
                 break;
         }
     }
@@ -134,83 +147,55 @@ public class Character : BaseBehaviour
     }
     protected virtual void InitializeState()
     {
-        _animator.SetBool(AnimationSettings.IsMoving, false);
-        _animator.SetBool(AnimationSettings.IsIdle, false);
-        _animator.SetBool(AnimationSettings.IsAttacking, false);
-
+        _animator.SetFloat(AnimationSettings.Speed, 0);
     }
 
 
 
     private void Event_OnDirectionChanged(DirectionEvent directionEvent, DirectionEventArgs directionEventArgs)
     {
-
         _direction = directionEventArgs.direction;
-        InitializeDirection();
         UpdateDirection();
     }
     protected virtual void UpdateDirection()
     {
         switch (_direction)
         {
-            //case Direction.Down:
-            //    _animator.SetFloat(AnimationSettings.Vertical, -1);
-            //    _animator.SetFloat(AnimationSettings.Horizontal, 0);
-            //    break;
-            //case Direction.DownLeft:
-            //    _animator.SetFloat(AnimationSettings.Vertical, -1);
-            //    _animator.SetFloat(AnimationSettings.Horizontal, -1);
-            //    break;
-            //case Direction.DownRight:
-            //    _animator.SetFloat(AnimationSettings.Vertical, -1);
-            //    _animator.SetFloat(AnimationSettings.Horizontal, 1);
-            //    break;
-            //case Direction.Up:
-            //    _animator.SetFloat(AnimationSettings.Vertical, 1);
-            //    _animator.SetFloat(AnimationSettings.Horizontal, 0);
-            //    break;
-            //case Direction.UpRight:
-            //    _animator.SetFloat(AnimationSettings.Vertical, 1);
-            //    _animator.SetFloat(AnimationSettings.Horizontal, 1);
-            //    break;
-            //case Direction.UpLeft:
-            //    _animator.SetFloat(AnimationSettings.Vertical, 1);
-            //    _animator.SetFloat(AnimationSettings.Horizontal, -1);
-            //    break;
-            //case Direction.Left:
-            //    _animator.SetFloat(AnimationSettings.Vertical, 0);
-            //    _animator.SetFloat(AnimationSettings.Horizontal, -1);
-            //    break;
-            //case Direction.Right:
-            //    _animator.SetFloat(AnimationSettings.Vertical, 0);
-            //    _animator.SetFloat(AnimationSettings.Horizontal, 1);
-            //    break;
-
-            case Direction.Left:
-            case Direction.DownLeft:
-            case Direction.UpLeft:
-                _animator.transform.localScale = new Vector3(-1, 1, 1);
+            case Direction.Down:
+                ResetRig();
+                _downRig.SetActive(true);
+                _animator.SetFloat(AnimationSettings.Direction, 2);
                 break;
             case Direction.Right:
-            case Direction.DownRight:
-            case Direction.UpRight:
-                _animator.transform.localScale = new Vector3(1, 1, 1);
+                ResetRig();
+                _sideRig.transform.localScale = new Vector3(1, 1, 1);
+                _sideRig.SetActive(true);
+                _animator.SetFloat(AnimationSettings.Direction, 1);
                 break;
-
+            case Direction.Left:
+                ResetRig();
+                _sideRig.transform.localScale = new Vector3(-1, 1, 1);
+                _sideRig.SetActive(true);
+                _animator.SetFloat(AnimationSettings.Direction, 1);
+                break;
+            case Direction.Up:
+                ResetRig();
+                _upRig.SetActive(true);
+                _animator.SetFloat(AnimationSettings.Direction, 0);
+                break;
         }
     }
 
-    protected virtual void InitializeDirection()
-    {
-        _animator.SetInteger(AnimationSettings.Vertical, 0);
-        _animator.SetInteger(AnimationSettings.Horizontal, 0);
-    }
+
 
 #if UNITY_EDITOR
     protected override void OnBindField()
     {
         base.OnBindField();
         _characterInfo = GetComponentInChildren<CharacterInfo>();
+        _downRig = FindGameObjectInChildren("Down");
+        _upRig = FindGameObjectInChildren("Up");
+        _sideRig = FindGameObjectInChildren("Side");
         _animator = GetComponentInChildren<Animator>();
         EventState = GetComponent<StateEvent>();
         EventDirection = GetComponent<DirectionEvent>();
@@ -221,6 +206,9 @@ public class Character : BaseBehaviour
     protected virtual void OnValidate()
     {
         CheckNullValue(this.name, _characterInfo);
+        CheckNullValue(this.name, _upRig);
+        CheckNullValue(this.name, _downRig);
+        CheckNullValue(this.name, _sideRig);
         CheckNullValue(this.name, _animator);
         CheckNullValue(this.name, EventState);
         CheckNullValue(this.name, EventDirection);
