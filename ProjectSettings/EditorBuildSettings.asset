@@ -18,6 +18,6 @@ EditorBuildSettings:
     path: Assets/Scenes/TeamBattleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 0
-    path: Assets/DownloadAssets/Vivox/16.2.0/Chat Channel Sample/Assets/ChatChannelSample/Scenes/MainScene.unity
+    path: Assets/DownloadAssets/Tools/Vivox/16.2.0/Chat Channel Sample/Assets/ChatChannelSample/Scenes/MainScene.unity
     guid: dbc457e6df4234749aff8bd5ffa028ef
   m_configObjects: {}

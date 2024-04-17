@@ -6,6 +6,7 @@ TagManager:
   tags:
   - RedTeamSpawnPosition
   - BlueTeamSpawnPosition
+  - FxTemporaire
   layers:
   - Default
   - TransparentFX
@@ -48,4 +49,7 @@ TagManager:
     locked: 0
   - name: Character
     uniqueID: 563539551
+    locked: 0
+  - name: DamageText
+    uniqueID: 1506980911
     locked: 0

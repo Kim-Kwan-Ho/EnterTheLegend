@@ -154,6 +154,8 @@ namespace StandardData
         public ushort Index;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = (int)(NetworkSize.MaxNicknameLength))]
         public string Nickname;
+        [MarshalAs(UnmanagedType.U2, SizeConst = 2)]
+        public ushort Hp;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = NetworkSize.EquipedItemLength)]
         public int[] EquipedItems;
     }

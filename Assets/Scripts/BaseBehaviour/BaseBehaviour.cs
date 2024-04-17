@@ -51,7 +51,7 @@ public class BaseBehaviour : MonoBehaviour
     }
     protected GameObject FindGameObjectInChildren(string name)
     {
-        var objects = GetComponentsInChildren<Transform>();
+        var objects = GetComponentsInChildren<Transform>(true);
         foreach (var obj in objects)
         {
             if (obj.gameObject.name.Equals(name))
@@ -61,7 +61,7 @@ public class BaseBehaviour : MonoBehaviour
     }
     protected T FindGameObjectInChildren<T>(string name) where T : Component
     {
-        T[] objects = GetComponentsInChildren<T>();
+        T[] objects = GetComponentsInChildren<T>(true);
         foreach (var obj in objects)
         {
             if (obj.gameObject.name.Equals(name))
@@ -72,12 +72,12 @@ public class BaseBehaviour : MonoBehaviour
     protected T[] GetComponentsInGameObject<T>(string name) where T : Component
     {
         GameObject gob = GameObject.Find(name);
-        return gob.GetComponentsInChildren<T>();
+        return gob.GetComponentsInChildren<T>(true);
     }
 
     protected T GetComponentInChildrenExceptThis<T>() where T : Component
     {
-        T[] components = GetComponentsInChildren<T>();
+        T[] components = GetComponentsInChildren<T>(true);
         foreach (T component in components)
         {
             if (component.gameObject.GetInstanceID() == this.gameObject.GetInstanceID())

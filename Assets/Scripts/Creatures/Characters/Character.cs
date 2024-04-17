@@ -1,10 +1,11 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using CustomizableCharacters;
 using StandardData;
 using UnityEngine;
 
-
+[RequireComponent(typeof(BattleEvent))]
 [RequireComponent(typeof(StateEvent))]
 [RequireComponent(typeof(DirectionEvent))]
 [RequireComponent(typeof(MovementEvent))]
@@ -14,8 +15,11 @@ public class Character : BaseBehaviour
     [Header("UI")]
     [SerializeField]
     private CharacterInfo _characterInfo;
+    [SerializeField]
+    private GameObject _damageTextPrefab;
 
-
+    [Header("Stats")]
+    private ushort _curHp;
 
     [Header("Rig")]
     [SerializeField]
@@ -34,16 +38,18 @@ public class Character : BaseBehaviour
     [SerializeField] protected Animator _animator;
 
     [Header("Events")]
+    public BattleEvent EventBattle;
     public StateEvent EventState;
     public DirectionEvent EventDirection;
     public MovementEvent EventMovement;
 
     [Header("Equipments")]
-    private EquipmentSO _characterEquip;
-    private EquipmentSO _weaponEquip;
-    private EquipmentSO _helmetEquip;
-    private EquipmentSO _armorEquip;
-    private EquipmentSO _shoesEquip;
+    protected EquipmentSO _characterEquip;
+    [SerializeField]
+    protected WeaponEquipmentSO _weaponEquip;
+    protected EquipmentSO _helmetEquip;
+    protected EquipmentSO _armorEquip;
+    protected EquipmentSO _shoesEquip;
 
     [Header("Customizer ")]
     [SerializeField]
@@ -58,16 +64,59 @@ public class Character : BaseBehaviour
         _state = State.Idle;
         _animator.speed = AnimationSettings.PlayerAnimationSpeed;
     }
-    public virtual void Initialize(string nickname, bool isEnemy, bool isPlayer, int[] equipedItems)
+    protected virtual void OnEnable()
     {
-        _characterInfo.SetCharacterInfoUi(nickname, isEnemy, isPlayer);
-        for (int i = 0; i < equipedItems.Length; i++)
-        {
-            SetEquipment((EquipmentType)i, equipedItems[i]);
-        }
+        EventBattle.OnInitialize += Event_Initialize;
+        EventBattle.OnTakeDamage += Event_TakeDamage;
+        EventState.OnStateChanged += Event_OnStateChanged;
+        EventDirection.OnDirectionChanged += Event_OnDirectionChanged;
+        EventMovement.OnPositionMovement += Event_OnMovement;
 
     }
 
+    protected virtual void OnDisable()
+    {
+        EventBattle.OnInitialize -= Event_Initialize;
+        EventBattle.OnTakeDamage -= Event_TakeDamage;
+        EventState.OnStateChanged -= Event_OnStateChanged;
+        EventDirection.OnDirectionChanged -= Event_OnDirectionChanged;
+        EventMovement.OnPositionMovement -= Event_OnMovement;
+
+    }
+    protected virtual void Event_Initialize(BattleEvent battleEvent, BattleInitializeEventArgs battleInitializeEventArgs)
+    {
+        _curHp = battleInitializeEventArgs.hp;
+        for (int i = 0; i < battleInitializeEventArgs.equipedItems.Length; i++)
+        {
+            SetEquipment((EquipmentType)i, battleInitializeEventArgs.equipedItems[i]);
+        }
+    }
+
+    protected virtual void Event_TakeDamage(BattleEvent battleEvent,
+        BattleTakeDamageEventArgs battleTakeDamageEventArgs)
+    {
+        _curHp = battleTakeDamageEventArgs.curHp;
+        if (_curHp == 0)
+        {
+            EventState.CallStateChangedEvent(State.Death);
+        }
+    }
+    private void Event_OnStateChanged(StateEvent stateEvent, StateEventArgs stateEventArgs)
+    {
+        _state = stateEventArgs.state;
+        InitializeState();
+        UpdateState();
+    }
+
+    protected virtual void Event_OnMovement(MovementEvent movementEvent, MovementEventArgs movementEventArgs)
+    {
+        transform.position = movementEventArgs.position;
+    }
+    private void Event_OnDirectionChanged(DirectionEvent directionEvent, DirectionEventArgs directionEventArgs)
+    {
+        _direction = directionEventArgs.direction;
+        UpdateDirection();
+    }
     private void SetEquipment(EquipmentType type, int itemId)
     {
         EquipmentSO equipment =
@@ -78,7 +127,7 @@ public class Character : BaseBehaviour
         }
         else if (type == EquipmentType.Weapon)
         {
-            _weaponEquip = equipment;
+            _weaponEquip = (WeaponEquipmentSO)equipment;
         }
         else if (type == EquipmentType.Helmet)
         {
@@ -102,29 +151,15 @@ public class Character : BaseBehaviour
         _sideRig.SetActive(false);
     }
 
-    protected virtual void OnEnable()
-    {
-        EventState.OnStateChanged += Event_OnStateChanged;
-        EventDirection.OnDirectionChanged += Event_OnDirectionChanged;
-        EventMovement.OnPositionMovement += Event_OnMovement;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            PoolManager.Instance.GetPool(_damageTextPrefab).OnSpawn();
+        }
     }
 
-    protected virtual void OnDisable()
-    {
-        EventState.OnStateChanged -= Event_OnStateChanged;
-        EventDirection.OnDirectionChanged -= Event_OnDirectionChanged;
-        EventMovement.OnPositionMovement -= Event_OnMovement;
-
-    }
-
-
-    private void Event_OnStateChanged(StateEvent stateEvent, StateEventArgs stateEventArgs)
-    {
-        _state = stateEventArgs.state;
-        InitializeState();
-        UpdateState();
-    }
     protected virtual void UpdateState()
     {
         switch (_state)
@@ -136,15 +171,15 @@ public class Character : BaseBehaviour
                 break;
             case State.Attack:
                 break;
+            case State.Death:
+                _animator.SetTrigger(AnimationSettings.Die);
+                StartCoroutine(CoDeath());
+                break;
         }
     }
 
+    
 
-
-    protected virtual void Event_OnMovement(MovementEvent movementEvent, MovementEventArgs movementEventArgs)
-    {
-        transform.position = movementEventArgs.position;
-    }
     protected virtual void InitializeState()
     {
         _animator.SetFloat(AnimationSettings.Speed, 0);
@@ -152,11 +187,7 @@ public class Character : BaseBehaviour
 
 
 
-    private void Event_OnDirectionChanged(DirectionEvent directionEvent, DirectionEventArgs directionEventArgs)
-    {
-        _direction = directionEventArgs.direction;
-        UpdateDirection();
-    }
+
     protected virtual void UpdateDirection()
     {
         switch (_direction)
@@ -186,12 +217,17 @@ public class Character : BaseBehaviour
         }
     }
 
-
+    protected virtual IEnumerator CoDeath()
+    {
+        Debug.Log("Death");
+        yield return null;
+    }
 
 #if UNITY_EDITOR
     protected override void OnBindField()
     {
         base.OnBindField();
+        EventBattle = GetComponent<BattleEvent>();
         _characterInfo = GetComponentInChildren<CharacterInfo>();
         _downRig = FindGameObjectInChildren("Down");
         _upRig = FindGameObjectInChildren("Up");
@@ -199,12 +235,13 @@ public class Character : BaseBehaviour
         _animator = GetComponentInChildren<Animator>();
         EventState = GetComponent<StateEvent>();
         EventDirection = GetComponent<DirectionEvent>();
-        EventMovement = GetComponent<MovementEvent>();
+        EventMovement = GetComponent<MovementEvent>(); 
         _customizer = GetComponent<Customizer>();
     }
 
     protected virtual void OnValidate()
     {
+        CheckNullValue(this.name, EventBattle);
         CheckNullValue(this.name, _characterInfo);
         CheckNullValue(this.name, _upRig);
         CheckNullValue(this.name, _downRig);

@@ -59,19 +59,19 @@ public class TeamBattleSceneManager : BattleSceneManager
 
             if (i == _playerIndex)
             {
-                _players[i].Initialize(roomInfo.playersInfo[i].Nickname, false, true, roomInfo.playersInfo[i].EquipedItems);
+                _players[i].EventBattle.CallInitialize(roomInfo.playersInfo[i].Nickname, roomInfo.playersInfo[i].Hp, false, true, roomInfo.playersInfo[i].EquipedItems);
             }
             else if (isPlayerBlueTeam && i < GameRoomSize.TeamBattleRoomSize / 2)
             {
-                _players[i].Initialize(roomInfo.playersInfo[i].Nickname, false, false, roomInfo.playersInfo[i].EquipedItems);
+                _players[i].EventBattle.CallInitialize(roomInfo.playersInfo[i].Nickname, roomInfo.playersInfo[i].Hp, false, false, roomInfo.playersInfo[i].EquipedItems);
             }
             else if (!isPlayerBlueTeam && i >= GameRoomSize.TeamBattleRoomSize / 2)
             {
-                _players[i].Initialize(roomInfo.playersInfo[i].Nickname, false, false, roomInfo.playersInfo[i].EquipedItems);
+                _players[i].EventBattle.CallInitialize(roomInfo.playersInfo[i].Nickname, roomInfo.playersInfo[i].Hp, false, false, roomInfo.playersInfo[i].EquipedItems);
             }
             else
             {
-                _players[i].Initialize(roomInfo.playersInfo[i].Nickname, true, false, roomInfo.playersInfo[i].EquipedItems);
+                _players[i].EventBattle.CallInitialize(roomInfo.playersInfo[i].Nickname, roomInfo.playersInfo[i].Hp, true, false, roomInfo.playersInfo[i].EquipedItems);
             }
         }
 

@@ -46,6 +46,30 @@ public enum EquipmentType
     Shoes,
     None,
 }
+
+public enum WeaponType
+{
+    Sword,
+    Bow
+}
+public enum WeaponSkillType
+{
+    SelfBuff,      
+    TeamBuff,  
+    EnemyTargetDeBuff, 
+    EnemyTeamDeBuff,   
+    AutoCast,
+    TargetCast,
+    None
+}
+
+public enum ShoesSkillType
+{
+    Buff,
+    Dash,
+    Teleport,
+    None,
+}
 public enum GameRoomType
 {
     Duel,

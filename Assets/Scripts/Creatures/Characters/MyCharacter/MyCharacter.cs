@@ -9,9 +9,16 @@ using UnityEngine;
 public class MyCharacter : Character
 {
     public AttackEvent EventAttack;
-    [SerializeField] private Rigidbody2D _rigid;
-    private float _moveSpeed = 3f;
+    [SerializeField] 
+    private Rigidbody2D _rigid;
 
+
+    [Header("SKill UI")]
+    [SerializeField]
+    private SkillController _skillController;
+    
+    
+    private float _moveSpeed = 3f;
     private bool _canAttack = true;
     private float _attackCoolTime = 0.2f;
     
@@ -32,6 +39,30 @@ public class MyCharacter : Character
         EventAttack.OnAttack -= Event_OnAttack;
 
     }
+
+    private void Start()
+    {
+        _skillController.SetWeaponSkill(_weaponEquip.WeaponSkill, UseWeaponSkill);
+    }
+
+    protected override void Event_Initialize(BattleEvent battleEvent, BattleInitializeEventArgs battleInitializeEventArgs)
+    {
+        base.Event_Initialize(battleEvent, battleInitializeEventArgs);
+        _skillController.SetWeaponSkill(_weaponEquip.WeaponSkill, UseWeaponSkill);
+    }
+
+    private void UseWeaponSkill()
+    {
+        Debug.Log("weaponSkill");
+    }
+    private void UseShoesSkill()
+    {
+
+    }
+
+   
+
+
 
     protected override void Event_OnMovement(MovementEvent movementEvent, MovementEventArgs movementEventArgs)
     {
@@ -84,9 +115,10 @@ public class MyCharacter : Character
 
     protected override void OnBindField()
     {
+        base.OnBindField();
         EventAttack = GetComponent<AttackEvent>();
         _rigid = GetComponent<Rigidbody2D>();
-        base.OnBindField();
+        _skillController = FindAnyObjectByType<SkillController>();
     }
 
     protected override void OnValidate()
