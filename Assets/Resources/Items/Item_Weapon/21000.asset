@@ -9,13 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52a5749e27bcac44d89b5b7e49c0933e, type: 3}
+  m_Script: {fileID: 11500000, guid: b8d249ed208ff60498124ce1a8e8d3f1, type: 3}
   m_Name: 21000
   m_EditorClassIdentifier: 
   ItemId: 21000
   Type: 1
   ItemCustomData: {fileID: 11400000, guid: e1a2a9ccfdc20fc44a6b976e2a7bb2c6, type: 2}
-  StatHp: 4
-  StatAttack: 4
-  StatDefense: 4
-  AttackDistance: 4
+  StatHp: 5
+  StatAttack: 5
+  StatDefense: 5
+  AttackDistance: 5
+  WeaponSkill: {fileID: 11400000, guid: 2c97bf8270d89b5428d91dab4d844a77, type: 2}
+  WeaponType: 0

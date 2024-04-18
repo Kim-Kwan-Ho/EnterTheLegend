@@ -42,13 +42,13 @@ public class MyCharacter : Character
 
     private void Start()
     {
-        _skillController.SetWeaponSkill(_weaponEquip.WeaponSkill, UseWeaponSkill);
+
     }
 
     protected override void Event_Initialize(BattleEvent battleEvent, BattleInitializeEventArgs battleInitializeEventArgs)
     {
         base.Event_Initialize(battleEvent, battleInitializeEventArgs);
-        _skillController.SetWeaponSkill(_weaponEquip.WeaponSkill, UseWeaponSkill);
+        _skillController.SetWeaponSkill(_weaponEquip?.WeaponSkill, UseWeaponSkill);
     }
 
     private void UseWeaponSkill()

@@ -149,6 +149,7 @@ Library: lib_burst_generated
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Environments.dll
+--root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\CFXRDemo.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Authentication.PlayerAccounts.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Analytics.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.2D.SpriteShape.Runtime.dll
@@ -160,12 +161,14 @@ Library: lib_burst_generated
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.2D.Common.Runtime.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.2D.IK.Runtime.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Device.dll
+--root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\CFXRRuntime.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Threading.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.2D.Tilemap.Extras.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Networking.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.InternalAPIEngineBridge.001.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Configuration.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\PimDeWitte.UnityMainThreadDispatcher.dll
+--root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\KinoBloom.Runtime.dll
 --assembly-folder=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\
 --pdb-search-paths=Temp/ManagedSymbols/
 --method=Unity.Burst.BurstCompiler+BurstCompilerHelper, Unity.Burst, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::IsBurstEnabled()--8c2be93e18276203cbd918daa2748a10
@@ -323,6 +326,7 @@ Library: lib_burst_generated
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Assembly-CSharp.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Environments.dll
+--root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\CFXRDemo.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Authentication.PlayerAccounts.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Analytics.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.2D.SpriteShape.Runtime.dll
@@ -334,12 +338,14 @@ Library: lib_burst_generated
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.2D.Common.Runtime.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.2D.IK.Runtime.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Device.dll
+--root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\CFXRRuntime.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Threading.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.2D.Tilemap.Extras.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Networking.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.InternalAPIEngineBridge.001.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\Unity.Services.Core.Configuration.dll
 --root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\PimDeWitte.UnityMainThreadDispatcher.dll
+--root-assembly=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\KinoBloom.Runtime.dll
 --assembly-folder=D:\Study\EnterTheLegend\Temp\StagingArea\Data\Managed\
 --pdb-search-paths=Temp/ManagedSymbols/
 --method=Unity.Burst.BurstCompiler+BurstCompilerHelper, Unity.Burst, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null::IsBurstEnabled()--8c2be93e18276203cbd918daa2748a10

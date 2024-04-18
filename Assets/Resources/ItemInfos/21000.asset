@@ -16,4 +16,4 @@ MonoBehaviour:
   Description: SwordSword
   IsEquipped: 0
   ItemIcon: {fileID: 21300000, guid: f84cee3528026f943a795491aa3be184, type: 3}
-  Equipment: {fileID: 11400000, guid: 64a27c026ab2cf74c96e5809eaf35467, type: 2}
+  Equipment: {fileID: 11400000, guid: dcaa9a6fe73cfac4b9280741b4c3f5ab, type: 2}
