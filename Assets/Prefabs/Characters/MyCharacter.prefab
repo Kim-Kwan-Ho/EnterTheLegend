@@ -1978,9 +1978,9 @@ MonoBehaviour:
   EventMovement: {fileID: 2301813561595772819}
   _weaponEquip: {fileID: 0}
   _customizer: {fileID: 7110778581197275085}
-  EventAttack: {fileID: -5759048518445801138}
   _rigid: {fileID: 2262024080487404084}
   _skillController: {fileID: 0}
+  _dataSender: {fileID: -6012630930733234642}
 --- !u!114 &-6012630930733234642
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1994,15 +1994,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _player: {fileID: -7267733569492189700}
---- !u!114 &-5759048518445801138
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8667937111910072456}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26e0b74cba861844fb5dfd612484f1a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

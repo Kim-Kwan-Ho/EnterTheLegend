@@ -247,7 +247,12 @@ public class ServerManager : SingletonMonobehaviour<ServerManager>
                     TeamBattleSceneManager.Instance.EventBattleScene.CallPlayerDirectionChanged(directionChanged.PlayerIndex, (Direction)directionChanged.Direction);
                 });
                 break;
-
+            case MessageIdTcp.BattleRoomPlayerTakeDamage:
+                stBattleRoomPlayerTakeDamage takeDamage =
+                    Utilities.GetObjectFromByte<stBattleRoomPlayerTakeDamage>(msgData);
+                UnityMainThreadDispatcher.Instance().Enqueue(() =>
+                    TeamBattleSceneManager.Instance.EventBattleScene.CallPlayerDamaged(takeDamage.PlayerIndex, takeDamage.Damage));
+                break;
 
         }
     }

@@ -4,11 +4,9 @@ using UnityEngine;
 
 
 [RequireComponent(typeof(MyCharacterDataSender))]
-[RequireComponent(typeof(AttackEvent))]
 [RequireComponent(typeof(Rigidbody2D))]
 public class MyCharacter : Character
 {
-    public AttackEvent EventAttack;
     [SerializeField] 
     private Rigidbody2D _rigid;
 
@@ -20,30 +18,30 @@ public class MyCharacter : Character
     
     private float _moveSpeed = 3f;
     private bool _canAttack = true;
-    private float _attackCoolTime = 0.2f;
+    private bool _isAttacking = false;
+    private float _attackCoolTime = 1.2f;
+
+    [Header("Data Sender")]
+    [SerializeField]
+    private MyCharacterDataSender _dataSender;
     
     protected override void OnEnable()
     {
         base.OnEnable();
-        EventMovement.OnVelocityMovement += Event_OnMovement;
-        EventMovement.OnStopMovement += Event_OnMovementStop;
-        EventAttack.OnAttack += Event_OnAttack;
-        
+        EventMovement.OnVelocityMovement += Event_PositionMovement;
+        EventMovement.OnStopMovement += Event_MovementStop;
+        EventBattle.StopAttack += Event_StopAttack;
     }
 
     protected override void OnDisable()
     {
         base.OnDisable();
-        EventMovement.OnVelocityMovement -= Event_OnMovement;
-        EventMovement.OnStopMovement -= Event_OnMovementStop;
-        EventAttack.OnAttack -= Event_OnAttack;
-
+        EventMovement.OnVelocityMovement -= Event_PositionMovement;
+        EventMovement.OnStopMovement -= Event_MovementStop;
+        EventBattle.StopAttack -= Event_StopAttack;
     }
 
-    private void Start()
-    {
 
-    }
 
     protected override void Event_Initialize(BattleEvent battleEvent, BattleInitializeEventArgs battleInitializeEventArgs)
     {
@@ -64,9 +62,10 @@ public class MyCharacter : Character
 
 
 
-    protected override void Event_OnMovement(MovementEvent movementEvent, MovementEventArgs movementEventArgs)
+    protected override void Event_PositionMovement(MovementEvent movementEvent, MovementEventArgs movementEventArgs)
     {
-        if (_state != State.Attack)
+        _animator.SetFloat(AnimationSettings.Speed, 1);
+        if (!_isAttacking)
         {
             if (_state != State.Move)
                 EventState.CallStateChangedEvent(State.Move);
@@ -74,28 +73,35 @@ public class MyCharacter : Character
                 EventDirection.CallDirectionChanged(movementEventArgs.direction);
 
         }
-        MoveRigidPlayer(movementEventArgs.velocity);
+        MoveRigidPlayer(movementEventArgs.velocity * 3);
     }
 
-    private void Event_OnMovementStop(MovementEvent movementEvent)
+    private void Event_MovementStop(MovementEvent movementEvent)
     {
         StopRigidPlayer();
         EventState.CallStateChangedEvent(State.Idle);
     }
-    private void Event_OnAttack(AttackEvent attackEvent, AttackEventArgs attackEventArgs)
+    protected override void Event_OnAttack(BattleEvent battleEvent, BattleAttackEventArgs battleAttackEventArgs)
     {
+        _isAttacking = true;
+        if (battleAttackEventArgs.direction != _direction)
+            EventDirection.CallDirectionChanged(battleAttackEventArgs.direction);
         if (_canAttack)
         {
-            StartCoroutine(CoOnAttack(attackEventArgs));
+            EventState.CallStateChangedEvent(State.Attack);
+            _dataSender.SendPlayerOnAttack();
+            StartCoroutine(CoAttackTimer());
         }
-        
     }
 
-    private IEnumerator CoOnAttack(AttackEventArgs attackEventArgs)
+    private void Event_StopAttack(BattleEvent battleEvent)
+    {
+        _isAttacking = false;
+    }
+
+    private IEnumerator CoAttackTimer()
     {
         _canAttack = false;
-        EventState.CallStateChangedEvent(State.Attack);
-        EventDirection.CallDirectionChanged(attackEventArgs.direction);
         yield return new WaitForSeconds(_attackCoolTime);
         _canAttack = true;
     }
@@ -116,16 +122,17 @@ public class MyCharacter : Character
     protected override void OnBindField()
     {
         base.OnBindField();
-        EventAttack = GetComponent<AttackEvent>();
         _rigid = GetComponent<Rigidbody2D>();
         _skillController = FindAnyObjectByType<SkillController>();
+        _dataSender = GetComponent<MyCharacterDataSender>();
     }
 
     protected override void OnValidate()
     {
         base.OnValidate();
-        CheckNullValue(this.name, EventAttack);
         CheckNullValue(this.name, _rigid);
+        CheckNullValue(this.name, _skillController);
+        CheckNullValue(this.name, _dataSender);
     }
 
 

@@ -9,6 +9,7 @@ public class BattleSceneEvent : MonoBehaviour
     public Action<BattleSceneEvent, BattleScenePlayerPositionChangedEventArgs> OnPlayerPositionChanged;
     public Action<BattleSceneEvent, BattleSceneEventPlayerStateChangedEventArgs> OnPlayerStateChanged;
     public Action<BattleSceneEvent, BattleScenePlayerDirectionChangedEventArgs> OnPlayerDirectionChanged;
+    public Action<BattleSceneEvent, BattleScenePlayerDamagedEventArgs> OnPlayerDamaged;
     public void CallRoomInitialize(ushort roomId, ushort playerIndex, stBattlePlayerInfo[] playersInfo)
     {
         OnRoomInitialize?.Invoke(this,
@@ -35,6 +36,11 @@ public class BattleSceneEvent : MonoBehaviour
     {
         OnPlayerDirectionChanged?.Invoke(this,
             new BattleScenePlayerDirectionChangedEventArgs() { playerIndex = playerIndex, direction = direction });
+    }
+    public void CallPlayerDamaged(ushort playerIndex, ushort damage)
+    {
+        OnPlayerDamaged?.Invoke(this,
+            new BattleScenePlayerDamagedEventArgs() { playerIndex = playerIndex, damage = damage });
     }
 }
 
@@ -64,4 +70,9 @@ public class BattleScenePlayerDirectionChangedEventArgs : EventArgs
 {
     public ushort playerIndex;
     public Direction direction;
+}
+public class BattleScenePlayerDamagedEventArgs : EventArgs
+{
+    public ushort playerIndex;
+    public ushort damage;
 }

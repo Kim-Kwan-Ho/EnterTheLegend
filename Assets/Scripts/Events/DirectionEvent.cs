@@ -8,6 +8,7 @@ public class DirectionEvent : MonoBehaviour
     public void CallDirectionChanged(Direction direction)
     {
         OnDirectionChanged?.Invoke(this, new DirectionEventArgs() { direction = direction });
+        Debug.Log(direction);
     }
 
 

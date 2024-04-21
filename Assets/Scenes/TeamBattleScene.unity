@@ -1690,6 +1690,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1821041228}
     - target: {fileID: -7267733569492189700, guid: 4e85e66a18f509c419c0f2516d1c62b5, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -7267733569492189700, guid: 4e85e66a18f509c419c0f2516d1c62b5, type: 3}
+      propertyPath: _dataSender
+      value: 
+      objectReference: {fileID: 1331355207}
+    - target: {fileID: -7267733569492189700, guid: 4e85e66a18f509c419c0f2516d1c62b5, type: 3}
       propertyPath: _weaponEquip
       value: 
       objectReference: {fileID: 11400000, guid: 57a22fa269d87a24581051d1088fd1b6, type: 2}
@@ -1699,7 +1707,7 @@ PrefabInstance:
       objectReference: {fileID: 821308455}
     - target: {fileID: -6012630930733234642, guid: 4e85e66a18f509c419c0f2516d1c62b5, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3732076346879848163, guid: 4e85e66a18f509c419c0f2516d1c62b5, type: 3}
       propertyPath: m_RootOrder
@@ -1768,6 +1776,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c8c479649ec9f0c469c70de7f36006e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1331355207 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: -6012630930733234642, guid: 4e85e66a18f509c419c0f2516d1c62b5, type: 3}
+  m_PrefabInstance: {fileID: 1331355204}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 605f986d7d74c3b4c927b7b46aead213, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1341914763
@@ -1990,7 +2009,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _movementRange: 25
-  _distanceRange: 0.3
+  _attackDistanceRange: 0.4
   _player: {fileID: 1331355205}
 --- !u!114 &1474221169
 MonoBehaviour:

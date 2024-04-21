@@ -22,15 +22,15 @@ public class MyCharacterDataSender : BaseBehaviour
     private void OnEnable()
     {
         BattleSceneManager.Instance.EventBattleScene.OnGameStart += Event_OnGameStart;
-        _player.EventState.OnStateChanged += Event_SendPlayerStateChanged;
-        _player.EventDirection.OnDirectionChanged += Event_SendPlayerDirectionChanged;
+        _player.EventState.OnStateChanged += Event_StateChanged;
+        _player.EventDirection.OnDirectionChanged += Event_DirectionChanged;
     }
 
     private void OnDisable()
     {
         BattleSceneManager.Instance.EventBattleScene.OnGameStart -= Event_OnGameStart;
-        _player.EventState.OnStateChanged -= Event_SendPlayerStateChanged;
-        _player.EventDirection.OnDirectionChanged -= Event_SendPlayerDirectionChanged;
+        _player.EventState.OnStateChanged -= Event_StateChanged;
+        _player.EventDirection.OnDirectionChanged -= Event_DirectionChanged;
 
     }
 
@@ -54,7 +54,7 @@ public class MyCharacterDataSender : BaseBehaviour
         }
     }
 
-    private void Event_SendPlayerStateChanged(StateEvent stateEvent, StateEventArgs stateEventArgs)
+    private void Event_StateChanged(StateEvent stateEvent, StateEventArgs stateEventArgs)
     {
         stTeamBattleRoomPlayerStateChangedToServer stateChanged = new stTeamBattleRoomPlayerStateChangedToServer();
         stateChanged.Header.MsgID = MessageIdTcp.TeamBattleRoomPlayerStateChangedToServer;
@@ -64,7 +64,7 @@ public class MyCharacterDataSender : BaseBehaviour
         byte[] msg = Utilities.GetObjectToByte(stateChanged);
         ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);
     }
-    private void Event_SendPlayerDirectionChanged(DirectionEvent directionEvent, DirectionEventArgs directionEventArgs)
+    private void Event_DirectionChanged(DirectionEvent directionEvent, DirectionEventArgs directionEventArgs)
     {
         stTeamBattleRoomPlayerDirectionChangedToServer directionChanged = new stTeamBattleRoomPlayerDirectionChangedToServer();
         directionChanged.Header.MsgID = MessageIdTcp.TeamBattleRoomPlayerDirectionChangedToServer;
@@ -74,8 +74,14 @@ public class MyCharacterDataSender : BaseBehaviour
         byte[] msg = Utilities.GetObjectToByte(directionChanged);
         ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);
     }
-    private void Event_SendPlayerOnAttack(AttackEvent attackEvent, AttackEventArgs attackEventArgs)
+    public void SendPlayerOnAttack()
     {
+        stTeamBattleRoomPlayerOnAttack onAttack = new stTeamBattleRoomPlayerOnAttack();
+        onAttack.Header.MsgID = MessageIdTcp.TeamBattleRoomPlayerAttackToServer;
+        onAttack.Header.PacketSize = (ushort)Marshal.SizeOf(onAttack);
+        onAttack.PlayerInfo = _playerInfo;
+        byte[] msg = Utilities.GetObjectToByte(onAttack);
+        ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);
 
     }
 

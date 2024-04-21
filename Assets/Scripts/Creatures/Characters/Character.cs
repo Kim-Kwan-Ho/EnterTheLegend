@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using CustomizableCharacters;
 using StandardData;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.U2D;
 
 [RequireComponent(typeof(BattleEvent))]
 [RequireComponent(typeof(StateEvent))]
@@ -17,6 +19,7 @@ public class Character : BaseBehaviour
     private CharacterInfo _characterInfo;
     [SerializeField]
     private GameObject _damageTextPrefab;
+
 
     [Header("Stats")]
     private ushort _curHp;
@@ -63,14 +66,18 @@ public class Character : BaseBehaviour
         _direction = Direction.Down;
         _state = State.Idle;
         _animator.speed = AnimationSettings.PlayerAnimationSpeed;
+        InitializeState();
     }
     protected virtual void OnEnable()
     {
         EventBattle.OnInitialize += Event_Initialize;
         EventBattle.OnTakeDamage += Event_TakeDamage;
-        EventState.OnStateChanged += Event_OnStateChanged;
-        EventDirection.OnDirectionChanged += Event_OnDirectionChanged;
-        EventMovement.OnPositionMovement += Event_OnMovement;
+        EventBattle.OnAttack += Event_OnAttack;
+
+        EventState.OnStateChanged += Event_StateChanged;
+        EventDirection.OnDirectionChanged += Event_DirectionChanged;
+        EventMovement.OnPositionMovement += Event_PositionMovement;
+
 
     }
 
@@ -78,9 +85,11 @@ public class Character : BaseBehaviour
     {
         EventBattle.OnInitialize -= Event_Initialize;
         EventBattle.OnTakeDamage -= Event_TakeDamage;
-        EventState.OnStateChanged -= Event_OnStateChanged;
-        EventDirection.OnDirectionChanged -= Event_OnDirectionChanged;
-        EventMovement.OnPositionMovement -= Event_OnMovement;
+        EventBattle.OnAttack -= Event_OnAttack;
+
+        EventState.OnStateChanged -= Event_StateChanged;
+        EventDirection.OnDirectionChanged -= Event_DirectionChanged;
+        EventMovement.OnPositionMovement -= Event_PositionMovement;
 
     }
     protected virtual void Event_Initialize(BattleEvent battleEvent, BattleInitializeEventArgs battleInitializeEventArgs)
@@ -95,28 +104,42 @@ public class Character : BaseBehaviour
     protected virtual void Event_TakeDamage(BattleEvent battleEvent,
         BattleTakeDamageEventArgs battleTakeDamageEventArgs)
     {
-        _curHp = battleTakeDamageEventArgs.curHp;
-        if (_curHp == 0)
-        {
-            EventState.CallStateChangedEvent(State.Death);
-        }
+        _curHp -= battleTakeDamageEventArgs.amount;
+
+        IPoolable pool = PoolManager.Instance.GetPool(_damageTextPrefab);
+        pool.OnSpawn((Vector2)transform.position + Vector2.up * 3);
+        //if (_curHp == 0)
+        //{
+        //    EventState.CallStateChangedEvent(State.Death);
+        //}
     }
-    private void Event_OnStateChanged(StateEvent stateEvent, StateEventArgs stateEventArgs)
+    private void Event_StateChanged(StateEvent stateEvent, StateEventArgs stateEventArgs)
     {
         _state = stateEventArgs.state;
         InitializeState();
         UpdateState();
     }
 
-    protected virtual void Event_OnMovement(MovementEvent movementEvent, MovementEventArgs movementEventArgs)
+    protected virtual void Event_PositionMovement(MovementEvent movementEvent, MovementEventArgs movementEventArgs)
     {
-        transform.position = movementEventArgs.position;
+        bool movement = (movementEventArgs.position - transform.position).magnitude > 0.05f;
+        if (movement)
+        {
+            transform.position = movementEventArgs.position;
+            _animator.SetFloat(AnimationSettings.Speed, 1);
+        }
     }
-    private void Event_OnDirectionChanged(DirectionEvent directionEvent, DirectionEventArgs directionEventArgs)
+    private void Event_DirectionChanged(DirectionEvent directionEvent, DirectionEventArgs directionEventArgs)
     {
         _direction = directionEventArgs.direction;
         UpdateDirection();
     }
+
+    protected virtual void Event_OnAttack(BattleEvent battleEvent, BattleAttackEventArgs battleAttackEventArgs)
+    {
+
+    }
+
     private void SetEquipment(EquipmentType type, int itemId)
     {
         EquipmentSO equipment =
@@ -141,6 +164,9 @@ public class Character : BaseBehaviour
         {
             _shoesEquip = equipment;
         }
+
+        if (equipment != null && equipment.ItemCustomData != null)
+            _customizer.Add(equipment.ItemCustomData);
     }
 
 
@@ -152,13 +178,6 @@ public class Character : BaseBehaviour
     }
 
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            PoolManager.Instance.GetPool(_damageTextPrefab).OnSpawn();
-        }
-    }
 
     protected virtual void UpdateState()
     {
@@ -167,9 +186,17 @@ public class Character : BaseBehaviour
             case State.Idle:
                 break;
             case State.Move:
-                _animator.SetFloat(AnimationSettings.Speed, 1);
                 break;
             case State.Attack:
+                if (_weaponEquip?.WeaponType == WeaponType.Bow)
+                {
+                    _animator.SetTrigger(AnimationSettings.BowLoad);
+                    _animator.SetTrigger(AnimationSettings.BowRelease);
+                }
+                else
+                {
+                    _animator.SetTrigger(AnimationSettings.Attack);
+                }
                 break;
             case State.Death:
                 _animator.SetTrigger(AnimationSettings.Die);
@@ -178,7 +205,7 @@ public class Character : BaseBehaviour
         }
     }
 
-    
+
 
     protected virtual void InitializeState()
     {
@@ -235,7 +262,7 @@ public class Character : BaseBehaviour
         _animator = GetComponentInChildren<Animator>();
         EventState = GetComponent<StateEvent>();
         EventDirection = GetComponent<DirectionEvent>();
-        EventMovement = GetComponent<MovementEvent>(); 
+        EventMovement = GetComponent<MovementEvent>();
         _customizer = GetComponent<Customizer>();
     }
 
@@ -251,6 +278,14 @@ public class Character : BaseBehaviour
         CheckNullValue(this.name, EventDirection);
         CheckNullValue(this.name, EventMovement);
         CheckNullValue(this.name, _customizer);
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(transform.position, 3);
+
+        Gizmos.DrawRay(transform.position, (Vector2.up + Vector2.right) * 3);
+        Gizmos.DrawRay(transform.position, (Vector2.down + Vector2.right) * 3);
     }
 
 #endif

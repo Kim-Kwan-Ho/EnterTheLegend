@@ -22,7 +22,8 @@ public class CharacterInfo : BaseBehaviour
     private Image _hpGageImage;
     [SerializeField]
     private TextMeshProUGUI _hpText;
-    private int _maxHp;
+    private ushort _maxHp;
+    private ushort _curHp;
 
     private void OnEnable()
     {
@@ -41,6 +42,7 @@ public class CharacterInfo : BaseBehaviour
         _nicknameText.text = battleInitializeEventArgs.nickname;
         _hpText.text = battleInitializeEventArgs.hp.ToString();
         _maxHp = battleInitializeEventArgs.hp;
+        _curHp = _maxHp;
         if (battleInitializeEventArgs.isEnemy)
         {
             _nicknameText.color = Color.red;
@@ -63,9 +65,8 @@ public class CharacterInfo : BaseBehaviour
 
     private void Event_TakeDamage(BattleEvent battleEvent, BattleTakeDamageEventArgs battleTakeDamageEventArgs)
     {
-        _hpSlider.value = battleTakeDamageEventArgs.curHp / (float)_maxHp;
-
-        
+        _curHp -= battleTakeDamageEventArgs.amount;
+        _hpSlider.value = _curHp / (float)_maxHp;
     }
 
     private IEnumerator CoTakeDamaged(ushort amount)

@@ -699,6 +699,7 @@ GameObject:
   - component: {fileID: 3092954404479128911}
   - component: {fileID: 5461085220969948189}
   - component: {fileID: 4982113107822833599}
+  - component: {fileID: 2939817073415539724}
   m_Layer: 0
   m_Name: CharacterInfoCanvas
   m_TagString: Untagged
@@ -747,7 +748,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 563539551
-  m_SortingOrder: 1
+  m_SortingOrder: 2
   m_TargetDisplay: 0
 --- !u!114 &3092954404479128911
 MonoBehaviour:
@@ -806,6 +807,17 @@ MonoBehaviour:
   _hpSlider: {fileID: 8022264992405559917}
   _hpGageImage: {fileID: 8022264992628684576}
   _hpText: {fileID: 7316021031657933062}
+--- !u!210 &2939817073415539724
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 387884844609151360}
+  m_Enabled: 1
+  m_SortingLayerID: 563539551
+  m_SortingLayer: 2
+  m_SortingOrder: 2
 --- !u!1 &394406249833016886
 GameObject:
   m_ObjectHideFlags: 0
@@ -23118,7 +23130,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 100
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}

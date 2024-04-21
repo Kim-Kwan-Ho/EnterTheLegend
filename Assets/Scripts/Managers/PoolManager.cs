@@ -47,7 +47,6 @@ public class PoolManager : SingletonMonobehaviour<PoolManager>
         if (poolDic[poolKey].Count == 0)
         {
             throw new Exception(("Need More Pool"));
-            return null;
         }
         else
         {
@@ -71,6 +70,6 @@ public struct Pool
 public interface IPoolable
 {
     int PoolKey { get; set; }
-    void OnSpawn();
+    void OnSpawn(Vector2 position);
     void OnDeSpawn();
 }

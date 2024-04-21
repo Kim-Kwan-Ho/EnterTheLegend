@@ -6,10 +6,11 @@ public class DamageText : MonoBehaviour, IPoolable
 {
     public int PoolKey { get; set; }
 
-    public void OnSpawn()
+    public void OnSpawn(Vector2 position)
     {
+        transform.position = position;
         gameObject.SetActive(true);
-        Invoke("OnDeSpawn",3);
+        Invoke("OnDeSpawn", 2);
     }
 
     public void OnDeSpawn()

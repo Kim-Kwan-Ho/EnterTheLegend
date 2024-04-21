@@ -5,10 +5,10 @@ public class PlayerAttackController : BaseBehaviour, IPointerDownHandler, IPoint
     [Header("UI SETTINGS TEST")]
     [SerializeField] private float _movementRange = 25;
 
-    [SerializeField] private float _distanceRange = 0.3f;
+    [SerializeField] private float _attackDistanceRange = 0.4f;
 
     private Vector3 _startPosition = Vector3.zero;
-    private bool _isDragging = false;
+    private bool _onAttack = false;
     private Vector2 _distance = Vector2.zero;
     
     [SerializeField]
@@ -22,15 +22,15 @@ public class PlayerAttackController : BaseBehaviour, IPointerDownHandler, IPoint
 
     private void Update()
     {
-        if (_isDragging)
+        if (_onAttack)
         {
-            _player.EventAttack.CallAttackEvent(Utilities.GetDirectionFromVector(_distance), 0);
+            _player.EventBattle.CallOnAttack(Utilities.GetDirectionFromVector(_distance), 0);
         }
     }
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        _isDragging = true;
+
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -39,16 +39,16 @@ public class PlayerAttackController : BaseBehaviour, IPointerDownHandler, IPoint
         pos = Vector3.ClampMagnitude(pos, _movementRange);
         _distance = new Vector2(pos.x / _movementRange, pos.y / _movementRange);
         transform.position = _startPosition + pos;
+
+        _onAttack = _distance.magnitude > _attackDistanceRange;
     }
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        _isDragging = false;
-        _player.EventState.CallStateChangedEvent(State.Idle);
-
+        _onAttack = false;
         transform.position = _startPosition;
-
-        _player.EventMovement.CallStopMovement();
+        _player.EventBattle.CallStopAttack();
+        //_player.EventMovement.CallStopMovement();
     }
 
 

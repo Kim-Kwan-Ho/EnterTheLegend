@@ -28,6 +28,7 @@ public class TeamBattleSceneManager : BattleSceneManager
         EventBattleScene.OnGameStart += Event_OnGameStart;
         EventBattleScene.OnPlayerStateChanged += Event_PlayerStateChanged;
         EventBattleScene.OnPlayerDirectionChanged += Event_PlayerDirectionChanged;
+        EventBattleScene.OnPlayerDamaged += Event_PlayerDamaged;
     }
 
     private void OnDisable()
@@ -37,6 +38,7 @@ public class TeamBattleSceneManager : BattleSceneManager
         EventBattleScene.OnGameStart -= Event_OnGameStart;
         EventBattleScene.OnPlayerStateChanged -= Event_PlayerStateChanged;
         EventBattleScene.OnPlayerDirectionChanged -= Event_PlayerDirectionChanged;
+        EventBattleScene.OnPlayerDamaged -= Event_PlayerDamaged;
     }
 
     private void Event_InitializeTeamBattleRoom(BattleSceneEvent battleSceneEvent, BattleSceneEventRoomInfoArgs battleSceneEventArgs)
@@ -80,6 +82,8 @@ public class TeamBattleSceneManager : BattleSceneManager
         playerLoadInfo.Header.PacketSize = (ushort)Marshal.SizeOf(playerLoadInfo);
         playerLoadInfo.RoomId = _roomId;
         playerLoadInfo.PlayerIndex = _playerIndex;
+        playerLoadInfo.PositionX = transform.position.x;
+        playerLoadInfo.PositionY = transform.position.y;
         byte[] msg = Utilities.GetObjectToByte(playerLoadInfo);
         ServerManager.Instance.EventClientToServer.CallOnTcpSend(msg);
         _sceneState = GameSceneState.WaitingPlayer;
@@ -131,6 +135,11 @@ public class TeamBattleSceneManager : BattleSceneManager
             .CallDirectionChanged(battleSceneEventPlayerDirectionChangedArgs.direction);
     }
 
+    private void Event_PlayerDamaged(BattleSceneEvent battleSceneEvent,
+        BattleScenePlayerDamagedEventArgs battleScenePlayerDamagedEventArgs)
+    {
+        _players[battleScenePlayerDamagedEventArgs.playerIndex].EventBattle.CallTakeDamage(battleScenePlayerDamagedEventArgs.damage);
+    }
 
 #if UNITY_EDITOR
 
