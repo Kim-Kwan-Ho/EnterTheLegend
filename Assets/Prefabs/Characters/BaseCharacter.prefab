@@ -23267,8 +23267,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62caf8e0a0a7fa141ae41aad743ee51d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _additionalDataSO: {fileID: 11400000, guid: f608a3054cbb3b042836148921fefcb2, type: 2}
   _characterInfo: {fileID: 4982113107822833599}
-  _damageTextPrefab: {fileID: 7115704873972310390, guid: e02ed839840de8e4ab6fc4b2448e3e8c, type: 3}
   _downRig: {fileID: 637086134480938569}
   _upRig: {fileID: 8786498945541174830}
   _sideRig: {fileID: 4108880494567317474}

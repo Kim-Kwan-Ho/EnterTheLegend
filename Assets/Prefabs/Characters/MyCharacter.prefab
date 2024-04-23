@@ -1966,8 +1966,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8c479649ec9f0c469c70de7f36006e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _additionalDataSO: {fileID: 11400000, guid: f608a3054cbb3b042836148921fefcb2, type: 2}
   _characterInfo: {fileID: 6503294151702819456}
-  _damageTextPrefab: {fileID: 7115704873972310390, guid: e02ed839840de8e4ab6fc4b2448e3e8c, type: 3}
   _downRig: {fileID: 1707762131645496182}
   _upRig: {fileID: 7389202844585601809}
   _sideRig: {fileID: 2765772986667533021}

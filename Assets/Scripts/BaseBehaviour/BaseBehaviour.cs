@@ -4,6 +4,7 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
+
 public class BaseBehaviour : MonoBehaviour
 {
 #if UNITY_EDITOR // 에디터에서만 작동되게끔
@@ -97,9 +98,9 @@ public class BaseBehaviour : MonoBehaviour
 }
 
 #if UNITY_EDITOR
-[UnityEditor.CustomEditor(typeof(BaseBehaviour), true)] 
-[UnityEditor.CanEditMultipleObjects]
-public class BehaviourBaseEditor : UnityEditor.Editor
+[CustomEditor(typeof(BaseBehaviour), true)] 
+[CanEditMultipleObjects]
+public class BehaviourBaseEditor : Editor
 {
 
     private MethodInfo _bindMethod = (typeof(BaseBehaviour)).GetMethod("OnBindField", BindingFlags.NonPublic | BindingFlags.Instance);

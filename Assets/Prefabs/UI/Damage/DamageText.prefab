@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7115704873972310389}
   - component: {fileID: 7115704873972310395}
   - component: {fileID: 7115704873972310388}
-  - component: {fileID: 7348034020661238957}
+  - component: {fileID: 3039938015600651828}
   m_Layer: 9
   m_Name: DamageText
   m_TagString: Untagged
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hit
+  m_text: 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 943740ed2ff034fc48ce7c5125f00570, type: 2}
   m_sharedMaterial: {fileID: -4171563015097924827, guid: 943740ed2ff034fc48ce7c5125f00570, type: 2}
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_renderer: {fileID: 7115704873972310395}
   m_maskType: 0
---- !u!114 &7348034020661238957
+--- !u!114 &3039938015600651828
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -185,3 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 721e44ab17f3d3d4b9c6674bec35f73e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _text: {fileID: 7115704873972310388}
+  _offSet: {x: 0, y: 2.5}
+  _lifeTime: 1
+  _moveSpeed: 1.5

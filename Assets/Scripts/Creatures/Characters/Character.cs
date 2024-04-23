@@ -14,11 +14,13 @@ using UnityEngine.U2D;
 
 public class Character : BaseBehaviour
 {
+    [Header("SO Files")]
+    [SerializeField]
+    private CharacterAdditionalDataSO _additionalDataSO;
+
     [Header("UI")]
     [SerializeField]
     private CharacterInfo _characterInfo;
-    [SerializeField]
-    private GameObject _damageTextPrefab;
 
 
     [Header("Stats")]
@@ -106,12 +108,10 @@ public class Character : BaseBehaviour
     {
         _curHp -= battleTakeDamageEventArgs.amount;
 
-        IPoolable pool = PoolManager.Instance.GetPool(_damageTextPrefab);
-        pool.OnSpawn((Vector2)transform.position + Vector2.up * 3);
-        //if (_curHp == 0)
-        //{
-        //    EventState.CallStateChangedEvent(State.Death);
-        //}
+        IPoolable pool = PoolManager.Instance.GetPool(_additionalDataSO.DamageTextPrefab);
+        DamageText damageText = (DamageText)pool;
+        damageText.SetDamage(battleTakeDamageEventArgs.amount);
+        damageText.OnSpawn(transform.position);
     }
     private void Event_StateChanged(StateEvent stateEvent, StateEventArgs stateEventArgs)
     {
