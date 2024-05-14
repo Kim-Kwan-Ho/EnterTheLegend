@@ -65,8 +65,12 @@ public class CharacterInfo : BaseBehaviour
 
     private void Event_TakeDamage(BattleEvent battleEvent, BattleTakeDamageEventArgs battleTakeDamageEventArgs)
     {
+        if (_curHp == 0)
+            return;
         _curHp -= battleTakeDamageEventArgs.amount;
         _hpSlider.value = _curHp / (float)_maxHp;
+        _hpText.text = _curHp.ToString();
+        
     }
 
     private IEnumerator CoTakeDamaged(ushort amount)

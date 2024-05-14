@@ -132,7 +132,7 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
         if (beforeItem != null)
         {
             beforeItem.IsEquipped = false;
-            _characterStat.ChangeStat(false, beforeItem.Equipment.StatHp, beforeItem.Equipment.StatAttack, beforeItem.Equipment.StatDefense, beforeItem.Equipment.AttackDistance);
+            _characterStat.ChangeStat(false, beforeItem.Equipment.StatHp, beforeItem.Equipment.StatAttack, beforeItem.Equipment.StatDefense);
             EventLobbyScene.CallStatChanged(_characterStat);
         }
 
@@ -143,8 +143,8 @@ public class LobbySceneManager : SingletonMonobehaviour<LobbySceneManager>
             equipChangedInfo.AfterItem = lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.ItemId;
             lobbySceneEquipChangedEventArgs.equipmentInfo.IsEquipped = true;
             _characterStat.ChangeStat(true, lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.StatHp,
-                lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.StatAttack, lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.StatDefense,
-                lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.AttackDistance);
+                lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.StatAttack, lobbySceneEquipChangedEventArgs.equipmentInfo.Equipment.StatDefense
+                );
             EventLobbyScene.CallStatChanged(_characterStat);
         }
 

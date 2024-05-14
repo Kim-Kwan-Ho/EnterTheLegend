@@ -280,13 +280,6 @@ public class Character : BaseBehaviour
         CheckNullValue(this.name, _customizer);
     }
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, 3);
-
-        Gizmos.DrawRay(transform.position, (Vector2.up + Vector2.right) * 3);
-        Gizmos.DrawRay(transform.position, (Vector2.down + Vector2.right) * 3);
-    }
 
 #endif
 }

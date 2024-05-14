@@ -12,5 +12,4 @@ public class EquipmentSO : ScriptableObject  // 아이템 정보 (게임씬)
     public ushort StatHp;
     public ushort StatAttack;
     public ushort StatDefense;
-    public ushort AttackDistance;
 }

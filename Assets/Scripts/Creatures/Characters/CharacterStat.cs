@@ -15,21 +15,19 @@ public class CharacterStat
 
 
 
-    public void ChangeStat(bool equip, ushort hp, ushort attack, ushort defense, float attackDistance)
+    public void ChangeStat(bool equip, ushort hp, ushort attack, ushort defense)
     {
         if (equip)
         {
             _hp = (ushort)Math.Clamp(_hp + hp, 0, PlayerMaximumStats.MaxHp);
             _attack = (ushort)Math.Clamp(_attack + attack, 0, PlayerMaximumStats.MaxAttack);
             _defense = (ushort)Math.Clamp(_defense + defense, 0, PlayerMaximumStats.MaxDefense);
-            _attackDistance = (ushort)Math.Clamp(_attackDistance + attackDistance, 0, PlayerMaximumStats.MaxAttackDistance);
         }
         else
         {
             _hp = (ushort)Math.Clamp(_hp - hp, 0, PlayerMaximumStats.MaxHp);
             _attack = (ushort)Math.Clamp(_attack - attack, 0, PlayerMaximumStats.MaxAttack);
             _defense = (ushort)Math.Clamp(_defense - defense, 0, PlayerMaximumStats.MaxDefense);
-            _attackDistance = (ushort)Math.Clamp(_attackDistance - attackDistance, 0, PlayerMaximumStats.MaxAttackDistance);
         }
 
     }

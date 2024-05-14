@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 public class PlayerAttackController : BaseBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
-    [Header("UI SETTINGS TEST")]
+    [Header("UI SETTINGS")]
     [SerializeField] private float _movementRange = 25;
 
     [SerializeField] private float _attackDistanceRange = 0.4f;

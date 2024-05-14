@@ -18,5 +18,7 @@ MonoBehaviour:
   StatHp: 4
   StatAttack: 4
   StatDefense: 4
-  AttackDistance: 4
   WeaponSkill: {fileID: 11400000, guid: 2c97bf8270d89b5428d91dab4d844a77, type: 2}
+  WeaponType: 0
+  AttackAngle: 150
+  AttackRange: 2

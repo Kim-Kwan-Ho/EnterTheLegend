@@ -8,4 +8,6 @@ public class WeaponEquipmentSO : EquipmentSO
     [Header("Weapon")]
     public WeaponSkillSO WeaponSkill;
     public WeaponType WeaponType;
+    public float AttackAngle;
+    public float AttackRange;
 }
